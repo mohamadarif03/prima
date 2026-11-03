@@ -224,3 +224,483 @@ export const mockDailyChecklist: DailyChecklistItem[] = [
     tag: "Klinis",
   },
 ];
+
+// 7. Data Rencana Belajar (Study Plans)
+export type StudyPlanStatus = "sesuai jadwal" | "sedikit tertinggal" | "tertinggal";
+
+export interface StudyPlan {
+  id: string;
+  topicTitle: string;
+  latinName: string;
+  examDate: string; // YYYY-MM-DD
+  daysUntilExam: number;
+  targetPerDay: number;
+  totalItems: number;
+  masteredItems: number;
+  status: StudyPlanStatus;
+  studyDays: string[]; // e.g. ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab"]
+  notes?: string;
+}
+
+export const mockStudyPlans: StudyPlan[] = [
+  {
+    id: "plan-01",
+    topicTitle: "Anggota Gerak Atas",
+    latinName: "Extremitas Superior",
+    examDate: "2026-11-20",
+    daysUntilExam: 17,
+    targetPerDay: 20,
+    totalItems: 120,
+    masteredItems: 82,
+    status: "sesuai jadwal",
+    studyDays: ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab"],
+    notes: "Fokus regio pleksus brakialis & rotator cuff",
+  },
+  {
+    id: "plan-02",
+    topicTitle: "Anggota Gerak Bawah",
+    latinName: "Extremitas Inferior",
+    examDate: "2026-12-05",
+    daysUntilExam: 32,
+    targetPerDay: 15,
+    totalItems: 140,
+    masteredItems: 68,
+    status: "sedikit tertinggal",
+    studyDays: ["Sen", "Rab", "Jum", "Sab"],
+    notes: "Kuasai trigonum femorale & fossa poplitea",
+  },
+  {
+    id: "plan-03",
+    topicTitle: "Kepala dan Leher",
+    latinName: "Caput et Collum",
+    examDate: "2026-12-22",
+    daysUntilExam: 49,
+    targetPerDay: 25,
+    totalItems: 180,
+    masteredItems: 42,
+    status: "tertinggal",
+    studyDays: ["Sel", "Kam", "Sab", "Min"],
+    notes: "12 nervi craniales dan trigonum colli",
+  },
+];
+
+// 8. Jadwal Target Harian 14 Hari ke Depan
+export interface DayTargetItem {
+  id: string;
+  title: string;
+  latinTerm?: string;
+  category: string;
+  itemCount: number;
+  completed: boolean;
+}
+
+export interface DaySchedule {
+  id: string;
+  dateStr: string; // YYYY-MM-DD
+  dayName: string; // e.g. "Selasa"
+  shortDay: string; // e.g. "Sel"
+  formattedDate: string; // e.g. "3 Nov"
+  isToday: boolean;
+  totalItems: number;
+  isHeavyLoad: boolean;
+  smartSuggestion?: string;
+  targets: DayTargetItem[];
+}
+
+export const mock14DaySchedule: DaySchedule[] = [
+  {
+    id: "day-01",
+    dateStr: "2026-11-03",
+    dayName: "Selasa",
+    shortDay: "Sel",
+    formattedDate: "3 Nov",
+    isToday: true,
+    totalItems: 14,
+    isHeavyLoad: false,
+    targets: [
+      {
+        id: "t-01-1",
+        title: "Review 6 struktur kritis Pleksus Brakialis",
+        latinTerm: "N. Radialis & N. Axillaris",
+        category: "Spaced Repetition",
+        itemCount: 6,
+        completed: true,
+      },
+      {
+        id: "t-01-2",
+        title: "Kuis 3D Rotator Cuff: Identifikasi Origo & Insersio",
+        latinTerm: "M. Subscapularis",
+        category: "Model 3D",
+        itemCount: 4,
+        completed: false,
+      },
+      {
+        id: "t-01-3",
+        title: "Ulangi 3 struktur salah kemarin di Antebrachium",
+        latinTerm: "M. Pronator Teres",
+        category: "Koreksi",
+        itemCount: 3,
+        completed: false,
+      },
+      {
+        id: "t-01-4",
+        title: "Pemahaman klinis: Sindrom Terowongan Karpal",
+        latinTerm: "Carpal Tunnel Syndrome",
+        category: "Klinis",
+        itemCount: 1,
+        completed: false,
+      },
+    ],
+  },
+  {
+    id: "day-02",
+    dateStr: "2026-11-04",
+    dayName: "Rabu",
+    shortDay: "Rab",
+    formattedDate: "4 Nov",
+    isToday: false,
+    totalItems: 18,
+    isHeavyLoad: false,
+    targets: [
+      {
+        id: "t-02-1",
+        title: "Ulangi 8 struktur inervasi lengan bawah",
+        latinTerm: "N. Ulnaris & N. Medianus",
+        category: "Spaced Repetition",
+        itemCount: 8,
+        completed: false,
+      },
+      {
+        id: "t-02-2",
+        title: "Identifikasi vaskularisasi arcus palmaris",
+        latinTerm: "Arcus Palmaris Superficialis et Profundus",
+        category: "Model 3D",
+        itemCount: 6,
+        completed: false,
+      },
+      {
+        id: "t-02-3",
+        title: "Kuis sendi siku & ligamentum collateral",
+        latinTerm: "Articulatio Cubiti",
+        category: "Kuis",
+        itemCount: 4,
+        completed: false,
+      },
+    ],
+  },
+  {
+    id: "day-03",
+    dateStr: "2026-11-05",
+    dayName: "Kamis",
+    shortDay: "Kam",
+    formattedDate: "5 Nov",
+    isToday: false,
+    totalItems: 30,
+    isHeavyLoad: true,
+    smartSuggestion: "Hari Kamis cukup padat (30 item). Pertimbangkan memindahkan 6 item kuis ke hari Rabu.",
+    targets: [
+      {
+        id: "t-03-1",
+        title: "Evaluasi kumulatif otot kompartemen posterior brachium",
+        latinTerm: "M. Triceps Brachii & M. Anconeus",
+        category: "Spaced Repetition",
+        itemCount: 12,
+        completed: false,
+      },
+      {
+        id: "t-03-2",
+        title: "Latihan 3D tulang carpalia & articulationes",
+        latinTerm: "Ossa Carpi (Scaphoideum, Lunatum, dll)",
+        category: "Model 3D",
+        itemCount: 10,
+        completed: false,
+      },
+      {
+        id: "t-03-3",
+        title: "Kasus klinis: Fraktur Colles dan Smith",
+        latinTerm: "Fractura Extremitas Distalis Radii",
+        category: "Klinis",
+        itemCount: 8,
+        completed: false,
+      },
+    ],
+  },
+  {
+    id: "day-04",
+    dateStr: "2026-11-06",
+    dayName: "Jumat",
+    shortDay: "Jum",
+    formattedDate: "6 Nov",
+    isToday: false,
+    totalItems: 15,
+    isHeavyLoad: false,
+    targets: [
+      {
+        id: "t-04-1",
+        title: "Review interval 5 hari Pleksus Brakialis",
+        latinTerm: "Truncus Superior, Medius, Inferior",
+        category: "Spaced Repetition",
+        itemCount: 8,
+        completed: false,
+      },
+      {
+        id: "t-04-2",
+        title: "Identifikasi otot thenar dan hypothenar",
+        latinTerm: "Mm. Thenar et Hypothenar",
+        category: "Model 3D",
+        itemCount: 7,
+        completed: false,
+      },
+    ],
+  },
+  {
+    id: "day-05",
+    dateStr: "2026-11-07",
+    dayName: "Sabtu",
+    shortDay: "Sab",
+    formattedDate: "7 Nov",
+    isToday: false,
+    totalItems: 24,
+    isHeavyLoad: false,
+    targets: [
+      {
+        id: "t-05-1",
+        title: "Simulasi Ujian Mandiri Regio Bahu & Lengan",
+        latinTerm: "Articulatio Humeri & Regio Brachii",
+        category: "Tryout",
+        itemCount: 16,
+        completed: false,
+      },
+      {
+        id: "t-05-2",
+        title: "Koreksi cepat item berstatus salah",
+        latinTerm: "Repetisi Adaptif",
+        category: "Koreksi",
+        itemCount: 8,
+        completed: false,
+      },
+    ],
+  },
+  {
+    id: "day-06",
+    dateStr: "2026-11-08",
+    dayName: "Minggu",
+    shortDay: "Min",
+    formattedDate: "8 Nov",
+    isToday: false,
+    totalItems: 10,
+    isHeavyLoad: false,
+    targets: [
+      {
+        id: "t-06-1",
+        title: "Sesi konsolidasi ringan: Flashcard inervasi kutan",
+        latinTerm: "Dermatoma Extremitas Superior",
+        category: "Spaced Repetition",
+        itemCount: 10,
+        completed: false,
+      },
+    ],
+  },
+  {
+    id: "day-07",
+    dateStr: "2026-11-09",
+    dayName: "Senin",
+    shortDay: "Sen",
+    formattedDate: "9 Nov",
+    isToday: false,
+    totalItems: 20,
+    isHeavyLoad: false,
+    targets: [
+      {
+        id: "t-07-1",
+        title: "Pengenalan regio panggul dan paha anterior",
+        latinTerm: "Trigonum Femorale & M. Quadriceps",
+        category: "Materi Baru",
+        itemCount: 12,
+        completed: false,
+      },
+      {
+        id: "t-07-2",
+        title: "Repetisi terjadwal rotatores bahu",
+        latinTerm: "M. Teres Minor & Infraspinatus",
+        category: "Spaced Repetition",
+        itemCount: 8,
+        completed: false,
+      },
+    ],
+  },
+  {
+    id: "day-08",
+    dateStr: "2026-11-10",
+    dayName: "Selasa",
+    shortDay: "Sel",
+    formattedDate: "10 Nov",
+    isToday: false,
+    totalItems: 22,
+    isHeavyLoad: false,
+    targets: [
+      {
+        id: "t-08-1",
+        title: "Vaskularisasi ekstremitas inferior",
+        latinTerm: "A. Femoralis & A. Poplitea",
+        category: "Model 3D",
+        itemCount: 12,
+        completed: false,
+      },
+      {
+        id: "t-08-2",
+        title: "Review fosa cubiti dan isinya",
+        latinTerm: "Fossa Cubitalis",
+        category: "Spaced Repetition",
+        itemCount: 10,
+        completed: false,
+      },
+    ],
+  },
+  {
+    id: "day-09",
+    dateStr: "2026-11-11",
+    dayName: "Rabu",
+    shortDay: "Rab",
+    formattedDate: "11 Nov",
+    isToday: false,
+    totalItems: 18,
+    isHeavyLoad: false,
+    targets: [
+      {
+        id: "t-09-1",
+        title: "Inervasi Nervus Ischiadicus & percabangannya",
+        latinTerm: "N. Tibialis & N. Fibularis Communis",
+        category: "Materi Baru",
+        itemCount: 10,
+        completed: false,
+      },
+      {
+        id: "t-09-2",
+        title: "Kuis kilat pleksus brakialis terminal",
+        latinTerm: "Percabangan Saraf",
+        category: "Kuis",
+        itemCount: 8,
+        completed: false,
+      },
+    ],
+  },
+  {
+    id: "day-10",
+    dateStr: "2026-11-12",
+    dayName: "Kamis",
+    shortDay: "Kam",
+    formattedDate: "12 Nov",
+    isToday: false,
+    totalItems: 28,
+    isHeavyLoad: true,
+    smartSuggestion: "Target Kamis padat (28 item) menjelang minggu ujian. Sisihkan waktu ekstra 20 menit.",
+    targets: [
+      {
+        id: "t-10-1",
+        title: "Kompartemen kruris anterior dan lateral",
+        latinTerm: "M. Tibialis Anterior & Mm. Fibulares",
+        category: "Model 3D",
+        itemCount: 14,
+        completed: false,
+      },
+      {
+        id: "t-10-2",
+        title: "Review klinis Drop Foot dan Sindrom Kompartemen",
+        latinTerm: "Syndroma Compartimenti",
+        category: "Klinis",
+        itemCount: 14,
+        completed: false,
+      },
+    ],
+  },
+  {
+    id: "day-11",
+    dateStr: "2026-11-13",
+    dayName: "Jumat",
+    shortDay: "Jum",
+    formattedDate: "13 Nov",
+    isToday: false,
+    totalItems: 16,
+    isHeavyLoad: false,
+    targets: [
+      {
+        id: "t-11-1",
+        title: "Articulatio genus dan ligamenta cruciata",
+        latinTerm: "Lig. Cruciatum Anterius & Posterius (ACL/PCL)",
+        category: "Model 3D",
+        itemCount: 10,
+        completed: false,
+      },
+      {
+        id: "t-11-2",
+        title: "Review terpadu extremitas superior",
+        latinTerm: "Spaced Repetition H-7",
+        category: "Spaced Repetition",
+        itemCount: 6,
+        completed: false,
+      },
+    ],
+  },
+  {
+    id: "day-12",
+    dateStr: "2026-11-14",
+    dayName: "Sabtu",
+    shortDay: "Sab",
+    formattedDate: "14 Nov",
+    isToday: false,
+    totalItems: 20,
+    isHeavyLoad: false,
+    targets: [
+      {
+        id: "t-12-1",
+        title: "Simulasi Ujian Blok Lengkap (40 Soal Pilihan)",
+        latinTerm: "Tryout Blok Muskuloskeletal",
+        category: "Tryout",
+        itemCount: 20,
+        completed: false,
+      },
+    ],
+  },
+  {
+    id: "day-13",
+    dateStr: "2026-11-15",
+    dayName: "Minggu",
+    shortDay: "Min",
+    formattedDate: "15 Nov",
+    isToday: false,
+    totalItems: 8,
+    isHeavyLoad: false,
+    targets: [
+      {
+        id: "t-13-1",
+        title: "Review santai struktur yang masih ragu",
+        latinTerm: "Penyegaran Mental",
+        category: "Koreksi",
+        itemCount: 8,
+        completed: false,
+      },
+    ],
+  },
+  {
+    id: "day-14",
+    dateStr: "2026-11-16",
+    dayName: "Senin",
+    shortDay: "Sen",
+    formattedDate: "16 Nov",
+    isToday: false,
+    totalItems: 16,
+    isHeavyLoad: false,
+    targets: [
+      {
+        id: "t-14-1",
+        title: "Final Check: 16 Struktur Vital Extremitas Superior",
+        latinTerm: "Struktur Kunci Ujian Blok",
+        category: "Spaced Repetition",
+        itemCount: 16,
+        completed: false,
+      },
+    ],
+  },
+];
+
