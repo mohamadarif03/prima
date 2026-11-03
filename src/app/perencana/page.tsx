@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import ChartJS from "chart.js/auto";
-import { AppShell } from "@/components/layout/AppShell";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Skeleton } from "@/components/ui/Skeleton";
@@ -326,7 +325,7 @@ export default function PerencanaPage() {
   }, [schedule, selectedDayId]);
 
   return (
-    <AppShell>
+    <>
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-[6px] bg-[#1e293b] px-4 py-3 text-[13px] text-white shadow-lg animate-in fade-in duration-200">
@@ -1102,6 +1101,6 @@ export default function PerencanaPage() {
           </div>
         </div>
       )}
-    </AppShell>
+    </>
   );
 }

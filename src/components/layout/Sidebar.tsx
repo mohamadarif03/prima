@@ -6,8 +6,9 @@ import { usePathname } from "next/navigation";
 import { mockUserProfile } from "@/lib/mock-data";
 
 interface SidebarProps {
-  open: boolean;
-  onCloseMobile?: () => void;
+  desktopOpen: boolean;
+  mobileOpen: boolean;
+  onCloseMobile: () => void;
 }
 
 interface NavMenuItem {
@@ -53,11 +54,15 @@ const accountNavItems: NavMenuItem[] = [
   },
 ];
 
-export const Sidebar: React.FC<SidebarProps> = ({ open, onCloseMobile }) => {
+export const Sidebar: React.FC<SidebarProps> = ({
+  desktopOpen,
+  mobileOpen,
+  onCloseMobile,
+}) => {
   const pathname = usePathname();
 
   const sidebarContent = (
-    <aside className="w-[230px] bg-white border-r border-[#e5e7eb] flex-shrink-0 select-none pt-3 pb-8 h-full flex flex-col justify-between">
+    <>
       <nav className="flex flex-col">
         {/* FITUR MEDIS SECTION */}
         <div className="px-6 pt-2 pb-1.5 text-[10.5px] font-bold uppercase tracking-wider text-[#475569]">
@@ -129,29 +134,62 @@ export const Sidebar: React.FC<SidebarProps> = ({ open, onCloseMobile }) => {
           </div>
         </div>
       </div>
-    </aside>
+    </>
   );
 
   return (
     <>
-      {/* Desktop Sidebar (hidden when open is false on desktop, or toggled) */}
-      <div className={`hidden lg:block ${open ? "block" : "!hidden"}`}>
-        {sidebarContent}
+      {/* Desktop Persistent Sidebar (Sticky with smooth width collapse) */}
+      <div
+        className={`hidden lg:block transition-[width] duration-300 ease-in-out overflow-hidden flex-shrink-0 ${
+          desktopOpen ? "w-[230px]" : "w-0"
+        }`}
+      >
+        <aside className="w-[230px] sticky top-[60px] h-[calc(100vh-60px)] bg-white border-r border-[#e5e7eb] select-none pt-3 pb-8 flex flex-col justify-between overflow-y-auto">
+          {sidebarContent}
+        </aside>
       </div>
 
-      {/* Mobile Sidebar (Slide-over drawer) */}
-      {open && (
-        <div className="fixed inset-0 z-40 lg:hidden flex">
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 bg-black/30 backdrop-blur-xs transition-opacity"
-            onClick={onCloseMobile}
-          />
-          <div className="relative z-50 flex-1 flex max-w-[240px]">
-            {sidebarContent}
-          </div>
+      {/* Mobile Drawer (Smooth animated slide-over with backdrop) */}
+      <div
+        className={`fixed inset-0 z-50 lg:hidden transition-all duration-300 ${
+          mobileOpen
+            ? "visible opacity-100"
+            : "invisible opacity-0 pointer-events-none"
+        }`}
+      >
+        {/* Animated backdrop */}
+        <div
+          className={`fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity duration-300 ${
+            mobileOpen ? "opacity-100" : "opacity-0"
+          }`}
+          onClick={onCloseMobile}
+        />
+
+        {/* Animated drawer panel */}
+        <div
+          className={`relative z-10 h-full w-[250px] max-w-[85vw] transform transition-transform duration-300 ease-in-out ${
+            mobileOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
+          <aside className="w-full h-full bg-white border-r border-[#e5e7eb] select-none pt-4 pb-8 flex flex-col justify-between overflow-y-auto shadow-2xl">
+            <div className="px-6 pb-3 border-b border-[#f1f5f9] flex items-center justify-between">
+              <span className="font-bold text-[16px] text-[#1e293b] tracking-tight">
+                Menu Navigasi
+              </span>
+              <button
+                onClick={onCloseMobile}
+                className="text-[#64748b] hover:text-[#0f172a] p-1 rounded"
+              >
+                <i className="bi bi-x-lg text-[16px]"></i>
+              </button>
+            </div>
+            <div className="flex-1 pt-2 flex flex-col justify-between">
+              {sidebarContent}
+            </div>
+          </aside>
         </div>
-      )}
+      </div>
     </>
   );
 };

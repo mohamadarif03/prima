@@ -4,7 +4,6 @@ import React, { useState, Suspense, useMemo } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { AppShell } from "@/components/layout/AppShell";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Skeleton } from "@/components/ui/Skeleton";
@@ -230,7 +229,7 @@ function LatihanContent() {
   const hintStructureId = isHintActive ? targetStructure?.id || null : null;
 
   return (
-    <AppShell>
+    <>
       {/* PAGE HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
         <div>
@@ -609,6 +608,6 @@ function LatihanContent() {
           </div>
         </div>
       )}
-    </AppShell>
+    </>
   );
 }
