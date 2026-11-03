@@ -33,7 +33,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
       <Topbar onToggleSidebar={handleToggleSidebar} />
 
       {/* Main Body Wrapper */}
-      <div className="flex flex-1 relative">
+      <div className="flex flex-1">
         {/* Persistent Left Sidebar */}
         <Sidebar
           desktopOpen={desktopOpen}

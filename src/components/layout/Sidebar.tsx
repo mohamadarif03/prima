@@ -139,16 +139,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <>
-      {/* Desktop Persistent Sidebar (Sticky with smooth width collapse) */}
-      <div
-        className={`hidden lg:block transition-[width] duration-300 ease-in-out overflow-hidden flex-shrink-0 ${
-          desktopOpen ? "w-[230px]" : "w-0"
+      {/* Desktop Persistent Sidebar (Matches template exactly with zero gap) */}
+      <aside
+        className={`hidden lg:flex flex-col justify-between bg-white border-r border-[#e5e7eb] select-none pt-3 pb-8 flex-shrink-0 transition-all duration-300 ease-in-out ${
+          desktopOpen
+            ? "w-[230px] opacity-100"
+            : "!w-0 !p-0 !border-0 opacity-0 overflow-hidden"
         }`}
       >
-        <aside className="w-[230px] sticky top-[60px] h-[calc(100vh-60px)] bg-white border-r border-[#e5e7eb] select-none pt-3 pb-8 flex flex-col justify-between overflow-y-auto">
-          {sidebarContent}
-        </aside>
-      </div>
+        {sidebarContent}
+      </aside>
 
       {/* Mobile Drawer (Smooth animated slide-over with backdrop) */}
       <div
