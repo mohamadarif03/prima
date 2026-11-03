@@ -46,6 +46,73 @@ body {
   letter-spacing: -0.01em;
 }
 
+/* Font Size System */
+html.font-size-small {
+  font-size: 13px;
+}
+html.font-size-normal {
+  font-size: 14.5px;
+}
+html.font-size-large {
+  font-size: 16px;
+}
+
+/* Dark Mode Theme Support */
+html.dark {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+}
+
+html.dark body {
+  background-color: #0b1120 !important;
+  color: #f1f5f9 !important;
+}
+
+html.dark header,
+html.dark aside,
+html.dark footer,
+html.dark .metis-card {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+html.dark .metis-card-header {
+  border-color: #334155 !important;
+}
+
+html.dark .metis-card-title,
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark h4 {
+  color: #f8fafc !important;
+}
+
+html.dark .nav-item {
+  color: #cbd5e1 !important;
+}
+
+html.dark .nav-item:hover {
+  background-color: #334155 !important;
+}
+
+html.dark .nav-item.active {
+  background-color: #334155 !important;
+  color: #38bdf8 !important;
+}
+
+html.dark .nav-item.active i.nav-icon {
+  color: #38bdf8 !important;
+}
+
+html.dark input:not([type="checkbox"]):not([type="radio"]),
+html.dark select {
+  background-color: #0f172a !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
 /* Sidebar Item Styling */
 .nav-item {
   display: flex;
