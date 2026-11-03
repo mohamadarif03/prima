@@ -1,173 +1,105 @@
 "use client";
 
 import React, { useState } from "react";
-import { usePathname } from "next/navigation";
-import {
-  Menu,
-  Bell,
-  CheckCircle2,
-  AlertCircle,
-  Clock,
-  Sparkles,
-} from "lucide-react";
-import { mockUserProfile, mockDashboardStats } from "@/lib/mock-data";
+import Link from "next/link";
+import { mockUserProfile } from "@/lib/mock-data";
 
 interface TopbarProps {
-  onOpenMobileMenu: () => void;
+  onToggleSidebar: () => void;
 }
 
-const pageTitles: Record<string, { title: string; subtitle: string }> = {
-  "/dashboard": {
-    title: "Dashboard Belajar",
-    subtitle: "Ringkasan retensi memori dan rekomendasi latihan adaptif",
-  },
-  "/latihan": {
-    title: "Latihan Anatomi 3D",
-    subtitle: "Eksplorasi model 3D dan kuis identifikasi struktur",
-  },
-  "/perencana": {
-    title: "Perencana Belajar",
-    subtitle: "Penjadwalan target harian dan persiapan tanggal ujian",
-  },
-  "/kelemahan": {
-    title: "Peta Kelemahan Topik",
-    subtitle: "Analisis diagnostik materi yang membutuhkan repetisi intensif",
-  },
-  "/pengaturan": {
-    title: "Pengaturan Akun",
-    subtitle: "Preferensi interval repetisi dan profil mahasiswa",
-  },
-};
-
-export const Topbar: React.FC<TopbarProps> = ({ onOpenMobileMenu }) => {
-  const pathname = usePathname();
-  const [notificationOpen, setNotificationOpen] = useState(false);
-
-  const currentPage = pageTitles[pathname] || {
-    title: "PRIMA Medika",
-    subtitle: "Platform Review Interaktif Medis Adaptif",
-  };
+export const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
+  const [showNotification, setShowNotification] = useState(false);
 
   return (
-    <header className="sticky top-0 z-20 flex h-16 w-full items-center justify-between border-b border-slate-200/90 bg-white/95 px-4 sm:px-6 backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/95 transition-colors">
-      {/* Left: Mobile hamburger & Page Title */}
-      <div className="flex items-center gap-3 min-w-0">
-        <button
-          onClick={onOpenMobileMenu}
-          className="lg:hidden p-2 -ml-2 rounded-lg text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 transition"
-          aria-label="Buka Menu Navigasi"
-        >
-          <Menu className="h-5 w-5" />
-        </button>
-
-        <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <h1 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white truncate tracking-tight">
-              {currentPage.title}
-            </h1>
-            <span className="hidden sm:inline-flex items-center gap-1 rounded-full bg-teal-50 px-2 py-0.5 text-[11px] font-semibold text-teal-700 dark:bg-teal-950/80 dark:text-teal-300 dark:border dark:border-teal-800">
-              <span className="h-1.5 w-1.5 rounded-full bg-teal-500 animate-pulse" />
-              Preklinik Smt {mockUserProfile.semester}
-            </span>
-          </div>
-          <p className="hidden md:block text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">
-            {currentPage.subtitle}
-          </p>
+    <header className="h-[60px] bg-white border-b border-[#e5e7eb] flex items-center justify-between px-4 sticky top-0 z-30">
+      {/* Left: Brand & Hamburger */}
+      <div className="flex items-center">
+        <div className="w-[214px] flex items-center justify-between pr-3">
+          <Link href="/beranda" className="flex items-center gap-2.5 no-underline">
+            {/* Blue 'P' Logo Box */}
+            <div className="w-[32px] h-[32px] rounded-[7px] bg-[#2563eb] flex items-center justify-center text-white font-bold text-[19px] tracking-tight shadow-sm">
+              P
+            </div>
+            <span className="font-bold text-[18px] text-[#1e293b] tracking-tight">PRIMA</span>
+          </Link>
+          <button
+            onClick={onToggleSidebar}
+            className="text-[#475569] hover:text-[#0f172a] p-1 rounded transition"
+            aria-label="Toggle Sidebar"
+          >
+            <i className="bi bi-list text-[20px]"></i>
+          </button>
         </div>
       </div>
 
-      {/* Right: Notification & Profile */}
-      <div className="flex items-center gap-3">
-        {/* Quick Review Status Pill */}
-        <div className="hidden xl:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 text-xs text-slate-600 dark:text-slate-300">
-          <Clock className="h-3.5 w-3.5 text-teal-600 dark:text-teal-400" />
-          <span>
-            Target Ujian: <strong className="text-slate-800 dark:text-slate-100">{mockDashboardStats.daysUntilExam} hari lagi</strong>
-          </span>
+      {/* Center: Search Input */}
+      <div className="hidden md:flex items-center flex-1 max-w-[385px] mx-4">
+        <div className="relative w-full">
+          <input
+            type="text"
+            placeholder="Cari materi anatomi... (Ctrl+K)"
+            className="w-full h-[36px] bg-[#f1f5f9] text-[13px] text-[#334155] placeholder-[#64748b] pl-3.5 pr-9 rounded-[6px] focus:outline-none focus:ring-1 focus:ring-[#cbd5e1]"
+          />
+          <i className="bi bi-search absolute right-3 top-1/2 -translate-y-1/2 text-[#475569] text-[14px]"></i>
         </div>
+      </div>
 
-        {/* Notification Bell Dropdown */}
+      {/* Right: Icons & Profile */}
+      <div className="flex items-center gap-4 pr-1">
+        {/* Sun Icon */}
+        <button
+          className="text-[#334155] hover:text-[#0f172a] flex items-center justify-center"
+          title="Toggle Theme"
+        >
+          <i className="bi bi-sun-fill text-[15px]"></i>
+        </button>
+
+        {/* Fullscreen Icon */}
+        <button
+          className="text-[#334155] hover:text-[#0f172a] flex items-center justify-center"
+          title="Fullscreen"
+        >
+          <i className="bi bi-arrows-fullscreen text-[13.5px]"></i>
+        </button>
+
+        {/* Notification Bell with Badge 3 */}
         <div className="relative">
           <button
-            onClick={() => setNotificationOpen(!notificationOpen)}
-            className="relative p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800 transition"
-            aria-label="Lihat Notifikasi"
+            onClick={() => setShowNotification(!showNotification)}
+            className="relative text-[#334155] hover:text-[#0f172a] flex items-center justify-center"
+            title="Notifikasi Belajar"
           >
-            <Bell className="h-5 w-5" />
-            <span className="absolute top-1.5 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white shadow-xs">
+            <i className="bi bi-bell text-[15.5px]"></i>
+            <span className="absolute -top-2 -right-2 bg-[#dc2626] text-white text-[9.5px] font-bold w-[15px] h-[15px] rounded-full flex items-center justify-center leading-none">
               3
             </span>
           </button>
 
-          {/* Notification Popup Dropdown */}
-          {notificationOpen && (
+          {/* Notification Dropdown */}
+          {showNotification && (
             <>
               <div
                 className="fixed inset-0 z-30"
-                onClick={() => setNotificationOpen(false)}
+                onClick={() => setShowNotification(false)}
               />
-              <div className="absolute right-0 mt-2 z-40 w-80 sm:w-96 rounded-2xl border border-slate-200/90 bg-white p-4 shadow-xl dark:border-slate-800 dark:bg-slate-900">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-3 dark:border-slate-800">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-bold text-slate-900 dark:text-white">
-                      Notifikasi Belajar
-                    </span>
-                    <span className="rounded-full bg-teal-50 px-2 py-0.5 text-[10px] font-bold text-teal-700 dark:bg-teal-950 dark:text-teal-300">
-                      3 Baru
-                    </span>
-                  </div>
-                  <button
-                    onClick={() => setNotificationOpen(false)}
-                    className="text-xs text-teal-600 hover:text-teal-700 font-medium"
-                  >
-                    Tutup
-                  </button>
+              <div className="absolute right-0 mt-3 w-72 sm:w-80 bg-white border border-[#e2e8f0] rounded-[8px] shadow-lg z-40 p-3 text-xs">
+                <div className="font-bold text-[#1e293b] pb-2 border-b border-[#f1f5f9] flex justify-between items-center">
+                  <span>Notifikasi Belajar</span>
+                  <span className="badge-completed">3 Baru</span>
                 </div>
-
-                <div className="divide-y divide-slate-100 dark:divide-slate-800/80 mt-2 text-xs">
-                  <div className="py-2.5 flex items-start gap-3">
-                    <div className="p-1.5 rounded-lg bg-rose-50 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400 shrink-0">
-                      <AlertCircle className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-slate-800 dark:text-slate-200">
-                        12 Item Jatuh Tempo Hari Ini
-                      </p>
-                      <p className="text-slate-500 dark:text-slate-400 mt-0.5">
-                        Pleksus brakialis perlu repetisi agar tidak terlupa sebelum ujian.
-                      </p>
-                      <span className="text-[10px] text-slate-400 mt-1 block">15 menit lalu</span>
-                    </div>
+                <div className="divide-y divide-[#f1f5f9] mt-1">
+                  <div className="py-2">
+                    <p className="font-semibold text-[#1e293b]">12 Item Jatuh Tempo</p>
+                    <p className="text-[#64748b] text-[11px]">Plexus brachialis perlu repetisi hari ini.</p>
                   </div>
-
-                  <div className="py-2.5 flex items-start gap-3">
-                    <div className="p-1.5 rounded-lg bg-teal-50 text-teal-600 dark:bg-teal-950/60 dark:text-teal-400 shrink-0">
-                      <Sparkles className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-slate-800 dark:text-slate-200">
-                        Rekomendasi Adaptif Baru
-                      </p>
-                      <p className="text-slate-500 dark:text-slate-400 mt-0.5">
-                        Sistem menyiapkan 3 kuis 3D untuk Rotator Cuff.
-                      </p>
-                      <span className="text-[10px] text-slate-400 mt-1 block">1 jam lalu</span>
-                    </div>
+                  <div className="py-2">
+                    <p className="font-semibold text-[#1e293b]">Rekomendasi Baru</p>
+                    <p className="text-[#64748b] text-[11px]">Latihan 3D Rotator cuff telah dijadwalkan.</p>
                   </div>
-
-                  <div className="py-2.5 flex items-start gap-3">
-                    <div className="p-1.5 rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400 shrink-0">
-                      <CheckCircle2 className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-slate-800 dark:text-slate-200">
-                        Streak 5 Hari Tercapai!
-                      </p>
-                      <p className="text-slate-500 dark:text-slate-400 mt-0.5">
-                        Konsistensi belajarmu meningkat 18% dibanding minggu lalu.
-                      </p>
-                      <span className="text-[10px] text-slate-400 mt-1 block">Kemarin</span>
-                    </div>
+                  <div className="py-2">
+                    <p className="font-semibold text-[#1e293b]">Streak 5 Hari 🔥</p>
+                    <p className="text-[#64748b] text-[11px]">Disiplin belajar kamu meningkat!</p>
                   </div>
                 </div>
               </div>
@@ -176,26 +108,18 @@ export const Topbar: React.FC<TopbarProps> = ({ onOpenMobileMenu }) => {
         </div>
 
         {/* Divider */}
-        <div className="h-6 w-[1px] bg-slate-200 dark:bg-slate-700/80" />
+        <div className="h-[24px] w-[1px] bg-[#e2e8f0] mx-0.5"></div>
 
-        {/* User Profile Pill */}
-        <div className="flex items-center gap-2.5 pl-1">
-          <div className="relative">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-teal-700 to-teal-500 text-white font-bold text-sm shadow-xs overflow-hidden">
-              R
-            </div>
-            <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white bg-emerald-500 dark:border-slate-900" />
+        {/* User Profile */}
+        <button className="flex items-center gap-2 text-left">
+          <div className="w-[26px] h-[26px] rounded-full bg-[#64748b] text-white flex items-center justify-center overflow-hidden">
+            <i className="bi bi-person-circle text-[26px] leading-none text-[#64748b] bg-white"></i>
           </div>
-
-          <div className="hidden sm:block text-left">
-            <div className="text-xs font-bold text-slate-800 dark:text-slate-100 leading-tight">
-              {mockUserProfile.name}
-            </div>
-            <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate max-w-[150px]">
-              {mockUserProfile.institution}
-            </div>
-          </div>
-        </div>
+          <span className="text-[13px] font-semibold text-[#1e293b] hidden sm:inline-block">
+            {mockUserProfile.name}
+          </span>
+          <i className="bi bi-chevron-down text-[11px] text-[#64748b] ml-0.5"></i>
+        </button>
       </div>
     </header>
   );

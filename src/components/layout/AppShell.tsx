@@ -9,37 +9,32 @@ interface AppShellProps {
 }
 
 export const AppShell: React.FC<AppShellProps> = ({ children }) => {
-  const [collapsed, setCollapsed] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans antialiased selection:bg-teal-500 selection:text-white transition-colors">
+    <div className="min-h-screen flex flex-col bg-[#f8f9fa] text-[#1e293b]">
+      {/* Top Navbar matching template */}
+      <Topbar onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
+
+      {/* Main Body Wrapper */}
       <div className="flex flex-1">
-        {/* Responsive Desktop & Mobile Sidebar */}
+        {/* Left Sidebar */}
         <Sidebar
-          collapsed={collapsed}
-          onToggleCollapse={() => setCollapsed(!collapsed)}
-          mobileOpen={mobileOpen}
-          onCloseMobile={() => setMobileOpen(false)}
+          open={sidebarOpen}
+          onCloseMobile={() => setSidebarOpen(false)}
         />
 
         {/* Main Content Area */}
-        <div className="flex flex-1 flex-col min-w-0 transition-all duration-300">
-          <Topbar onOpenMobileMenu={() => setMobileOpen(true)} />
-
-          <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+        <div className="flex-1 flex flex-col min-w-0">
+          <main className="flex-1 px-6 pt-6 pb-8 max-w-[1600px] w-full mx-auto">
             {children}
           </main>
 
-          {/* PRIMA Minimal Medical Footer */}
-          <footer className="mt-auto border-t border-slate-200/80 bg-white/50 px-6 py-4 text-center sm:text-left text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-900/50 dark:text-slate-400">
-            <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-              <p>
-                © 2026 <strong>PRIMA</strong> • Platform Review Interaktif Medis Adaptif
-              </p>
-              <p className="text-[11px] text-slate-400 dark:text-slate-500">
-                Alat bantu belajar mandiri preklinik kedokteran • Tidak ditujukan untuk diagnosis klinis
-              </p>
+          {/* Footer matching template */}
+          <footer className="mt-auto border-t border-[#e2e8f0] bg-[#f8f9fa] px-6 py-4 flex flex-col sm:flex-row items-center justify-between text-[12.5px] text-[#475569]">
+            <div>© 2026 PRIMA • Platform Review Interaktif Medis Adaptif</div>
+            <div className="mt-1 sm:mt-0">
+              Alat bantu belajar mandiri mahasiswa kedokteran preklinik · Bukan alat diagnosis klinis
             </div>
           </footer>
         </div>

@@ -1,6 +1,15 @@
 import React from "react";
 
-export type ProgressColor = "teal" | "emerald" | "amber" | "rose" | "sky" | "slate";
+export type ProgressColor =
+  | "blue"
+  | "teal"
+  | "green"
+  | "yellow"
+  | "red"
+  | "slate"
+  | "emerald"
+  | "amber"
+  | "rose";
 
 interface ProgressBarProps {
   value: number; // 0 - 100
@@ -14,24 +23,27 @@ interface ProgressBarProps {
 }
 
 const colorStyles: Record<ProgressColor, string> = {
-  teal: "bg-teal-600 dark:bg-teal-500",
-  emerald: "bg-emerald-500 dark:bg-emerald-400",
-  amber: "bg-amber-500 dark:bg-amber-400",
-  rose: "bg-rose-500 dark:bg-rose-400",
-  sky: "bg-sky-500 dark:bg-sky-400",
-  slate: "bg-slate-600 dark:bg-slate-400",
+  blue: "bg-[#0d6efd]",
+  teal: "bg-[#087990]",
+  green: "bg-[#198754]",
+  yellow: "bg-[#cc7a00]",
+  red: "bg-[#dc2626]",
+  slate: "bg-[#475569]",
+  emerald: "bg-[#198754]",
+  amber: "bg-[#cc7a00]",
+  rose: "bg-[#dc2626]",
 };
 
 const heightStyles = {
-  sm: "h-1.5",
-  md: "h-2.5",
-  lg: "h-3.5",
+  sm: "h-[5px]",
+  md: "h-[8px]",
+  lg: "h-[12px]",
 };
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   value,
   max = 100,
-  color = "teal",
+  color = "blue",
   size = "md",
   showLabel = false,
   labelPosition = "right",
@@ -43,17 +55,17 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   return (
     <div className={`w-full ${className}`}>
       {showLabel && labelPosition === "top" && (
-        <div className="flex justify-between items-center text-xs font-medium text-slate-600 dark:text-slate-300 mb-1.5">
+        <div className="flex justify-between items-center text-[12px] font-medium text-[#475569] mb-1">
           <span>Progres</span>
-          <span className="font-semibold text-slate-800 dark:text-slate-100">{percentage}%</span>
+          <span className="font-semibold text-[#1e293b]">{percentage}%</span>
         </div>
       )}
 
       <div className="flex items-center gap-3">
-        <div className={`w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800/80 ${heightStyles[size]}`}>
+        <div className={`w-full overflow-hidden rounded-[4px] bg-[#f1f5f9] border border-[#e2e8f0]/60 ${heightStyles[size]}`}>
           <div
-            className={`h-full rounded-full ${colorStyles[color]} ${
-              animate ? "transition-all duration-700 ease-out" : ""
+            className={`h-full rounded-[3px] ${colorStyles[color]} ${
+              animate ? "transition-all duration-500 ease-out" : ""
             }`}
             style={{ width: `${percentage}%` }}
             role="progressbar"
@@ -64,7 +76,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
         </div>
 
         {showLabel && labelPosition === "right" && (
-          <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 min-w-[38px] text-right">
+          <span className="text-[12px] font-semibold text-[#1e293b] min-w-[34px] text-right">
             {percentage}%
           </span>
         )}

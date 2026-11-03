@@ -12,17 +12,17 @@ interface BadgeProps {
 }
 
 const variantStyles: Record<BadgeVariant, string> = {
-  default: "bg-teal-50 text-teal-700 border-teal-200 dark:bg-teal-950/60 dark:text-teal-300 dark:border-teal-800",
-  success: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-300 dark:border-emerald-800",
-  warning: "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800",
-  danger: "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/60 dark:text-rose-300 dark:border-rose-800",
-  info: "bg-sky-50 text-sky-700 border-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-800",
-  neutral: "bg-slate-100 text-slate-700 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700",
+  default: "bg-[#0d6efd] text-white",
+  success: "bg-[#198754] text-white",
+  warning: "bg-[#cc7a00] text-white",
+  danger: "bg-[#dc2626] text-white",
+  info: "bg-[#087990] text-white",
+  neutral: "bg-[#f1f5f9] text-[#475569] border border-[#cbd5e1]",
 };
 
 const sizeStyles: Record<BadgeSize, string> = {
-  sm: "text-[11px] px-2 py-0.5 font-medium",
-  md: "text-xs px-2.5 py-1 font-semibold",
+  sm: "text-[11px] font-semibold px-2 py-0.5 rounded-[4px] leading-tight",
+  md: "text-[12px] font-semibold px-2.5 py-1 rounded-[5px] leading-normal",
 };
 
 export const Badge: React.FC<BadgeProps> = ({
@@ -34,7 +34,7 @@ export const Badge: React.FC<BadgeProps> = ({
 }) => {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border tracking-wide transition-colors ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+      className={`inline-flex items-center gap-1 font-semibold ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
     >
       {icon && <span className="inline-flex shrink-0">{icon}</span>}
       <span>{children}</span>
