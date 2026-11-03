@@ -31,7 +31,7 @@ Tahap sekarang hanya membangun frontend.
 - Ikuti struktur folder yang sudah ada di proyek.
 - Komponen yang dipakai ulang ditaruh di `components/`; komponen khusus satu halaman ditaruh dekat halamannya.
 - Semua data dummy ditaruh di satu tempat: `lib/mock-data.ts`, agar mudah diganti dengan data asli nanti.
-- Rute halaman: `/masuk`, `/dashboard`, `/latihan`, `/perencana`, `/kelemahan`, `/pengaturan`.
+- Rute halaman: `/masuk`, `/beranda`, `/latihan`, `/perencana`, `/kelemahan`, `/pengaturan`.
 - Gunakan TypeScript dengan tipe yang jelas. Beri nama komponen yang deskriptif (contoh: `StatCard`, `TopicScoreBar`, `AnatomyViewer`).
 - Hindari duplikasi: jika pola yang sama muncul di dua halaman, jadikan komponen bersama.
 
@@ -68,7 +68,7 @@ PRIMA adalah alat bantu belajar. Tampilan tidak boleh memberi kesan sebagai alat
 4. Jangan mengubah halaman lain di luar yang diminta, kecuali untuk memperbaiki komponen bersama, dan sebutkan perubahan itu dalam ringkasan.
 5. Jika permintaan ambigu, ambil asumsi yang paling masuk akal, sebutkan asumsinya dalam satu kalimat, lalu kerjakan.
 
-Urutan halaman yang direncanakan: kerangka (sidebar, topbar, tema) → Dashboard → Latihan Anatomi 3D → Perencana Belajar → Peta Kelemahan → Masuk dan onboarding.
+Urutan halaman yang direncanakan: kerangka (sidebar, topbar, tema) → Beranda → Latihan Anatomi 3D → Perencana Belajar → Peta Kelemahan → Masuk dan onboarding.
 
 ## Larangan Umum
 
