@@ -1147,37 +1147,99 @@ export interface QuizQuestionItem {
 
 export interface AnatomyPracticeRegion {
   id: string;
+  number: number;
   name: string;
+  subName: string;
   latinName: string;
   structuresCount: number;
   modelUrl?: string;
+  icon: string;
+  description: string;
+  masteryScore: number;
+  dueCount: number;
+  level: "Lemah" | "Sedang" | "Kuat";
 }
 
 export const mockAnatomyRegions: AnatomyPracticeRegion[] = [
   {
-    id: "reg-04",
-    name: "Dada dan Organ Toraks (Jantung)",
-    latinName: "Thorax - Cor",
+    id: "reg-caput",
+    number: 1,
+    name: "Regio Caput",
+    subName: "Kepala",
+    latinName: "Caput & Cranium",
+    structuresCount: 8,
+    icon: "bi bi-person",
+    description: "Tulang tengkorak neurocranium & viscerocranium, otot ekspresi wajah, dan persarafan kranial.",
+    masteryScore: 72,
+    dueCount: 4,
+    level: "Sedang",
+  },
+  {
+    id: "reg-collum",
+    number: 2,
+    name: "Regio Collum",
+    subName: "Leher",
+    latinName: "Collum & Cervix",
+    structuresCount: 7,
+    icon: "bi bi-arrows-vertical",
+    description: "Trigonum colli anterior & posterior, M. Sternocleidomastoideus, laring, dan vaskular karotis.",
+    masteryScore: 58,
+    dueCount: 6,
+    level: "Sedang",
+  },
+  {
+    id: "reg-thorax",
+    number: 3,
+    name: "Regio Thorax",
+    subName: "Dada",
+    latinName: "Thorax - Cor & Pulmo",
     structuresCount: 11,
     modelUrl: "/models/heart.glb",
+    icon: "bi bi-heart-pulse",
+    description: "Organ kardiovaskular, arkus aorta, arteri koronaria, pulmo, dan dinding miokardium bilik jantung.",
+    masteryScore: 80,
+    dueCount: 2,
+    level: "Kuat",
   },
   {
-    id: "reg-01",
-    name: "Anggota Gerak Atas",
-    latinName: "Extremitas Superior",
+    id: "reg-abdomen",
+    number: 4,
+    name: "Regio Abdomen",
+    subName: "Perut",
+    latinName: "Abdomen & Viscera",
+    structuresCount: 9,
+    icon: "bi bi-grid-3x3-gap",
+    description: "Organ digestif intraperitoneal & retroperitoneal, gaster, hepar, aorta abdominalis, dan peritoneum.",
+    masteryScore: 64,
+    dueCount: 5,
+    level: "Sedang",
+  },
+  {
+    id: "reg-pelvis",
+    number: 5,
+    name: "Regio Pelvis",
+    subName: "Pinggul",
+    latinName: "Pelvis & Perineum",
     structuresCount: 8,
+    icon: "bi bi-bounding-box",
+    description: "Gelang panggul (os coxae & sacrum), diafragma pelvis, dan organ traktus urogenitalis.",
+    masteryScore: 48,
+    dueCount: 7,
+    level: "Lemah",
   },
   {
-    id: "reg-02",
-    name: "Anggota Gerak Bawah",
-    latinName: "Extremitas Inferior",
+    id: "reg-membrum",
+    number: 6,
+    name: "Regio Membrum",
+    subName: "Anggota Gerak",
+    latinName: "Membrum Superius & Inferius",
     structuresCount: 8,
-  },
-  {
-    id: "reg-03",
-    name: "Kepala dan Leher",
-    latinName: "Caput et Collum",
-    structuresCount: 6,
+    modelUrl: "/models/muscles.glb",
+    icon: "bi bi-person-walking",
+    description: "Sistem lokomotor ekstremitas atas (bahu, lengan) dan ekstremitas bawah (tungkai, paha).",
+    masteryScore: 68,
+    dueCount: 8,
+    level: "Sedang",
   },
 ];
 
@@ -1797,19 +1859,130 @@ export const mockHeartQuizQuestions: QuizQuestionItem[] = [
   },
 ];
 
+// Data Struktur untuk Regio Caput (Kepala)
+export const mockCaput3DStructures: Anatomy3DStructure[] = [
+  {
+    id: "struct-c-01",
+    nameIndo: "Os Frontale",
+    nameLatin: "Os Frontale (Tulang Dahi)",
+    meshId: "os-frontale",
+    category: "tulang",
+    description: "Tulang pipih tunggal yang membentuk dahi, atap kavum orbita, dan bagian anterior fossa cranii anterior.",
+    clinicalNote: "Mengandung sinus frontalis; fraktur dapat menyebabkan rinorea cairan serebrospinal.",
+    difficulty: "mudah",
+    masteryStatus: "dikuasai",
+    geometryType: "sphere",
+    position: [0, 1.2, 0.5],
+    rotation: [0, 0, 0],
+    scale: [0.9, 0.7, 0.8],
+    baseColor: "#e6decb",
+  },
+  {
+    id: "struct-c-02",
+    nameIndo: "Mandibula",
+    nameLatin: "Mandibula (Tulang Rahang Bawah)",
+    meshId: "mandibula",
+    category: "tulang",
+    description: "Satu-satunya tulang kraniofasial yang dapat bergerak, bersendi dengan os temporale pada articulatio temporomandibularis (TMJ).",
+    clinicalNote: "Foramen mentale tempat keluarnya N. Mentalis; lokasi anestesi blok saraf alveolaris inferior.",
+    difficulty: "mudah",
+    masteryStatus: "dikuasai",
+    geometryType: "box",
+    position: [0, -0.6, 0.4],
+    rotation: [0, 0, 0],
+    scale: [0.8, 0.5, 0.7],
+    baseColor: "#d9d0bc",
+  },
+  {
+    id: "struct-c-03",
+    nameIndo: "Musculus Masseter",
+    nameLatin: "M. Masseter",
+    meshId: "m-masseter",
+    category: "otot",
+    description: "Otot mastikasi utama yang sangat kuat untuk elevasi mandibula (menutup mulut).",
+    clinicalNote: "Diinervasi oleh cabang N. Mandibularis (N. V3 / Trigeminus).",
+    difficulty: "sedang",
+    masteryStatus: "berkembang",
+    geometryType: "cylinder",
+    position: [0.55, -0.3, 0.2],
+    rotation: [0.2, 0, 0],
+    scale: [0.2, 0.6, 0.2],
+    baseColor: "#c25953",
+  },
+  {
+    id: "struct-c-04",
+    nameIndo: "Nervus Facialis (N. VII)",
+    nameLatin: "Nervus Facialis",
+    meshId: "n-facialis",
+    category: "saraf",
+    description: "Saraf kranial VII yang keluar melalui foramen stylomastoideum dan bercabang di dalam kelenjar parotis.",
+    clinicalNote: "Paresis nervus facialis perifer menyebabkan Bell's Palsy (lumpuh separuh otot wajah).",
+    difficulty: "sulit",
+    masteryStatus: "perlu_diulang",
+    geometryType: "cylinder",
+    position: [0.45, 0.1, 0.1],
+    rotation: [0, 0, 0.4],
+    scale: [0.06, 0.9, 0.06],
+    baseColor: "#eab308",
+  },
+];
+
+export const mockCaputQuizQuestions: QuizQuestionItem[] = [
+  {
+    id: "qc-01",
+    mode: "klik-struktur",
+    targetStructureId: "struct-c-02",
+    promptText: "Klik pada model 3D struktur tulang rahang bawah berikut:",
+    latinName: "Mandibula",
+    hint: "Tulang berbentuk tapal kuda yang berada di bagian paling inferior wajah.",
+    explanation: "Benar! Mandibula adalah tulang pembentuk rahang bawah dan tempat tertanamnya gigi geligi inferior.",
+  },
+  {
+    id: "qc-02",
+    mode: "sebutkan-nama",
+    targetStructureId: "struct-c-04",
+    promptText: "Saraf kranial yang menginervasi seluruh otot ekspresi wajah dan berjalan menembus glandula parotidea adalah:",
+    latinName: "Nervus Cranialis VII",
+    options: [
+      { structureId: "struct-c-04", nameIndo: "Nervus Facialis", nameLatin: "N. Facialis (CN VII)" },
+      { structureId: "struct-c-03", nameIndo: "Nervus Trigeminus", nameLatin: "N. Trigeminus (CN V)" },
+      { structureId: "struct-c-01", nameIndo: "Nervus Accessorius", nameLatin: "N. Accessorius (CN XI)" },
+      { structureId: "struct-c-02", nameIndo: "Nervus Vagus", nameLatin: "N. Vagus (CN X)" },
+    ],
+    hint: "Saraf ini terganggu pada kasus Bell's Palsy.",
+    explanation: "Tepat sekali! Nervus Facialis (CN VII) bertanggung jawab atas motorik ekspresi wajah dan pengecapan 2/3 anterior lidah.",
+  },
+];
+
 // Helper untuk mengambil struktur dan soal berdasarkan regio yang dipilih
 export function getStructuresByRegion(regionId: string): Anatomy3DStructure[] {
-  if (regionId === "reg-04") {
-    return mockHeart3DStructures;
+  switch (regionId) {
+    case "reg-thorax":
+    case "reg-04":
+      return mockHeart3DStructures;
+    case "reg-caput":
+    case "reg-03":
+      return mockCaput3DStructures;
+    case "reg-membrum":
+    case "reg-01":
+    default:
+      return mock3DStructures;
   }
-  return mock3DStructures;
 }
 
 export function getQuizQuestionsByRegion(regionId: string): QuizQuestionItem[] {
-  if (regionId === "reg-04") {
-    return mockHeartQuizQuestions;
+  switch (regionId) {
+    case "reg-thorax":
+    case "reg-04":
+      return mockHeartQuizQuestions;
+    case "reg-caput":
+    case "reg-03":
+      return mockCaputQuizQuestions;
+    case "reg-membrum":
+    case "reg-01":
+    default:
+      return mockQuizQuestions;
   }
-  return mockQuizQuestions;
 }
 
 // 11. Data Pengaturan & Preferensi Mahasiswa

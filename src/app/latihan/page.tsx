@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, Suspense, useMemo } from "react";
+import React, { useState, Suspense, useMemo, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -13,11 +13,14 @@ import {
   mockAnatomyRegions,
   mockHeart3DStructures,
   mockHeartQuizQuestions,
+  mockCaput3DStructures,
+  mockCaputQuizQuestions,
   getStructuresByRegion,
   getQuizQuestionsByRegion,
   QuizMode,
   QuizQuestionItem,
   Anatomy3DStructure,
+  AnatomyPracticeRegion,
 } from "@/lib/mock-data";
 
 // Dynamic Client Component Loader for Three.js (No SSR)
@@ -35,7 +38,7 @@ const AnatomyViewer = dynamic(
           Memuat Model 3D Anatomi...
         </p>
         <p className="text-[12px] text-[#64748b] mt-0.5">
-          Menyiapkan grafis WebGL dan koordinat struktur
+          Menyiapkan grafis WebGL dan koordinat struktur regio
         </p>
       </div>
     ),
@@ -47,7 +50,7 @@ export default function LatihanPage() {
     <Suspense
       fallback={
         <div className="p-8 text-center text-xs text-[#64748b]">
-          Memuat modul latihan...
+          Memuat modul latihan anatomi...
         </div>
       }
     >
@@ -60,15 +63,34 @@ function LatihanContent() {
   const searchParams = useSearchParams();
   const topicParam = searchParams.get("topic") || searchParams.get("topik");
 
-  // Region and mode selection (Default to reg-04: Dada & Jantung 3D Realistis)
-  const [selectedRegionId, setSelectedRegionId] = useState("reg-04");
+  // Default to Regio Thorax (features real 3D heart model)
+  const [selectedRegionId, setSelectedRegionId] = useState("reg-thorax");
   const [currentMode, setCurrentMode] = useState<QuizMode>("klik-struktur");
+
+  // Handle URL search params mapping to regions
+  useEffect(() => {
+    if (!topicParam) return;
+    const lower = topicParam.toLowerCase();
+    if (lower.includes("caput") || lower.includes("kepala")) {
+      setSelectedRegionId("reg-caput");
+    } else if (lower.includes("collum") || lower.includes("leher")) {
+      setSelectedRegionId("reg-collum");
+    } else if (lower.includes("thorax") || lower.includes("dada") || lower.includes("jantung")) {
+      setSelectedRegionId("reg-thorax");
+    } else if (lower.includes("abdomen") || lower.includes("perut")) {
+      setSelectedRegionId("reg-abdomen");
+    } else if (lower.includes("pelvis") || lower.includes("pinggul")) {
+      setSelectedRegionId("reg-pelvis");
+    } else if (lower.includes("membrum") || lower.includes("lengan") || lower.includes("gerak")) {
+      setSelectedRegionId("reg-membrum");
+    }
+  }, [topicParam]);
 
   // Selected Region Object
   const selectedRegion = useMemo(() => {
     return (
       mockAnatomyRegions.find((r) => r.id === selectedRegionId) ||
-      mockAnatomyRegions[0]
+      mockAnatomyRegions[2] // Fallback to Thorax
     );
   }, [selectedRegionId]);
 
@@ -187,9 +209,9 @@ function LatihanContent() {
     }
   };
 
-  // Next Question Button
+  // Next question handler
   const handleNextQuestion = () => {
-    if (currentQuestionIndex + 1 < activeQuestions.length) {
+    if (currentQuestionIndex < activeQuestions.length - 1) {
       setCurrentQuestionIndex((prev) => prev + 1);
       setAnsweredState("unanswered");
       setSelectedChoiceId(null);
@@ -200,21 +222,17 @@ function LatihanContent() {
     }
   };
 
-  // Progress calculations
-  const totalQuestions = activeQuestions.length;
-  const currentStep = Math.min(currentQuestionIndex + 1, totalQuestions);
-  const progressPercent =
-    totalQuestions > 0 ? Math.round((currentStep / totalQuestions) * 100) : 0;
-  const scorePercent =
-    totalQuestions > 0 ? Math.round((correctCount / totalQuestions) * 100) : 0;
+  // Summary Metrics
+  const totalQuestions = activeQuestions.length || 1;
+  const scorePercent = Math.round((correctCount / totalQuestions) * 100);
+  const currentStep = isSessionFinished
+    ? totalQuestions
+    : currentQuestionIndex + 1;
+  const progressPercent = Math.round((currentStep / totalQuestions) * 100);
 
-  // 3D visual states calculation
+  // Mesh state calculations
   const correctStructureId =
-    answeredState === "correct"
-      ? targetStructure?.id || null
-      : answeredState === "incorrect"
-      ? targetStructure?.id || null
-      : null;
+    answeredState === "correct" ? targetStructure?.id || null : null;
 
   const incorrectStructureId =
     answeredState === "incorrect" && clickedMeshId !== targetStructure?.id
@@ -229,21 +247,21 @@ function LatihanContent() {
   const hintStructureId = isHintActive ? targetStructure?.id || null : null;
 
   return (
-    <>
+    <div className="space-y-5">
       {/* PAGE HEADER */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-[21px] font-medium text-[#1e293b] leading-tight">
-              Latihan Anatomi 3D
+              Latihan Anatomi 3D Berbasis Regio
             </h1>
             {topicParam && (
               <span className="badge-shipped flex items-center gap-1">
-                <span>Fokus Topik: Saraf Lengan</span>
+                <span>Filter: {topicParam}</span>
                 <Link
                   href="/latihan"
                   className="hover:text-white/80 ml-1 font-bold"
-                  title="Hapus fokus topik"
+                  title="Hapus filter"
                 >
                   ✕
                 </Link>
@@ -251,11 +269,11 @@ function LatihanContent() {
             )}
           </div>
           <p className="text-[12.5px] text-[#64748b] mt-0.5">
-            Eksplorasi spasial interaktif untuk memperkuat retensi struktur dan inervasi
+            Eksplorasi spasial interaktif terbagi dalam 6 regio utama tubuh manusia sesuai Terminologia Anatomica
           </p>
         </div>
 
-        {/* Header Right: Region & Demo Controls */}
+        {/* Header Right: Simulation & Quick Selector */}
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsLoading(!isLoading)}
@@ -268,178 +286,253 @@ function LatihanContent() {
             <i className="bi bi-hourglass-split"></i>
             <span>{isLoading ? "Mode Normal" : "Simulasi Loading"}</span>
           </button>
-
-          <select
-            value={selectedRegionId}
-            onChange={(e) => handleRegionChange(e.target.value)}
-            className="h-[34px] px-3 bg-white border border-[#cbd5e1] rounded-[6px] text-[12.5px] font-medium text-[#1e293b] focus:outline-none focus:ring-1 focus:ring-[#0d6efd]"
-          >
-            {mockAnatomyRegions.map((reg) => (
-              <option key={reg.id} value={reg.id}>
-                {reg.name} ({reg.latinName})
-              </option>
-            ))}
-          </select>
         </div>
       </div>
 
-      {/* QUIZ CONTROLS & SESSION PROGRESS BAR */}
-      <div className="metis-card p-4 mb-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          {/* Mode Switcher */}
+      {/* 6 REGIO SELECTION ARENA (Interactive Cards Grid) */}
+      <div className="metis-card p-4">
+        <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <span className="text-[12.5px] font-semibold text-[#475569]">
-              Mode Kuis:
+            <span className="w-2.5 h-2.5 rounded-full bg-[#0d6efd]"></span>
+            <h2 className="text-[13.5px] font-bold text-[#1e293b]">
+              Pilih Fokus Regio Tubuh
+            </h2>
+            <span className="text-[11.5px] text-[#64748b] hidden sm:inline">
+              · Klik regio untuk memuat model 3D dan set soal terkait
             </span>
-            <div className="btn-group-period">
+          </div>
+          <span className="text-[11px] font-semibold text-[#0d6efd] bg-[#eff6ff] px-2.5 py-0.5 rounded-full border border-[#bfdbfe]">
+            6 Regio Tersedia
+          </span>
+        </div>
+
+        {/* 6 Cards Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          {mockAnatomyRegions.map((reg) => {
+            const isSelected = selectedRegionId === reg.id;
+            return (
               <button
-                onClick={() => handleModeChange("klik-struktur")}
-                className={`btn-period ${
-                  currentMode === "klik-struktur" ? "active" : ""
+                key={reg.id}
+                type="button"
+                onClick={() => handleRegionChange(reg.id)}
+                className={`text-left p-3 rounded-[7px] border transition relative flex flex-col justify-between h-[130px] group ${
+                  isSelected
+                    ? "bg-[#eff6ff] border-[#0d6efd] ring-2 ring-[#0d6efd]/30 shadow-xs"
+                    : "bg-white border-[#e2e8f0] hover:border-[#cbd5e1] hover:bg-[#f8fafc]"
                 }`}
               >
-                <i className="bi bi-cursor-fill mr-1"></i>
-                Klik Struktur
+                {/* Top: Number & 3D Badge */}
+                <div className="flex items-center justify-between w-full">
+                  <span
+                    className={`text-[10.5px] font-bold px-1.5 py-0.5 rounded-[4px] ${
+                      isSelected
+                        ? "bg-[#0d6efd] text-white"
+                        : "bg-[#f1f5f9] text-[#475569] group-hover:bg-[#e2e8f0]"
+                    }`}
+                  >
+                    #{reg.number}
+                  </span>
+
+                  {reg.modelUrl && (
+                    <span className="bg-[#10b981]/10 text-[#047857] border border-[#10b981]/30 text-[9.5px] font-bold px-1.5 py-0.2 rounded-full flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>
+                      <span>3D Asli</span>
+                    </span>
+                  )}
+                </div>
+
+                {/* Middle: Icon & Titles */}
+                <div className="my-1">
+                  <div className="flex items-center gap-1.5">
+                    <i
+                      className={`${reg.icon} text-[15px] ${
+                        isSelected ? "text-[#0d6efd]" : "text-[#64748b]"
+                      }`}
+                    ></i>
+                    <h3
+                      className={`text-[13px] font-bold leading-tight ${
+                        isSelected ? "text-[#0d6efd]" : "text-[#1e293b]"
+                      }`}
+                    >
+                      {reg.subName}
+                    </h3>
+                  </div>
+                  <span className="text-[10.5px] text-[#64748b] block truncate mt-0.5 font-medium">
+                    {reg.name}
+                  </span>
+                </div>
+
+                {/* Bottom: Mastery & Due items */}
+                <div className="flex items-center justify-between w-full pt-1.5 border-t border-[#f1f5f9] text-[10.5px]">
+                  <span
+                    className={`font-semibold ${
+                      reg.masteryScore >= 75
+                        ? "text-[#047857]"
+                        : reg.masteryScore >= 55
+                        ? "text-[#b45309]"
+                        : "text-[#b91c1c]"
+                    }`}
+                  >
+                    {reg.masteryScore}%
+                  </span>
+                  <span className="text-[#64748b]">
+                    {reg.dueCount} review
+                  </span>
+                </div>
               </button>
-              <button
-                onClick={() => handleModeChange("sebutkan-nama")}
-                className={`btn-period ${
-                  currentMode === "sebutkan-nama" ? "active" : ""
-                }`}
-              >
-                <i className="bi bi-ui-checks mr-1"></i>
-                Sebutkan Nama
-              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ACTIVE REGION OVERVIEW & QUIZ CONTROLS */}
+      <div className="metis-card p-4">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          {/* Active Region Context Info */}
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="w-10 h-10 rounded-[8px] bg-[#eff6ff] border border-[#bfdbfe] text-[#0d6efd] flex items-center justify-center text-[20px] flex-shrink-0">
+              <i className={selectedRegion.icon}></i>
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="font-bold text-[14.5px] text-[#1e293b]">
+                  {selectedRegion.name} ({selectedRegion.subName})
+                </span>
+                <span className="text-[11px] font-medium text-[#475569] italic bg-[#f8fafc] px-2 py-0.5 rounded-[4px] border border-[#e2e8f0]">
+                  {selectedRegion.latinName}
+                </span>
+                <span className="badge-shipped text-[10.5px]">
+                  {selectedRegion.structuresCount} Struktur
+                </span>
+              </div>
+              <p className="text-[11.5px] text-[#64748b] mt-0.5">
+                {selectedRegion.description}
+              </p>
             </div>
           </div>
 
-          {/* Session Progress Indicator */}
-          <div className="flex items-center gap-3 min-w-[220px]">
-            <span className="text-[12.5px] font-semibold text-[#1e293b] whitespace-nowrap">
-              Soal {currentStep} dari {totalQuestions}
-            </span>
-            <ProgressBar value={progressPercent} color="blue" size="md" />
+          {/* Mode Switcher & Progress */}
+          <div className="flex items-center gap-4 flex-wrap self-end lg:self-auto">
+            <div className="flex items-center gap-2">
+              <span className="text-[12px] font-semibold text-[#475569]">
+                Mode:
+              </span>
+              <div className="btn-group-period">
+                <button
+                  onClick={() => handleModeChange("klik-struktur")}
+                  className={`btn-period ${
+                    currentMode === "klik-struktur" ? "active" : ""
+                  }`}
+                >
+                  <i className="bi bi-cursor-fill mr-1"></i>Klik 3D
+                </button>
+                <button
+                  onClick={() => handleModeChange("sebutkan-nama")}
+                  className={`btn-period ${
+                    currentMode === "sebutkan-nama" ? "active" : ""
+                  }`}
+                >
+                  <i className="bi bi-ui-checks mr-1"></i>Identifikasi
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2 min-w-[170px]">
+              <span className="text-[12px] font-semibold text-[#1e293b] whitespace-nowrap">
+                {currentStep}/{totalQuestions}
+              </span>
+              <div className="w-28">
+                <ProgressBar value={progressPercent} size="md" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* MAIN PRACTICE WORKSPACE (2 COLUMNS: 65% VIEWER & 35% QUIZ PANEL) */}
+      {/* MAIN PRACTICE & QUIZ ARENA */}
       {isLoading ? (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 mb-5">
-          <div className="lg:col-span-8 metis-card h-[450px] p-6 flex flex-col justify-between">
-            <Skeleton className="h-6 w-44" />
-            <Skeleton className="h-64 w-full rounded-[8px]" />
-            <Skeleton className="h-4 w-60" />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+          <div className="lg:col-span-8 metis-card p-6 flex flex-col justify-center items-center min-h-[440px]">
+            <Skeleton className="w-12 h-12 rounded-full mb-3" />
+            <Skeleton className="h-5 w-48 mb-2" />
+            <Skeleton className="h-4 w-72" />
           </div>
-          <div className="lg:col-span-4 metis-card h-[450px] p-6 space-y-4">
-            <Skeleton className="h-5 w-32" />
+          <div className="lg:col-span-4 metis-card p-6 space-y-4">
+            <Skeleton className="h-6 w-1/2" />
+            <Skeleton className="h-24 w-full" />
             <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-28 w-full rounded-[6px]" />
+            <Skeleton className="h-10 w-full" />
           </div>
         </div>
       ) : isSessionFinished ? (
-        /* 5. LAYAR RINGKASAN SESI */
-        <div className="metis-card p-6 sm:p-8 max-w-2xl mx-auto mb-6 text-center animate-in zoom-in-95 duration-200">
-          <div className="w-16 h-16 rounded-full bg-[#e8f5e9] text-[#1b5e20] flex items-center justify-center text-[28px] mx-auto mb-4 shadow-sm">
+        /* Sesi Selesai (Summary View) */
+        <div className="metis-card p-8 text-center max-w-2xl mx-auto space-y-5">
+          <div className="w-16 h-16 mx-auto rounded-full bg-[#ecfdf5] border border-[#a7f3d0] text-[#059669] flex items-center justify-center text-[30px]">
             <i className="bi bi-award-fill"></i>
           </div>
 
-          <h2 className="text-[20px] font-bold text-[#1e293b]">
-            Sesi Latihan Selesai!
-          </h2>
-          <p className="text-[13px] text-[#64748b] mt-1 max-w-md mx-auto">
-            Hasil latihanmu telah direkam ke dalam jadwal Spaced Repetition untuk
-            menyesuaikan interval pengulangan berikutnya.
-          </p>
-
-          {/* Summary Score Boxes */}
-          <div className="grid grid-cols-3 gap-3 my-6 text-center">
-            <div className="p-3.5 bg-[#f8f9fa] border border-[#e2e8f0] rounded-[8px]">
-              <span className="text-[11.5px] text-[#64748b] block">Skor Sesi</span>
-              <span className="text-[24px] font-bold text-[#0d6efd] block leading-snug">
-                {scorePercent}%
-              </span>
-            </div>
-            <div className="p-3.5 bg-[#f0fdf4] border border-[#bbf7d0] rounded-[8px]">
-              <span className="text-[11.5px] text-[#166534] block">Jawaban Benar</span>
-              <span className="text-[24px] font-bold text-[#198754] block leading-snug">
-                {correctCount}
-              </span>
-            </div>
-            <div className="p-3.5 bg-[#fff5f5] border border-[#fed7d7] rounded-[8px]">
-              <span className="text-[11.5px] text-[#991b1b] block">Perlu Diulang</span>
-              <span className="text-[24px] font-bold text-[#dc2626] block leading-snug">
-                {totalQuestions - correctCount}
-              </span>
-            </div>
+          <div>
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#059669]">
+              Sesi Latihan {selectedRegion.name} Selesai
+            </span>
+            <h2 className="text-[20px] font-bold text-[#1e293b] mt-1">
+              Hasil Latihan: Skor {scorePercent}% ({correctCount}/{totalQuestions}{" "}
+              Benar)
+            </h2>
+            <p className="text-[12.5px] text-[#64748b] mt-1 max-w-md mx-auto">
+              PRIMA telah menyesuaikan bobot spaced repetition untuk regio{" "}
+              <strong>{selectedRegion.subName}</strong>. Struktur yang keliru akan
+              dijadwalkan ulang lebih cepat.
+            </p>
           </div>
 
-          {/* Incorrect Structures Notification */}
-          {incorrectStructures.length > 0 && (
-            <div className="mb-6 text-left border border-[#fed7d7] bg-[#fff5f5] rounded-[8px] p-4">
-              <div className="flex items-center gap-2 text-[#991b1b] font-semibold text-[13px] mb-2">
-                <i className="bi bi-arrow-repeat text-[15px]"></i>
-                <span>Struktur yang akan diulang lebih cepat:</span>
-              </div>
-              <div className="space-y-1.5 divide-y divide-[#fed7d7]/60">
-                {incorrectStructures.map((struct) => (
-                  <div
-                    key={struct.id}
-                    className="pt-1.5 flex items-center justify-between text-[12px]"
-                  >
-                    <div>
-                      <strong className="text-[#0f172a]">{struct.nameIndo}</strong>
-                      <span className="italic text-[#64748b] ml-1.5">
-                        ({struct.nameLatin})
-                      </span>
-                    </div>
-                    <span className="text-[11px] font-semibold text-[#dc2626] bg-white px-2 py-0.5 rounded-[3px] border border-[#fca5a5]">
-                      Interval 1 Hari
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Action Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          {/* Action buttons on finish */}
+          <div className="flex items-center justify-center gap-3 pt-3 flex-wrap">
             <button
               onClick={handleResetSession}
-              className="h-[36px] px-4 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white font-semibold text-[13px] rounded-[6px] flex items-center gap-1.5 shadow-sm transition"
+              className="h-[36px] px-4 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white font-semibold text-[13px] rounded-[6px] shadow-sm transition flex items-center gap-1.5"
             >
-              <i className="bi bi-arrow-repeat"></i>
-              <span>Ulangi Sesi Latihan</span>
+              <i className="bi bi-arrow-counterclockwise"></i>
+              <span>Ulangi Regio Ini</span>
             </button>
-            <Link
-              href="/beranda"
-              className="h-[36px] px-4 bg-white hover:bg-[#f8fafc] border border-[#cbd5e1] text-[#334155] font-semibold text-[13px] rounded-[6px] flex items-center gap-1.5 transition"
+
+            {/* Quick Switch to another region */}
+            <button
+              onClick={() => {
+                const nextReg =
+                  selectedRegionId === "reg-thorax"
+                    ? "reg-membrum"
+                    : "reg-thorax";
+                handleRegionChange(nextReg);
+              }}
+              className="h-[36px] px-4 bg-white border border-[#cbd5e1] hover:bg-[#f8fafc] text-[#334155] font-semibold text-[13px] rounded-[6px] transition flex items-center gap-1.5"
             >
-              <i className="bi bi-house-door"></i>
-              <span>Kembali ke Beranda</span>
-            </Link>
+              <i className="bi bi-arrow-right-circle"></i>
+              <span>Lanjut ke Regio Lain</span>
+            </button>
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 mb-5 items-stretch">
-          {/* KOLOM KIRI: 3D VIEWER (Sekitar 65% lebar / 8 Kolom di Laptop) */}
+        /* Active Practice Arena (Two Columns) */
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+          {/* KOLOM KIRI: 3D ANATOMY VIEWER (8 Kolom di Laptop) */}
           <div className="lg:col-span-8 metis-card flex flex-col overflow-hidden">
             <div className="metis-card-header">
               <div className="flex items-center gap-2">
                 <i className="bi bi-box text-[#0d6efd] text-[15px]"></i>
                 <h2 className="metis-card-title">
-                  Model Anatomi: {selectedRegion.name}
+                  Model Anatomi 3D: {selectedRegion.name} ({selectedRegion.subName})
                 </h2>
               </div>
               <span className="text-[11.5px] text-[#64748b]">
                 {currentMode === "klik-struktur"
-                  ? "Klik mesh struktur untuk menjawab"
+                  ? "Klik bagian model 3D untuk menjawab"
                   : "Struktur target disorot warna biru"}
               </span>
             </div>
 
             {/* 3D Canvas Container */}
-            <div className="p-3 flex-1 flex flex-col">
+            <div className="p-3 flex-1 flex flex-col min-h-[430px] lg:min-h-[520px]">
               <AnatomyViewer
                 structures={structures}
                 selectedStructureId={clickedMeshId}
@@ -454,7 +547,7 @@ function LatihanContent() {
             </div>
           </div>
 
-          {/* KOLOM KANAN: PANEL LATIHAN & KUIS (35% lebar / 4 Kolom di Laptop) */}
+          {/* KOLOM KANAN: PANEL LATIHAN & KUIS (4 Kolom di Laptop) */}
           <div className="lg:col-span-4 metis-card flex flex-col justify-between">
             <div className="metis-card-header">
               <div>
@@ -465,135 +558,155 @@ function LatihanContent() {
                     : "Mode Identifikasi Nama"}
                 </span>
               </div>
-              <span className="text-[11.5px] font-bold text-[#0d6efd] bg-[#f1f5f9] px-2 py-0.5 rounded-[4px] border border-[#e2e8f0]">
-                Soal {currentStep}/{totalQuestions}
+              <span className="text-[11.5px] font-bold text-[#0d6efd] bg-[#eff6ff] px-2 py-0.5 rounded-[4px]">
+                {currentStep} / {totalQuestions}
               </span>
             </div>
 
             <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-              {/* Question Body */}
-              <div className="space-y-3">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748b] block">
-                  Pertanyaan:
-                </span>
-                <p className="text-[14px] font-medium text-[#1e293b] leading-relaxed">
-                  {currentQuestion?.promptText}
-                </p>
-
-                {/* Highlighted Target Label */}
-                <div className="p-3 bg-[#f8f9fa] border border-[#e2e8f0] rounded-[6px]">
-                  <strong className="text-[14px] text-[#0d6efd] block font-bold">
-                    {currentQuestion?.latinName}
-                  </strong>
-                  <span className="text-[11.5px] text-[#64748b]">
-                    Regio: Extremitas Superior
-                  </span>
-                </div>
-
-                {/* MODE 1: KLIK STRUKTUR (Action instruction & Hint) */}
-                {currentMode === "klik-struktur" && (
-                  <div className="space-y-3 pt-1">
-                    <p className="text-[12px] text-[#475569] bg-[#f8fafc] p-2.5 rounded-[5px] border border-[#e2e8f0]/80 flex items-center gap-2">
-                      <i className="bi bi-mouse text-[#0d6efd] text-[15px]"></i>
-                      <span>Putar dan klik langsung pada mesh model 3D di samping.</span>
+              {currentQuestion ? (
+                <>
+                  <div className="space-y-3">
+                    <p className="text-[13.5px] font-semibold text-[#1e293b] leading-relaxed">
+                      {currentQuestion.promptText}
                     </p>
 
-                    {/* Hint Button */}
-                    {answeredState === "unanswered" && (
-                      <button
-                        onClick={() => setIsHintActive(!isHintActive)}
-                        className={`h-[30px] px-3 rounded-[5px] text-[12px] font-semibold border transition flex items-center gap-1.5 ${
-                          isHintActive
-                            ? "bg-[#fff8e1] border-[#ffe082] text-[#b45309]"
-                            : "bg-white border-[#cbd5e1] text-[#64748b] hover:bg-[#f8fafc]"
-                        }`}
-                      >
-                        <i className="bi bi-lightbulb-fill text-[#cc7a00]"></i>
-                        <span>{isHintActive ? "Sembunyikan Petunjuk" : "Bantuan / Petunjuk"}</span>
-                      </button>
+                    {/* Mode: Klik Struktur */}
+                    {currentMode === "klik-struktur" && targetStructure && (
+                      <div className="p-3.5 bg-[#f8fafc] border border-[#e2e8f0] rounded-[6px] space-y-1">
+                        <span className="text-[10.5px] uppercase font-bold tracking-wider text-[#64748b]">
+                          Cari & Klik Struktur:
+                        </span>
+                        <div className="text-[15px] font-bold text-[#0d6efd]">
+                          {targetStructure.nameIndo}
+                        </div>
+                        <div className="text-[12.5px] text-[#475569] italic">
+                          {targetStructure.nameLatin}
+                        </div>
+                        <div className="pt-2 flex items-center gap-2">
+                          <span className="badge-pending text-[10px]">
+                            {targetStructure.category}
+                          </span>
+                          <span className="text-[11px] text-[#64748b]">
+                            Tingkat kesulitan: {targetStructure.difficulty}
+                          </span>
+                        </div>
+                      </div>
                     )}
 
-                    {isHintActive && (
-                      <div className="p-2.5 bg-[#fff8e1] border border-[#ffe082] rounded-[5px] text-[#8d6e63] text-[12px]">
-                        <strong>Petunjuk:</strong> {currentQuestion?.hint}
+                    {/* Mode: Sebutkan Nama (Multiple Choice) */}
+                    {currentMode === "sebutkan-nama" && currentQuestion.options && (
+                      <div className="space-y-2 pt-1">
+                        {currentQuestion.options.map((opt) => {
+                          const isSelected = selectedChoiceId === opt.structureId;
+                          const isOptCorrect =
+                            answeredState !== "unanswered" &&
+                            opt.structureId === targetStructure?.id;
+                          const isOptIncorrect =
+                            answeredState === "incorrect" &&
+                            isSelected &&
+                            opt.structureId !== targetStructure?.id;
+
+                          return (
+                            <button
+                              key={opt.structureId}
+                              type="button"
+                              onClick={() => handleOptionSelect(opt.structureId)}
+                              disabled={answeredState !== "unanswered"}
+                              className={`w-full text-left p-3 rounded-[6px] border transition flex flex-col ${
+                                isOptCorrect
+                                  ? "bg-[#ecfdf5] border-[#10b981] text-[#065f46]"
+                                  : isOptIncorrect
+                                  ? "bg-[#fef2f2] border-[#ef4444] text-[#991b1b]"
+                                  : isSelected
+                                  ? "bg-[#eff6ff] border-[#0d6efd]"
+                                  : "bg-white border-[#cbd5e1] hover:bg-[#f8fafc] text-[#1e293b]"
+                              }`}
+                            >
+                              <span className="font-semibold text-[13px]">
+                                {opt.nameIndo}
+                              </span>
+                              <span className="text-[11px] text-[#64748b] italic">
+                                {opt.nameLatin}
+                              </span>
+                            </button>
+                          );
+                        })}
                       </div>
                     )}
                   </div>
-                )}
 
-                {/* MODE 2: SEBUTKAN NAMA (4 Multiple Choice Options) */}
-                {currentMode === "sebutkan-nama" && currentQuestion?.options && (
-                  <div className="space-y-2 pt-1">
-                    {currentQuestion.options.map((opt) => {
-                      const isSelected = selectedChoiceId === opt.structureId;
-                      const isCorrect =
-                        answeredState !== "unanswered" &&
-                        opt.structureId === currentQuestion.targetStructureId;
-                      const isWrongChoice =
-                        answeredState === "incorrect" && isSelected;
-
-                      let btnStyle =
-                        "bg-white border-[#cbd5e1] text-[#1e293b] hover:bg-[#f8fafc]";
-                      if (isCorrect) {
-                        btnStyle =
-                          "bg-[#e8f5e9] border-[#81c784] text-[#1b5e20] shadow-2xs";
-                      } else if (isWrongChoice) {
-                        btnStyle =
-                          "bg-[#ffebee] border-[#e57373] text-[#c62828]";
-                      }
-
-                      return (
-                        <button
-                          key={opt.structureId}
-                          disabled={answeredState !== "unanswered"}
-                          onClick={() => handleOptionSelect(opt.structureId)}
-                          className={`w-full text-left p-3 rounded-[6px] border transition ${btnStyle} disabled:cursor-default`}
-                        >
-                          <div className="text-[13px] font-bold leading-snug">
-                            {opt.nameIndo}
-                          </div>
-                          <div className="text-[11px] italic opacity-80 mt-0.5">
-                            {opt.nameLatin}
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-
-              {/* FEEDBACK BANNER (Appears after answer) */}
-              {answeredState !== "unanswered" && (
-                <div className="space-y-3 pt-3 border-t border-[#f1f5f9] animate-in fade-in duration-200">
-                  {answeredState === "correct" ? (
-                    <div className="p-3 bg-[#e8f5e9] border border-[#a5d6a7] rounded-[6px] text-[#1b5e20] text-[12.5px]">
-                      <div className="flex items-center gap-1.5 font-bold mb-1">
-                        <i className="bi bi-check-circle-fill text-[16px]"></i>
-                        <span>Jawaban Kamu Benar!</span>
+                  {/* Feedback Banner upon answering */}
+                  {answeredState !== "unanswered" && (
+                    <div
+                      className={`p-3.5 rounded-[6px] border space-y-1.5 animate-in fade-in duration-200 ${
+                        answeredState === "correct"
+                          ? "bg-[#ecfdf5] border-[#a7f3d0] text-[#065f46]"
+                          : "bg-[#fef2f2] border-[#fecaca] text-[#991b1b]"
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5 font-bold text-[13px]">
+                        <i
+                          className={`bi ${
+                            answeredState === "correct"
+                              ? "bi-check-circle-fill text-[#10b981]"
+                              : "bi-x-circle-fill text-[#ef4444]"
+                          }`}
+                        ></i>
+                        <span>
+                          {answeredState === "correct"
+                            ? "Jawaban Tepat!"
+                            : "Kurang Tepat"}
+                        </span>
                       </div>
-                      <p className="leading-relaxed text-[12px]">
-                        {currentQuestion?.explanation}
+                      <p className="text-[12px] leading-relaxed">
+                        {currentQuestion.explanation}
                       </p>
-                    </div>
-                  ) : (
-                    <div className="p-3 bg-[#ffebee] border border-[#ef9a9a] rounded-[6px] text-[#b71c1c] text-[12.5px]">
-                      <div className="flex items-center gap-1.5 font-bold mb-1">
-                        <i className="bi bi-x-circle-fill text-[16px]"></i>
-                        <span>Belum Tepat (Perlu Diulang)</span>
-                      </div>
-                      <p className="leading-relaxed text-[12px]">
-                        {currentQuestion?.explanation}
-                      </p>
-                      <span className="block mt-1.5 text-[11px] text-[#7f1d1d] font-semibold">
-                        Struktur yang benar ditandai warna hijau pada model 3D.
-                      </span>
+                      {targetStructure?.clinicalNote && (
+                        <div className="pt-1 text-[11.5px] border-t border-black/10 mt-1">
+                          <strong>Korelasi Klinis:</strong>{" "}
+                          {targetStructure.clinicalNote}
+                        </div>
+                      )}
                     </div>
                   )}
 
-                  {/* Continue Button */}
+                  {/* Hint Box (if triggered) */}
+                  {isHintActive && answeredState === "unanswered" && (
+                    <div className="p-3 bg-[#fffbeb] border border-[#fde68a] text-[#92400e] rounded-[6px] text-[12px] flex items-start gap-2 animate-in fade-in">
+                      <i className="bi bi-lightbulb-fill text-[#f59e0b] mt-0.5"></i>
+                      <div>
+                        <strong>Petunjuk Visual:</strong> {currentQuestion.hint}
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <EmptyState
+                  icon={<i className="bi bi-check2-all"></i>}
+                  title="Tidak ada soal"
+                  description="Seluruh soal latihan untuk regio dan mode ini telah selesai."
+                />
+              )}
+
+              {/* Bottom Actions */}
+              <div className="pt-3 border-t border-[#f1f5f9] flex items-center justify-between gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsHintActive(!isHintActive)}
+                  disabled={answeredState !== "unanswered"}
+                  className="h-[34px] px-3 bg-white border border-[#cbd5e1] hover:bg-[#f8fafc] text-[#475569] text-[12px] font-medium rounded-[5px] transition flex items-center gap-1.5 disabled:opacity-40"
+                  title="Tampilkan petunjuk lokasi"
+                >
+                  <i className="bi bi-lightbulb text-[#f59e0b]"></i>
+                  <span>Petunjuk</span>
+                </button>
+
+                {answeredState !== "unanswered" && (
                   <button
+                    type="button"
                     onClick={handleNextQuestion}
-                    className="w-full h-[36px] bg-[#0d6efd] hover:bg-[#0b5ed7] text-white text-[13px] font-semibold rounded-[6px] flex items-center justify-center gap-1.5 shadow-sm transition"
+                    className="h-[34px] px-4 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white text-[12.5px] font-semibold rounded-[5px] transition flex items-center gap-1.5 shadow-2xs"
                   >
                     <span>
                       {currentStep < totalQuestions
@@ -602,12 +715,12 @@ function LatihanContent() {
                     </span>
                     <i className="bi bi-chevron-right text-[12px]"></i>
                   </button>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
