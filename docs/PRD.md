@@ -50,7 +50,7 @@ Berdasarkan telaah 16 studi terbaru dan sebuah review tentang AI dalam pendidika
 
 ## 5. Cerita Penggunaan (User Story)
 
-> **Rina**, mahasiswa semester 2, punya ujian anatomi dua minggu lagi. Ia membuka PRIMA, memilih regio *anggota gerak atas*, dan mengisi tanggal ujiannya. Sistem membagi topik ke jadwal harian. Hari ini ia berlatih lewat model 3D: sistem menyorot sebuah otot dan ia memilih namanya. Beberapa jawabannya salah, dan sistem mencatat itu. Besok struktur yang salah muncul lagi, dengan jeda yang makin panjang jika ia menjawab benar. Di dashboard, Rina melihat bahwa saraf lengan masih menjadi titik lemahnya, jadi ia tahu apa yang harus diprioritaskan.
+> **Rina**, mahasiswa semester 2, punya ujian anatomi blok muskuloskeletal dan toraks dua minggu lagi. Ia membuka PRIMA, memilih fokus pada **Regio Thorax (Dada & Organ Dalam)** dan **Regio Membrum (Anggota Gerak)**. Sistem membagi target ke jadwal harian. Hari ini ia berlatih lewat model 3D: sistem menyorot sebuah organ/otot dan ia memilih namanya, atau sistem meminta Rina mengklik langsung struktur pada model 3D (seperti *Arcus aortae* atau *M. Biceps brachii*). Beberapa jawabannya salah, dan sistem mencatat kelemahan tersebut. Besok struktur yang salah muncul lagi dengan jeda adaptif (*spaced repetition*). Di dashboard, Rina dapat melihat peta penguasaan per regio sehingga ia tahu regio mana yang membutuhkan latihan intensif.
 
 ---
 
@@ -63,7 +63,7 @@ Berdasarkan telaah 16 studi terbaru dan sebuah review tentang AI dalam pendidika
 | F1 | **Akun dan profil** | Daftar, masuk, pilih regio atau topik yang dipelajari | Dasar untuk menyimpan progres |
 | F2 | **Perencana belajar** | Mahasiswa mengisi topik dan tanggal ujian, sistem membagi target harian | Menjawab masalah manajemen waktu |
 | F3 | **Latihan adaptif (spaced repetition)** | Item yang salah diulang lebih cepat, yang benar diulang lebih jarang | Menjawab masalah strategi belajar dan beban materi |
-| F4 | **Modul anatomi 3D (satu regio)** | Model 3D yang bisa diputar. Mode kuis: *klik struktur* dan *sebutkan nama* | Menjadi daya tarik utama dan latihan yang interaktif |
+| F4 | **Modul anatomi 3D berbasis 6 regio tubuh** | Eksplorasi 3D dan kuis interaktif yang mencakup 6 regio utama tubuh manusia: Caput, Collum, Thorax, Abdomen, Pelvis, dan Membrum. Mode kuis: *klik struktur* dan *sebutkan nama* | Menjadi daya tarik utama dan latihan terstruktur sesuai kurikulum anatomi kedokteran |
 | F5 | **Dashboard pribadi** | Progres, peta kelemahan per topik, rekomendasi latihan berikutnya | Memberi arah dan rasa kemajuan |
 
 ### 6.2 Fitur Fase Kedua
@@ -99,7 +99,7 @@ Berdasarkan telaah 16 studi terbaru dan sebuah review tentang AI dalam pendidika
 
 - PRIMA **bukan alat diagnosis** dan tidak memberi saran medis ke pasien.
 - PRIMA **tidak mengukur atau mendiagnosis burnout**.
-- Konten anatomi hanya mencakup **satu regio**, dan perlu divalidasi dosen anatomi.
+- Konten latihan anatomi diorganisasikan ke dalam **6 regio utama tubuh manusia** (Caput, Collum, Thorax, Abdomen, Pelvis, Membrum).
 - Sistem membantu belajar, **tidak menggantikan** praktikum dan bimbingan dosen.
 
 ---
