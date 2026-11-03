@@ -704,3 +704,410 @@ export const mock14DaySchedule: DaySchedule[] = [
   },
 ];
 
+// 9. Data Lengkap Peta Kelemahan (Weakness Map)
+export type MasteryLevel = "lemah" | "sedang" | "kuat";
+
+export interface ErrorProneStructure {
+  id: string;
+  nameIndo: string;
+  nameLatin: string;
+  errorCount: number;
+  lastErrorDate: string; // e.g. "02 Nov 2026"
+  clinicalNote?: string;
+}
+
+export interface DetailedAnatomyTopic {
+  id: string;
+  nameIndo: string;
+  nameLatin: string;
+  regio: string; // "Extremitas Superior" | "Extremitas Inferior" | "Caput et Collum" | "Thorax"
+  masteryScore: number; // 0 - 100
+  level: MasteryLevel; // lemah (<50), sedang (50-74), kuat (>=75)
+  totalItems: number;
+  frequentErrorCount: number;
+  lastPracticedDate: string; // e.g. "02 Nov 2026"
+  trend6Weeks: number[]; // e.g. [20, 24, 28, 30, 35, 38]
+  recommendation: string;
+  errorStructures: ErrorProneStructure[];
+}
+
+export const mockDetailedAnatomyTopics: DetailedAnatomyTopic[] = [
+  {
+    id: "top-01",
+    nameIndo: "Pleksus Brakialis & Saraf Perifer",
+    nameLatin: "Plexus Brachialis & Nervi Peripherici",
+    regio: "Extremitas Superior",
+    masteryScore: 38,
+    level: "lemah",
+    totalItems: 24,
+    frequentErrorCount: 9,
+    lastPracticedDate: "02 Nov 2026",
+    trend6Weeks: [20, 24, 28, 30, 35, 38],
+    recommendation: "Ulangi 8 struktur inervasi dan cabang terminal Pleksus Brakialis selama 3 hari berturut-turut.",
+    errorStructures: [
+      {
+        id: "err-01-1",
+        nameIndo: "Fasikulus Posterior",
+        nameLatin: "Fasciculus Posterior Plexus Brachialis",
+        errorCount: 14,
+        lastErrorDate: "02 Nov 2026",
+        clinicalNote: "Sering tertukar dengan Fasciculus Lateralis pada potongan transversal axilla.",
+      },
+      {
+        id: "err-01-2",
+        nameIndo: "Nervus Axillaris",
+        nameLatin: "N. Axillaris",
+        errorCount: 11,
+        lastErrorDate: "01 Nov 2026",
+        clinicalNote: "Kerap salah diidentifikasi saat melintasi Spatium Axillare Mediale vs Laterale.",
+      },
+      {
+        id: "err-01-3",
+        nameIndo: "Nervus Musculocutaneus",
+        nameLatin: "N. Musculocutaneus",
+        errorCount: 9,
+        lastErrorDate: "31 Okt 2026",
+        clinicalNote: "Perhatikan penetrasi saraf ini menembus M. Coracobrachialis.",
+      },
+      {
+        id: "err-01-4",
+        nameIndo: "Truncus Medius",
+        nameLatin: "Truncus Medius Plexus Brachialis",
+        errorCount: 7,
+        lastErrorDate: "30 Okt 2026",
+      },
+    ],
+  },
+  {
+    id: "top-02",
+    nameIndo: "Fossa Poplitea & Regio Genu Posterior",
+    nameLatin: "Fossa Poplitea & Regio Genu Posterior",
+    regio: "Extremitas Inferior",
+    masteryScore: 44,
+    level: "lemah",
+    totalItems: 20,
+    frequentErrorCount: 8,
+    lastPracticedDate: "30 Okt 2026",
+    trend6Weeks: [28, 30, 34, 38, 40, 44],
+    recommendation: "Fokuskan identifikasi urutan struktur neurovaskular dari medial ke lateral di fossa poplitea.",
+    errorStructures: [
+      {
+        id: "err-02-1",
+        nameIndo: "Nervus Tibialis",
+        nameLatin: "N. Tibialis",
+        errorCount: 12,
+        lastErrorDate: "30 Okt 2026",
+        clinicalNote: "Perhatikan posisinya yang paling superfisial dibanding pembuluh poplitea.",
+      },
+      {
+        id: "err-02-2",
+        nameIndo: "Vena Poplitea",
+        nameLatin: "V. Poplitea",
+        errorCount: 10,
+        lastErrorDate: "29 Okt 2026",
+      },
+      {
+        id: "err-02-3",
+        nameIndo: "Arteria Poplitea",
+        nameLatin: "A. Poplitea",
+        errorCount: 8,
+        lastErrorDate: "28 Okt 2026",
+      },
+    ],
+  },
+  {
+    id: "top-03",
+    nameIndo: "Trigonum Colli (Segitiga Leher)",
+    nameLatin: "Trigona Cervicalia (Colli)",
+    regio: "Caput et Collum",
+    masteryScore: 47,
+    level: "lemah",
+    totalItems: 26,
+    frequentErrorCount: 7,
+    lastPracticedDate: "28 Okt 2026",
+    trend6Weeks: [30, 35, 38, 40, 42, 47],
+    recommendation: "Bagi latihan batas Trigonum Caroticum dan Trigonum Submandibulare secara bertahap.",
+    errorStructures: [
+      {
+        id: "err-03-1",
+        nameIndo: "Trigonum Caroticum",
+        nameLatin: "Trigonum Caroticum",
+        errorCount: 11,
+        lastErrorDate: "28 Okt 2026",
+        clinicalNote: "Batas penting: Venter superior M. omohyoideus, M. SCM, dan venter posterior M. digastricus.",
+      },
+      {
+        id: "err-03-2",
+        nameIndo: "Venter Superior M. Omohyoideus",
+        nameLatin: "Venter Superior M. Omohyoidei",
+        errorCount: 9,
+        lastErrorDate: "27 Okt 2026",
+      },
+      {
+        id: "err-03-3",
+        nameIndo: "Venter Posterior M. Digastricus",
+        nameLatin: "Venter Posterior M. Digastrici",
+        errorCount: 8,
+        lastErrorDate: "26 Okt 2026",
+      },
+    ],
+  },
+  {
+    id: "top-04",
+    nameIndo: "Kompartemen Posterior Lengan Atas",
+    nameLatin: "Regio Brachii Posterior (M. Triceps)",
+    regio: "Extremitas Superior",
+    masteryScore: 54,
+    level: "sedang",
+    totalItems: 18,
+    frequentErrorCount: 5,
+    lastPracticedDate: "01 Nov 2026",
+    trend6Weeks: [36, 40, 42, 46, 50, 54],
+    recommendation: "Perkuat origo caput mediale dan caput laterale triceps brachii pada model 3D.",
+    errorStructures: [
+      {
+        id: "err-04-1",
+        nameIndo: "Caput Mediale M. Triceps Brachii",
+        nameLatin: "Caput Mediale M. Tricipitis Brachii",
+        errorCount: 8,
+        lastErrorDate: "01 Nov 2026",
+      },
+      {
+        id: "err-04-2",
+        nameIndo: "Nervus Radialis di Sulcus Radialis",
+        nameLatin: "N. Radialis in Sulco N. Radialis",
+        errorCount: 7,
+        lastErrorDate: "31 Okt 2026",
+        clinicalNote: "Rentan cedera pada fraktur corpus humeri sepertiga tengah.",
+      },
+      {
+        id: "err-04-3",
+        nameIndo: "Musculus Anconeus",
+        nameLatin: "M. Anconeus",
+        errorCount: 5,
+        lastErrorDate: "30 Okt 2026",
+      },
+    ],
+  },
+  {
+    id: "top-05",
+    nameIndo: "Trigonum Femorale & Canalis Adductorius",
+    nameLatin: "Trigonum Femorale & Canalis Adductorius",
+    regio: "Extremitas Inferior",
+    masteryScore: 62,
+    level: "sedang",
+    totalItems: 22,
+    frequentErrorCount: 4,
+    lastPracticedDate: "01 Nov 2026",
+    trend6Weeks: [44, 48, 52, 55, 58, 62],
+    recommendation: "Latih kembali batas mnemonik NAVEL di trigonum femorale untuk menghindari kekeliruan vaskular.",
+    errorStructures: [
+      {
+        id: "err-05-1",
+        nameIndo: "Anulus Femoralis",
+        nameLatin: "Anulus Femoralis",
+        errorCount: 7,
+        lastErrorDate: "01 Nov 2026",
+        clinicalNote: "Pintu masuk hernia femoralis; medial terhadap vena femoralis.",
+      },
+      {
+        id: "err-05-2",
+        nameIndo: "Nervus Saphenus",
+        nameLatin: "N. Saphenus",
+        errorCount: 6,
+        lastErrorDate: "30 Okt 2026",
+      },
+      {
+        id: "err-05-3",
+        nameIndo: "Hiatus Adductorius",
+        nameLatin: "Hiatus Adductorius (Hunter)",
+        errorCount: 5,
+        lastErrorDate: "29 Okt 2026",
+      },
+    ],
+  },
+  {
+    id: "top-06",
+    nameIndo: "Kompartemen Cruris & Tarsus",
+    nameLatin: "Regio Cruris & Articulatio Talocruralis",
+    regio: "Extremitas Inferior",
+    masteryScore: 68,
+    level: "sedang",
+    totalItems: 24,
+    frequentErrorCount: 4,
+    lastPracticedDate: "31 Okt 2026",
+    trend6Weeks: [50, 54, 58, 60, 64, 68],
+    recommendation: "Ulangi inervasi kutan dorsum pedis dan cabang terminal nervus fibularis profundus.",
+    errorStructures: [
+      {
+        id: "err-06-1",
+        nameIndo: "Nervus Fibularis Profundus",
+        nameLatin: "N. Fibularis Profundus",
+        errorCount: 7,
+        lastErrorDate: "31 Okt 2026",
+      },
+      {
+        id: "err-06-2",
+        nameIndo: "Retinaculum Extensorum Inferius",
+        nameLatin: "Retinaculum Mm. Extensorum Inferius",
+        errorCount: 6,
+        lastErrorDate: "30 Okt 2026",
+      },
+      {
+        id: "err-06-3",
+        nameIndo: "Musculus Tibialis Posterior",
+        nameLatin: "M. Tibialis Posterior",
+        errorCount: 4,
+        lastErrorDate: "28 Okt 2026",
+      },
+    ],
+  },
+  {
+    id: "top-07",
+    nameIndo: "Kompleks Sendi Bahu & Rotator Cuff",
+    nameLatin: "Articulatio Humeri & Musculi Rotatores",
+    regio: "Extremitas Superior",
+    masteryScore: 72,
+    level: "sedang",
+    totalItems: 22,
+    frequentErrorCount: 3,
+    lastPracticedDate: "02 Nov 2026",
+    trend6Weeks: [52, 56, 60, 64, 68, 72],
+    recommendation: "Tingkatkan ketelitian insersio M. Subscapularis vs M. Supraspinatus pada tuberculum humeri.",
+    errorStructures: [
+      {
+        id: "err-07-1",
+        nameIndo: "Musculus Subscapularis",
+        nameLatin: "M. Subscapularis",
+        errorCount: 6,
+        lastErrorDate: "02 Nov 2026",
+        clinicalNote: "Satu-satunya otot rotator cuff yang berinsersio di Tuberculum Minus.",
+      },
+      {
+        id: "err-07-2",
+        nameIndo: "Ligamentum Coracoacromiale",
+        nameLatin: "Lig. Coracoacromiale",
+        errorCount: 5,
+        lastErrorDate: "01 Nov 2026",
+      },
+      {
+        id: "err-07-3",
+        nameIndo: "Labrum Glenoidale",
+        nameLatin: "Labrum Glenoidale",
+        errorCount: 4,
+        lastErrorDate: "31 Okt 2026",
+      },
+    ],
+  },
+  {
+    id: "top-08",
+    nameIndo: "Mediastinum & Cor (Jantung & Pembuluh)",
+    nameLatin: "Mediastinum & Cor",
+    regio: "Thorax",
+    masteryScore: 78,
+    level: "kuat",
+    totalItems: 28,
+    frequentErrorCount: 2,
+    lastPracticedDate: "27 Okt 2026",
+    trend6Weeks: [65, 68, 70, 72, 75, 78],
+    recommendation: "Pertahankan jadwal spaced repetition 10 hari sekali untuk vaskularisasi arteri koronaria.",
+    errorStructures: [
+      {
+        id: "err-08-1",
+        nameIndo: "Ramus Circumflexus A. Coronaria Sinistra",
+        nameLatin: "R. Circumflexus A. Coronariae Sinistrae",
+        errorCount: 4,
+        lastErrorDate: "27 Okt 2026",
+      },
+      {
+        id: "err-08-2",
+        nameIndo: "Sinus Coronarius",
+        nameLatin: "Sinus Coronarius",
+        errorCount: 3,
+        lastErrorDate: "26 Okt 2026",
+      },
+      {
+        id: "err-08-3",
+        nameIndo: "Nervus Phrenicus Sinister",
+        nameLatin: "N. Phrenicus Sinister",
+        errorCount: 3,
+        lastErrorDate: "24 Okt 2026",
+      },
+    ],
+  },
+  {
+    id: "top-09",
+    nameIndo: "Kompartemen Fleksor Lengan Bawah",
+    nameLatin: "Regio Antebrachii Anterior",
+    regio: "Extremitas Superior",
+    masteryScore: 84,
+    level: "kuat",
+    totalItems: 26,
+    frequentErrorCount: 2,
+    lastPracticedDate: "01 Nov 2026",
+    trend6Weeks: [70, 74, 76, 79, 82, 84],
+    recommendation: "Pemahaman sangat baik. Lakukan review periodik singkat untuk insersio fleksor lapis profunda.",
+    errorStructures: [
+      {
+        id: "err-09-1",
+        nameIndo: "Musculus Flexor Pollicis Longus",
+        nameLatin: "M. Flexor Pollicis Longus",
+        errorCount: 3,
+        lastErrorDate: "01 Nov 2026",
+      },
+      {
+        id: "err-09-2",
+        nameIndo: "Musculus Pronator Quadratus",
+        nameLatin: "M. Pronator Quadratus",
+        errorCount: 3,
+        lastErrorDate: "30 Okt 2026",
+      },
+      {
+        id: "err-09-3",
+        nameIndo: "Nervus Interosseus Anterior",
+        nameLatin: "N. Interosseus Anterior",
+        errorCount: 2,
+        lastErrorDate: "28 Okt 2026",
+      },
+    ],
+  },
+  {
+    id: "top-10",
+    nameIndo: "Otot Intrinsik & Vaskularisasi Tangan",
+    nameLatin: "Regio Palmaris Manus",
+    regio: "Extremitas Superior",
+    masteryScore: 92,
+    level: "kuat",
+    totalItems: 30,
+    frequentErrorCount: 1,
+    lastPracticedDate: "03 Nov 2026",
+    trend6Weeks: [80, 82, 85, 88, 90, 92],
+    recommendation: "Topik telah dikuasai dengan matang. Lakukan sesi kuis pemeliharaan 14 hari sekali.",
+    errorStructures: [
+      {
+        id: "err-10-1",
+        nameIndo: "Musculi Lumbricales III-IV",
+        nameLatin: "Mm. Lumbricales III et IV",
+        errorCount: 2,
+        lastErrorDate: "03 Nov 2026",
+        clinicalNote: "Diinervasi oleh N. Ulnaris, berbeda dari I-II yang diinervasi N. Medianus.",
+      },
+      {
+        id: "err-10-2",
+        nameIndo: "Ramus Profundus N. Ulnaris",
+        nameLatin: "R. Profundus N. Ulnaris",
+        errorCount: 2,
+        lastErrorDate: "01 Nov 2026",
+      },
+      {
+        id: "err-10-3",
+        nameIndo: "Arcus Palmaris Profundus",
+        nameLatin: "Arcus Palmaris Profundus",
+        errorCount: 1,
+        lastErrorDate: "28 Okt 2026",
+      },
+    ],
+  },
+];
+
+
