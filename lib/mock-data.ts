@@ -1812,5 +1812,72 @@ export function getQuizQuestionsByRegion(regionId: string): QuizQuestionItem[] {
   return mockQuizQuestions;
 }
 
+// 11. Data Pengaturan & Preferensi Mahasiswa
+export interface UserStudyPreferences {
+  targetItemsPerDay: number;
+  studyDays: string[];
+  reminderTime: string;
+  defaultQuizMode: "klik-struktur" | "sebutkan-nama";
+}
+
+export interface UserNotificationSettings {
+  dailyReminder: boolean;
+  examAlert: boolean;
+  weeklySummary: boolean;
+}
+
+export interface UserAppearanceSettings {
+  theme: "light" | "dark" | "system";
+  fontSize: "small" | "normal" | "large";
+}
+
+export interface AppInfoSettings {
+  name: string;
+  version: string;
+  lastUpdated: string;
+  disclaimer: string;
+  attribution: string;
+  techStack: { name: string; category: string }[];
+}
+
+export const mockStudyPreferences: UserStudyPreferences = {
+  targetItemsPerDay: 20,
+  studyDays: ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
+  reminderTime: "19:30",
+  defaultQuizMode: "klik-struktur",
+};
+
+export const mockNotificationSettings: UserNotificationSettings = {
+  dailyReminder: true,
+  examAlert: true,
+  weeklySummary: true,
+};
+
+export const mockAppearanceSettings: UserAppearanceSettings = {
+  theme: "light",
+  fontSize: "normal",
+};
+
+export const mockAppInfoSettings: AppInfoSettings = {
+  name: "PRIMA (Platform Review Interaktif Medis Adaptif)",
+  version: "1.2.0-beta",
+  lastUpdated: "3 November 2026",
+  disclaimer:
+    "PRIMA adalah alat bantu belajar, bukan alat diagnosis dan bukan pengganti dosen, praktikum, atau pasien nyata.",
+  attribution:
+    "Model anatomi 3D diadaptasi dari 'Z-Anatomy, The libre 3D atlas of anatomy' (CC BY-SA 4.0) dan 'BodyParts3D, The Database Center for Life Science' (CC BY-SA 2.1 Japan). Model telah disederhanakan dan dipotong untuk keperluan aplikasi ini.",
+  techStack: [
+    { name: "Next.js 15 (App Router)", category: "Framework" },
+    { name: "React 19", category: "Library" },
+    { name: "TypeScript", category: "Language" },
+    { name: "Tailwind CSS v4", category: "Styling" },
+    { name: "Three.js", category: "3D Graphics" },
+    { name: "@react-three/fiber", category: "3D Engine" },
+    { name: "@react-three/drei", category: "3D Helpers" },
+    { name: "Chart.js", category: "Visualisasi Data" },
+    { name: "Bootstrap Icons", category: "Ikon" },
+  ],
+};
+
 
 
