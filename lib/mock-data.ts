@@ -1110,4 +1110,377 @@ export const mockDetailedAnatomyTopics: DetailedAnatomyTopic[] = [
   },
 ];
 
+// 10. Data Latihan Anatomi 3D & Kuis Interaktif
+export interface Anatomy3DStructure {
+  id: string;
+  nameIndo: string;
+  nameLatin: string;
+  meshId: string;
+  category: "otot" | "tulang" | "saraf" | "vaskular";
+  description: string;
+  clinicalNote?: string;
+  difficulty: "mudah" | "sedang" | "sulit";
+  masteryStatus: "dikuasai" | "berkembang" | "perlu_diulang";
+  geometryType: "cylinder" | "sphere" | "box";
+  position: [number, number, number];
+  rotation: [number, number, number];
+  scale: [number, number, number];
+  baseColor: string;
+}
+
+export type QuizMode = "klik-struktur" | "sebutkan-nama";
+
+export interface QuizQuestionItem {
+  id: string;
+  mode: QuizMode;
+  targetStructureId: string;
+  promptText: string;
+  latinName: string;
+  options?: {
+    structureId: string;
+    nameIndo: string;
+    nameLatin: string;
+  }[];
+  explanation: string;
+  hint: string;
+}
+
+export interface AnatomyPracticeRegion {
+  id: string;
+  name: string;
+  latinName: string;
+  structuresCount: number;
+}
+
+export const mockAnatomyRegions: AnatomyPracticeRegion[] = [
+  {
+    id: "reg-01",
+    name: "Anggota Gerak Atas",
+    latinName: "Extremitas Superior",
+    structuresCount: 8,
+  },
+  {
+    id: "reg-02",
+    name: "Anggota Gerak Bawah",
+    latinName: "Extremitas Inferior",
+    structuresCount: 8,
+  },
+  {
+    id: "reg-03",
+    name: "Kepala dan Leher",
+    latinName: "Caput et Collum",
+    structuresCount: 6,
+  },
+  {
+    id: "reg-04",
+    name: "Dada dan Organ Toraks",
+    latinName: "Thorax",
+    structuresCount: 6,
+  },
+];
+
+export const mock3DStructures: Anatomy3DStructure[] = [
+  {
+    id: "struct-01",
+    nameIndo: "Musculus Biceps Brachii",
+    nameLatin: "M. Biceps Brachii",
+    meshId: "mesh-biceps",
+    category: "otot",
+    description: "Otot berkepala dua di kompartemen anterior lengan atas; fleksor siku dan supinator lengan bawah yang kuat.",
+    clinicalNote: "Refleks tendon biseps menguji integritas radiks saraf C5-C6.",
+    difficulty: "mudah",
+    masteryStatus: "dikuasai",
+    geometryType: "cylinder",
+    position: [0.32, 0.35, 0.28],
+    rotation: [0, 0, 0.08],
+    scale: [0.26, 1.25, 0.26],
+    baseColor: "#c25953",
+  },
+  {
+    id: "struct-02",
+    nameIndo: "Musculus Triceps Brachii",
+    nameLatin: "M. Triceps Brachii",
+    meshId: "mesh-triceps",
+    category: "otot",
+    description: "Otot berkepala tiga di kompartemen posterior lengan atas; ekstensor utama persendian siku.",
+    clinicalNote: "Diinervasi oleh Nervus Radialis; menguji integritas radiks saraf C7-C8.",
+    difficulty: "sedang",
+    masteryStatus: "berkembang",
+    geometryType: "cylinder",
+    position: [-0.32, 0.32, -0.28],
+    rotation: [0, 0, -0.08],
+    scale: [0.28, 1.35, 0.28],
+    baseColor: "#b24d47",
+  },
+  {
+    id: "struct-03",
+    nameIndo: "Musculus Deltoideus",
+    nameLatin: "M. Deltoideus",
+    meshId: "mesh-deltoideus",
+    category: "otot",
+    description: "Otot segitiga penutup sendi bahu; abduktor utama lengan atas setelah 15 derajat pertama diinisiasi supraspinatus.",
+    clinicalNote: "Lokasi standar injeksi intramuskular; diinervasi oleh Nervus Axillaris (C5-C6).",
+    difficulty: "mudah",
+    masteryStatus: "dikuasai",
+    geometryType: "sphere",
+    position: [0, 1.35, 0],
+    rotation: [0, 0, 0],
+    scale: [0.65, 0.52, 0.6],
+    baseColor: "#d9655e",
+  },
+  {
+    id: "struct-04",
+    nameIndo: "Musculus Supraspinatus",
+    nameLatin: "M. Supraspinatus (Rotator Cuff)",
+    meshId: "mesh-supraspinatus",
+    category: "otot",
+    description: "Bagian dari manset rotator cuff; menginisiasi abduksi lengan atas 0-15 derajat dan menstabilkan caput humeri.",
+    clinicalNote: "Tendon yang paling sering mengalami robekan (rotator cuff tear) dan sindrom pelampiasan bahu.",
+    difficulty: "sulit",
+    masteryStatus: "perlu_diulang",
+    geometryType: "box",
+    position: [-0.38, 1.15, 0.16],
+    rotation: [0.2, 0.3, -0.2],
+    scale: [0.55, 0.22, 0.32],
+    baseColor: "#ba554f",
+  },
+  {
+    id: "struct-05",
+    nameIndo: "Musculus Brachioradialis",
+    nameLatin: "M. Brachioradialis",
+    meshId: "mesh-brachioradialis",
+    category: "otot",
+    description: "Otot fleksor siku di sisi lateral lengan bawah; bekerja maksimal saat lengan bawah dalam posisi semipronasi.",
+    clinicalNote: "Membentuk batas lateral dari fossa cubiti.",
+    difficulty: "sedang",
+    masteryStatus: "berkembang",
+    geometryType: "cylinder",
+    position: [0.48, -0.92, 0.16],
+    rotation: [0, 0, 0.14],
+    scale: [0.22, 1.15, 0.22],
+    baseColor: "#c7625c",
+  },
+  {
+    id: "struct-06",
+    nameIndo: "Corpus Humeri",
+    nameLatin: "Corpus Humeri (Os Humerus)",
+    meshId: "mesh-humerus",
+    category: "tulang",
+    description: "Batang tulang panjang utama lengan atas; tempat perlekatan banyak otot fleksor dan ekstensor.",
+    clinicalNote: "Fraktur pada pertengahan humerus dapat mencederai N. Radialis di sulcus radialis.",
+    difficulty: "mudah",
+    masteryStatus: "dikuasai",
+    geometryType: "cylinder",
+    position: [0, 0.2, 0],
+    rotation: [0, 0, 0],
+    scale: [0.2, 1.75, 0.2],
+    baseColor: "#e6decb",
+  },
+  {
+    id: "struct-07",
+    nameIndo: "Nervus Radialis",
+    nameLatin: "N. Radialis",
+    meshId: "mesh-n-radialis",
+    category: "saraf",
+    description: "Saraf utama dari fasikulus posterior pleksus brakialis yang melintasi sulcus nervi radialis di posterior humerus.",
+    clinicalNote: "Cedera saraf ini menyebabkan hilangnya kemampuan ekstensi pergelangan tangan (wrist drop).",
+    difficulty: "sulit",
+    masteryStatus: "perlu_diulang",
+    geometryType: "cylinder",
+    position: [-0.14, 0.12, -0.22],
+    rotation: [0.4, 0.2, 0.6],
+    scale: [0.065, 1.45, 0.065],
+    baseColor: "#eab308",
+  },
+  {
+    id: "struct-08",
+    nameIndo: "Arteria Brachialis",
+    nameLatin: "A. Brachialis",
+    meshId: "mesh-a-brachialis",
+    category: "vaskular",
+    description: "Pembuluh nadi utama lengan atas, lanjutan dari A. Axillaris di bawah batas inferior M. Teres Major.",
+    clinicalNote: "Titik auskultasi bunyi Korotkoff pada pemeriksaan tekanan darah dengan sfigmomanometer.",
+    difficulty: "sedang",
+    masteryStatus: "dikuasai",
+    geometryType: "cylinder",
+    position: [0.18, 0.28, 0.14],
+    rotation: [0, 0, 0.04],
+    scale: [0.075, 1.55, 0.075],
+    baseColor: "#dc2626",
+  },
+];
+
+// Soal Kuis Interaktif (Mode Klik Struktur dan Mode Sebutkan Nama)
+export const mockQuizQuestions: QuizQuestionItem[] = [
+  // Soal 1 (Mode Klik Struktur)
+  {
+    id: "q-01",
+    mode: "klik-struktur",
+    targetStructureId: "struct-01",
+    promptText: "Klik pada model 3D struktur berikut:",
+    latinName: "M. Biceps Brachii",
+    hint: "Cari otot lonjong di bagian depan (anterior) lengan atas di depan tulang humerus.",
+    explanation: "Benar! Musculus Biceps Brachii terletak di kompartemen anterior lengan atas dan berfungsi sebagai fleksor sendi siku serta supinator lengan bawah yang kuat.",
+  },
+  // Soal 2 (Mode Sebutkan Nama)
+  {
+    id: "q-02",
+    mode: "sebutkan-nama",
+    targetStructureId: "struct-04",
+    promptText: "Perhatikan struktur yang disorot pada model. Apa nama struktur tersebut?",
+    latinName: "Struktur Bahu Superior",
+    options: [
+      {
+        structureId: "struct-04",
+        nameIndo: "Musculus Supraspinatus",
+        nameLatin: "M. Supraspinatus (Rotator Cuff)",
+      },
+      {
+        structureId: "struct-03",
+        nameIndo: "Musculus Deltoideus",
+        nameLatin: "M. Deltoideus",
+      },
+      {
+        structureId: "struct-01",
+        nameIndo: "Musculus Biceps Brachii",
+        nameLatin: "M. Biceps Brachii",
+      },
+      {
+        structureId: "struct-02",
+        nameIndo: "Musculus Triceps Brachii",
+        nameLatin: "M. Triceps Brachii",
+      },
+    ],
+    hint: "Struktur ini berada di atas spina scapulae dan merupakan bagian dari manset rotator cuff.",
+    explanation: "Tepat sekali! Musculus Supraspinatus adalah inisiator abduksi bahu (0-15 derajat). Struktur ini paling sering mengalami robekan pada cedera rotator cuff.",
+  },
+  // Soal 3 (Mode Klik Struktur)
+  {
+    id: "q-03",
+    mode: "klik-struktur",
+    targetStructureId: "struct-07",
+    promptText: "Temukan dan klik saraf berikut pada model:",
+    latinName: "Nervus Radialis",
+    hint: "Cari struktur saraf silinder berwarna kuning yang melintasi sisi belakang (posterior) batang humerus.",
+    explanation: "Bagus! Nervus Radialis berjalan di sulcus nervi radialis humeri. Cedera pada saraf ini dapat menimbulkan gejala klinis wrist drop.",
+  },
+  // Soal 4 (Mode Sebutkan Nama)
+  {
+    id: "q-04",
+    mode: "sebutkan-nama",
+    targetStructureId: "struct-03",
+    promptText: "Identifikasi otot berbentuk segitiga yang disorot pada bagian superior bahu:",
+    latinName: "Musculus Regio Deltoidea",
+    options: [
+      {
+        structureId: "struct-03",
+        nameIndo: "Musculus Deltoideus",
+        nameLatin: "M. Deltoideus",
+      },
+      {
+        structureId: "struct-04",
+        nameIndo: "Musculus Supraspinatus",
+        nameLatin: "M. Supraspinatus",
+      },
+      {
+        structureId: "struct-05",
+        nameIndo: "Musculus Brachioradialis",
+        nameLatin: "M. Brachioradialis",
+      },
+      {
+        structureId: "struct-06",
+        nameIndo: "Corpus Humeri",
+        nameLatin: "Os Humerus",
+      },
+    ],
+    hint: "Otot besar yang membentuk kontur membulat bahu dan menjadi lokasi suntikan intramuskular.",
+    explanation: "Tepat! Musculus Deltoideus diinervasi oleh Nervus Axillaris dan bertanggung jawab untuk abduksi lengan atas dari 15 hingga 90 derajat.",
+  },
+  // Soal 5 (Mode Klik Struktur)
+  {
+    id: "q-05",
+    mode: "klik-struktur",
+    targetStructureId: "struct-08",
+    promptText: "Klik pembuluh darah utama berikut pada model:",
+    latinName: "Arteria Brachialis",
+    hint: "Cari pembuluh darah silinder merah di kompartemen anteromedial lengan atas.",
+    explanation: "Tepat! Arteria Brachialis merupakan sumber vaskularisasi utama lengan atas dan lokasi penting pengukuran tekanan darah rutin.",
+  },
+  // Soal 6 (Mode Sebutkan Nama)
+  {
+    id: "q-06",
+    mode: "sebutkan-nama",
+    targetStructureId: "struct-02",
+    promptText: "Apa nama otot kompartemen posterior lengan atas yang disorot ini?",
+    latinName: "Musculus Kompartemen Ekstensor",
+    options: [
+      {
+        structureId: "struct-02",
+        nameIndo: "Musculus Triceps Brachii",
+        nameLatin: "M. Triceps Brachii",
+      },
+      {
+        structureId: "struct-01",
+        nameIndo: "Musculus Biceps Brachii",
+        nameLatin: "M. Biceps Brachii",
+      },
+      {
+        structureId: "struct-05",
+        nameIndo: "Musculus Brachioradialis",
+        nameLatin: "M. Brachioradialis",
+      },
+      {
+        structureId: "struct-07",
+        nameIndo: "Nervus Radialis",
+        nameLatin: "N. Radialis",
+      },
+    ],
+    hint: "Otot berkepala tiga yang berfungsi mengekstensikan lengan bawah pada persendian siku.",
+    explanation: "Benar! Musculus Triceps Brachii memiliki caput longum, laterale, dan mediale yang berinsersio pada olecranon ulnae.",
+  },
+  // Soal 7 (Mode Klik Struktur)
+  {
+    id: "q-07",
+    mode: "klik-struktur",
+    targetStructureId: "struct-05",
+    promptText: "Temukan dan klik otot lengan bawah lateral berikut:",
+    latinName: "M. Brachioradialis",
+    hint: "Cari otot di bagian bawah lateral siku yang memanjang ke arah pergelangan tangan.",
+    explanation: "Hebat! M. Brachioradialis berorigo pada margo lateralis humeri dan membantu fleksi siku saat posisi lengan semipronasi.",
+  },
+  // Soal 8 (Mode Sebutkan Nama)
+  {
+    id: "q-08",
+    mode: "sebutkan-nama",
+    targetStructureId: "struct-06",
+    promptText: "Pilih nama tulang aksial lengan atas yang disorot putih gading di tengah model:",
+    latinName: "Os Longum Extremitas Superior",
+    options: [
+      {
+        structureId: "struct-06",
+        nameIndo: "Corpus Humeri",
+        nameLatin: "Corpus Humeri (Os Humerus)",
+      },
+      {
+        structureId: "struct-05",
+        nameIndo: "Radius",
+        nameLatin: "Os Radius",
+      },
+      {
+        structureId: "struct-02",
+        nameIndo: "Ulna",
+        nameLatin: "Os Ulna",
+      },
+      {
+        structureId: "struct-03",
+        nameIndo: "Clavicula",
+        nameLatin: "Os Clavicula",
+      },
+    ],
+    hint: "Tulang pipa panjang yang membentuk kerangka utama lengan atas.",
+    explanation: "Sangat tepat! Humerus adalah tulang panjang tunggal di lengan atas yang bersendi proksimal dengan scapula dan distal dengan radius serta ulna.",
+  },
+];
+
+
 
