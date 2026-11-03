@@ -1116,7 +1116,7 @@ export interface Anatomy3DStructure {
   nameIndo: string;
   nameLatin: string;
   meshId: string;
-  category: "otot" | "tulang" | "saraf" | "vaskular";
+  category: "otot" | "tulang" | "saraf" | "vaskular" | "organ";
   description: string;
   clinicalNote?: string;
   difficulty: "mudah" | "sedang" | "sulit";
@@ -1150,9 +1150,17 @@ export interface AnatomyPracticeRegion {
   name: string;
   latinName: string;
   structuresCount: number;
+  modelUrl?: string;
 }
 
 export const mockAnatomyRegions: AnatomyPracticeRegion[] = [
+  {
+    id: "reg-04",
+    name: "Dada dan Organ Toraks (Jantung)",
+    latinName: "Thorax - Cor",
+    structuresCount: 11,
+    modelUrl: "/models/heart.glb",
+  },
   {
     id: "reg-01",
     name: "Anggota Gerak Atas",
@@ -1171,11 +1179,185 @@ export const mockAnatomyRegions: AnatomyPracticeRegion[] = [
     latinName: "Caput et Collum",
     structuresCount: 6,
   },
+];
+
+// Model Nyata 3D Jantung (BodyParts3D GLB Model)
+export const mockHeart3DStructures: Anatomy3DStructure[] = [
   {
-    id: "reg-04",
-    name: "Dada dan Organ Toraks",
-    latinName: "Thorax",
-    structuresCount: 6,
+    id: "struct-h-01",
+    nameIndo: "Arkus Aorta",
+    nameLatin: "Arcus Aortae",
+    meshId: "aortic-arch",
+    category: "vaskular",
+    description: "Lengkungan aorta utama yang mempercabangkan arteri brakiosefalika, karotis komunis kiri, dan subklavia kiri.",
+    clinicalNote: "Lokasi umum terjadinya diseksi aorta tipe Stanford A dan koarktasio aorta.",
+    difficulty: "sedang",
+    masteryStatus: "dikuasai",
+    geometryType: "cylinder",
+    position: [0, 0, 0],
+    rotation: [0, 0, 0],
+    scale: [1, 1, 1],
+    baseColor: "#e11d48",
+  },
+  {
+    id: "struct-h-02",
+    nameIndo: "Aorta Asendens",
+    nameLatin: "Aorta Ascendens",
+    meshId: "ascending-aorta",
+    category: "vaskular",
+    description: "Bagian aorta pertama yang keluar dari ventrikel kiri jantung; mempercabangkan arteri koronaria.",
+    clinicalNote: "Tempat asal dari arteri koronaria dekstra dan sinistra pada sinus Valsalva.",
+    difficulty: "mudah",
+    masteryStatus: "dikuasai",
+    geometryType: "cylinder",
+    position: [0, 0, 0],
+    rotation: [0, 0, 0],
+    scale: [1, 1, 1],
+    baseColor: "#f43f5e",
+  },
+  {
+    id: "struct-h-03",
+    nameIndo: "Trunkus Pulmonalis",
+    nameLatin: "Truncus Pulmonalis",
+    meshId: "pulmonary-trunk",
+    category: "vaskular",
+    description: "Pembuluh darah besar pembawa darah vena miskin oksigen dari ventrikel kanan menuju ke paru-paru.",
+    clinicalNote: "Bercabang menjadi Arteria Pulmonalis Dextra dan Sinistra; lokasi penting emboli paru masif (saddle embolus).",
+    difficulty: "sedang",
+    masteryStatus: "berkembang",
+    geometryType: "cylinder",
+    position: [0, 0, 0],
+    rotation: [0, 0, 0],
+    scale: [1, 1, 1],
+    baseColor: "#0284c7",
+  },
+  {
+    id: "struct-h-04",
+    nameIndo: "Vena Kava Superior",
+    nameLatin: "Vena Cava Superior",
+    meshId: "superior-vena-cava",
+    category: "vaskular",
+    description: "Vena besar pembawa aliran darah balik dari kepala, leher, anggota gerak atas, dan rongga dada ke atrium kanan.",
+    clinicalNote: "Kompresi tumor paru dapat memicu Vena Cava Superior Syndrome.",
+    difficulty: "mudah",
+    masteryStatus: "dikuasai",
+    geometryType: "cylinder",
+    position: [0, 0, 0],
+    rotation: [0, 0, 0],
+    scale: [1, 1, 1],
+    baseColor: "#2563eb",
+  },
+  {
+    id: "struct-h-05",
+    nameIndo: "Dinding Ventrikel (Miokardium)",
+    nameLatin: "Myocardium Ventriculorum",
+    meshId: "ventricular-wall",
+    category: "otot",
+    description: "Lapisan otot tebal bilik jantung yang bertugas memompa darah ke seluruh tubuh (ventrikel kiri) dan sirkulasi paru (kanan).",
+    clinicalNote: "Ketebalan dinding ventrikel kiri 3x lebih tebal dari ventrikel kanan; target iskemia pada infark miokard akut.",
+    difficulty: "mudah",
+    masteryStatus: "dikuasai",
+    geometryType: "box",
+    position: [0, 0, 0],
+    rotation: [0, 0, 0],
+    scale: [1, 1, 1],
+    baseColor: "#be123c",
+  },
+  {
+    id: "struct-h-06",
+    nameIndo: "Rongga Ventrikel Kanan",
+    nameLatin: "Ventriculus Dexter",
+    meshId: "right-ventricle",
+    category: "organ",
+    description: "Bilik jantung kanan yang menerima darah dari atrium kanan melalui katup trikuspidalis dan memompanya ke trunkus pulmonalis.",
+    clinicalNote: "Bentuk bulan sabit (crescent-shaped) dengan tekanan fisiologis yang jauh lebih rendah daripada ventrikel kiri.",
+    difficulty: "sedang",
+    masteryStatus: "berkembang",
+    geometryType: "cylinder",
+    position: [0, 0, 0],
+    rotation: [0, 0, 0],
+    scale: [1, 1, 1],
+    baseColor: "#9f1239",
+  },
+  {
+    id: "struct-h-07",
+    nameIndo: "Rongga Ventrikel Kiri",
+    nameLatin: "Ventriculus Sinister",
+    meshId: "left-ventricle",
+    category: "organ",
+    description: "Bilik jantung kiri berdinding tebal yang memompa darah beroksigen tinggi menuju sirkulasi sistemik lewat katup aorta.",
+    clinicalNote: "Fungsi ejeksi ventrikel kiri (LVEF) merupakan parameter hemodinamik sentral pada evaluasi gagal jantung.",
+    difficulty: "sedang",
+    masteryStatus: "dikuasai",
+    geometryType: "cylinder",
+    position: [0, 0, 0],
+    rotation: [0, 0, 0],
+    scale: [1, 1, 1],
+    baseColor: "#881337",
+  },
+  {
+    id: "struct-h-08",
+    nameIndo: "Atrium Kanan",
+    nameLatin: "Atrium Dextrum",
+    meshId: "right-atrium",
+    category: "organ",
+    description: "Serambi kanan jantung penerima darah deoksigenasi dari vena kava superior, vena kava inferior, dan sinus koronarius.",
+    clinicalNote: "Terdapat nodus sinoatrialis (SA node / pacemaker alami jantung) pada taut vena kava superior dengan atrium kanan.",
+    difficulty: "mudah",
+    masteryStatus: "dikuasai",
+    geometryType: "sphere",
+    position: [0, 0, 0],
+    rotation: [0, 0, 0],
+    scale: [1, 1, 1],
+    baseColor: "#c2410c",
+  },
+  {
+    id: "struct-h-09",
+    nameIndo: "Atrium Kiri",
+    nameLatin: "Atrium Sinistrum",
+    meshId: "left-atrium",
+    category: "organ",
+    description: "Serambi kiri jantung yang menerima darah bersih beroksigen dari paru melalui empat muara vena pulmonalis.",
+    clinicalNote: "Apendiks atrium kiri (auricula sinistra) merupakan sumber tersering terbentuknya trombus pada fibrilasi atrium.",
+    difficulty: "sedang",
+    masteryStatus: "berkembang",
+    geometryType: "sphere",
+    position: [0, 0, 0],
+    rotation: [0, 0, 0],
+    scale: [1, 1, 1],
+    baseColor: "#ea580c",
+  },
+  {
+    id: "struct-h-10",
+    nameIndo: "Arteri Koronaria Kiri (LCA)",
+    nameLatin: "Arteria Coronaria Sinistra",
+    meshId: "left-coronary",
+    category: "vaskular",
+    description: "Arteri penyuplai darah kaya oksigen untuk otot jantung anterior dan ventrikel kiri melalui cabang LAD dan LCx.",
+    clinicalNote: "Oklusi cabang LAD (Left Anterior Descending) sering disebut 'widow-maker' karena menyebabkan infark miokard luas.",
+    difficulty: "sulit",
+    masteryStatus: "perlu_diulang",
+    geometryType: "cylinder",
+    position: [0, 0, 0],
+    rotation: [0, 0, 0],
+    scale: [1, 1, 1],
+    baseColor: "#f59e0b",
+  },
+  {
+    id: "struct-h-11",
+    nameIndo: "Arteri Koronaria Kanan (RCA)",
+    nameLatin: "Arteria Coronaria Dextra",
+    meshId: "right-coronary",
+    category: "vaskular",
+    description: "Arteri yang berjalan di sulkus koroner kanan untuk memperdarahi atrium kanan, ventrikel kanan, dan nodus AV.",
+    clinicalNote: "Oklusi RCA memicu infark dinding inferior jantung dan sering disertai gangguan konduksi (AV block).",
+    difficulty: "sulit",
+    masteryStatus: "perlu_diulang",
+    geometryType: "cylinder",
+    position: [0, 0, 0],
+    rotation: [0, 0, 0],
+    scale: [1, 1, 1],
+    baseColor: "#eab308",
   },
 ];
 
@@ -1481,6 +1663,154 @@ export const mockQuizQuestions: QuizQuestionItem[] = [
     explanation: "Sangat tepat! Humerus adalah tulang panjang tunggal di lengan atas yang bersendi proksimal dengan scapula dan distal dengan radius serta ulna.",
   },
 ];
+
+// Soal Kuis Khusus Model 3D Jantung (BodyParts3D)
+export const mockHeartQuizQuestions: QuizQuestionItem[] = [
+  {
+    id: "qh-01",
+    mode: "klik-struktur",
+    targetStructureId: "struct-h-01",
+    promptText: "Temukan dan klik struktur pembuluh darah besar berikut:",
+    latinName: "Arcus Aortae (Arkus Aorta)",
+    hint: "Cari lengkungan arteri besar berwarna merah paling atas yang mempercabangkan arteri untuk kepala dan lengan.",
+    explanation: "Tepat sekali! Arkus Aorta adalah segmen lengkung aorta yang mempercabangkan Truncus Brachiocephalicus, A. Carotis Communis Sinistra, dan A. Subclavia Sinistra.",
+  },
+  {
+    id: "qh-02",
+    mode: "klik-struktur",
+    targetStructureId: "struct-h-03",
+    promptText: "Klik pada model 3D pembuluh pembawa darah ke pulmo berikut:",
+    latinName: "Truncus Pulmonalis",
+    hint: "Cari pembuluh darah besar kebiruan di anterior aorta asendens yang mengalirkan darah vena dari ventrikel kanan.",
+    explanation: "Benar! Trunkus Pulmonalis mengalirkan darah deoksigenasi dari bilik kanan jantung menuju kedua paru-paru.",
+  },
+  {
+    id: "qh-03",
+    mode: "klik-struktur",
+    targetStructureId: "struct-h-04",
+    promptText: "Temukan pembuluh balik utama dari tubuh bagian atas:",
+    latinName: "Vena Cava Superior",
+    hint: "Saluran vena vertikal besar berwarna biru di sisi kanan atas yang bermuara langsung ke atrium kanan.",
+    explanation: "Hebat! Vena Kava Superior mengumpulkan darah dari kepala, leher, dada, dan ekstremitas atas menuju atrium kanan jantung.",
+  },
+  {
+    id: "qh-04",
+    mode: "klik-struktur",
+    targetStructureId: "struct-h-05",
+    promptText: "Klik pada lapisan otot pemompa utama bilik jantung:",
+    latinName: "Myocardium Ventriculorum",
+    hint: "Dinding otot tebal berwarna merah tua yang membentuk massa utama bilik bawah jantung.",
+    explanation: "Sangat tepat! Miokardium ventrikel terdiri dari serabut otot jantung yang sangat tebal, terutama pada ventrikel kiri untuk memompa darah ke seluruh tubuh.",
+  },
+  {
+    id: "qh-05",
+    mode: "sebutkan-nama",
+    targetStructureId: "struct-h-01",
+    promptText: "Perhatikan struktur pembuluh darah yang disorot pada puncak jantung. Apa nama struktur tersebut?",
+    latinName: "Pembuluh Darah Utama Toraks",
+    options: [
+      {
+        structureId: "struct-h-01",
+        nameIndo: "Arkus Aorta",
+        nameLatin: "Arcus Aortae",
+      },
+      {
+        structureId: "struct-h-03",
+        nameIndo: "Trunkus Pulmonalis",
+        nameLatin: "Truncus Pulmonalis",
+      },
+      {
+        structureId: "struct-h-04",
+        nameIndo: "Vena Kava Superior",
+        nameLatin: "Vena Cava Superior",
+      },
+      {
+        structureId: "struct-h-02",
+        nameIndo: "Aorta Asendens",
+        nameLatin: "Aorta Ascendens",
+      },
+    ],
+    hint: "Bagian melengkung yang menghubungkan aorta asendens dengan aorta desendens torakalis.",
+    explanation: "Benar! Arkus aorta melengkung ke posterior dan ke kiri di atas bifurkasio trunkus pulmonalis.",
+  },
+  {
+    id: "qh-06",
+    mode: "sebutkan-nama",
+    targetStructureId: "struct-h-04",
+    promptText: "Pilih nama pembuluh darah balik vertikal yang disorot biru di sisi kranial atrium kanan:",
+    latinName: "Pembuluh Balik Toraks",
+    options: [
+      {
+        structureId: "struct-h-04",
+        nameIndo: "Vena Kava Superior",
+        nameLatin: "Vena Cava Superior",
+      },
+      {
+        structureId: "struct-h-03",
+        nameIndo: "Trunkus Pulmonalis",
+        nameLatin: "Truncus Pulmonalis",
+      },
+      {
+        structureId: "struct-h-08",
+        nameIndo: "Atrium Kanan",
+        nameLatin: "Atrium Dextrum",
+      },
+      {
+        structureId: "struct-h-01",
+        nameIndo: "Arkus Aorta",
+        nameLatin: "Arcus Aortae",
+      },
+    ],
+    hint: "Vena besar tak berkatup yang bermuara di dinding posterosuperior serambi kanan.",
+    explanation: "Tepat sekali! Vena Cava Superior terbentuk dari penyatuan vena brakiosefalika dekstra dan sinistra.",
+  },
+  {
+    id: "qh-07",
+    mode: "sebutkan-nama",
+    targetStructureId: "struct-h-10",
+    promptText: "Struktur arteri vaskular nutrisi jantung yang disorot kuning di sulkus anterior adalah:",
+    latinName: "Vaskularisasi Miokardium",
+    options: [
+      {
+        structureId: "struct-h-10",
+        nameIndo: "Arteri Koronaria Kiri (LCA)",
+        nameLatin: "Arteria Coronaria Sinistra",
+      },
+      {
+        structureId: "struct-h-11",
+        nameIndo: "Arteri Koronaria Kanan (RCA)",
+        nameLatin: "Arteria Coronaria Dextra",
+      },
+      {
+        structureId: "struct-h-01",
+        nameIndo: "Arkus Aorta",
+        nameLatin: "Arcus Aortae",
+      },
+      {
+        structureId: "struct-h-03",
+        nameIndo: "Trunkus Pulmonalis",
+        nameLatin: "Truncus Pulmonalis",
+      },
+    ],
+    hint: "Arteri penyuplai miokardium ventrikel kiri yang mempercabangkan LAD (Left Anterior Descending).",
+    explanation: "Hebat! LCA memperdarahi sebagian besar ventrikel kiri, atrium kiri, dan septum interventrikular.",
+  },
+];
+
+// Helper untuk mengambil struktur dan soal berdasarkan regio yang dipilih
+export function getStructuresByRegion(regionId: string): Anatomy3DStructure[] {
+  if (regionId === "reg-04") {
+    return mockHeart3DStructures;
+  }
+  return mock3DStructures;
+}
+
+export function getQuizQuestionsByRegion(regionId: string): QuizQuestionItem[] {
+  if (regionId === "reg-04") {
+    return mockHeartQuizQuestions;
+  }
+  return mockQuizQuestions;
+}
 
 
 

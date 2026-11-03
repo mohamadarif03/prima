@@ -12,6 +12,10 @@ import {
   mock3DStructures,
   mockQuizQuestions,
   mockAnatomyRegions,
+  mockHeart3DStructures,
+  mockHeartQuizQuestions,
+  getStructuresByRegion,
+  getQuizQuestionsByRegion,
   QuizMode,
   QuizQuestionItem,
   Anatomy3DStructure,
@@ -57,9 +61,17 @@ function LatihanContent() {
   const searchParams = useSearchParams();
   const topicParam = searchParams.get("topic") || searchParams.get("topik");
 
-  // Region and mode selection
-  const [selectedRegionId, setSelectedRegionId] = useState("reg-01");
+  // Region and mode selection (Default to reg-04: Dada & Jantung 3D Realistis)
+  const [selectedRegionId, setSelectedRegionId] = useState("reg-04");
   const [currentMode, setCurrentMode] = useState<QuizMode>("klik-struktur");
+
+  // Selected Region Object
+  const selectedRegion = useMemo(() => {
+    return (
+      mockAnatomyRegions.find((r) => r.id === selectedRegionId) ||
+      mockAnatomyRegions[0]
+    );
+  }, [selectedRegionId]);
 
   // Quiz state
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -81,12 +93,15 @@ function LatihanContent() {
   const [isLoading, setIsLoading] = useState(false);
 
   // Structures for active region
-  const structures = mock3DStructures;
+  const structures = useMemo(() => {
+    return getStructuresByRegion(selectedRegionId);
+  }, [selectedRegionId]);
 
-  // Filter questions for the selected mode
+  // Filter questions for the selected mode & region
   const activeQuestions = useMemo(() => {
-    return mockQuizQuestions.filter((q) => q.mode === currentMode);
-  }, [currentMode]);
+    const list = getQuizQuestionsByRegion(selectedRegionId);
+    return list.filter((q) => q.mode === currentMode);
+  }, [selectedRegionId, currentMode]);
 
   const currentQuestion: QuizQuestionItem | undefined =
     activeQuestions[currentQuestionIndex];
@@ -96,6 +111,19 @@ function LatihanContent() {
     if (!currentQuestion) return undefined;
     return structures.find((s) => s.id === currentQuestion.targetStructureId);
   }, [currentQuestion, structures]);
+
+  // Handle Region Change
+  const handleRegionChange = (newRegionId: string) => {
+    setSelectedRegionId(newRegionId);
+    setCurrentQuestionIndex(0);
+    setAnsweredState("unanswered");
+    setSelectedChoiceId(null);
+    setClickedMeshId(null);
+    setIsHintActive(false);
+    setIsSessionFinished(false);
+    setCorrectCount(0);
+    setIncorrectStructures([]);
+  };
 
   // Handle Mode Change (Resets session)
   const handleModeChange = (mode: QuizMode) => {
@@ -244,7 +272,7 @@ function LatihanContent() {
 
           <select
             value={selectedRegionId}
-            onChange={(e) => setSelectedRegionId(e.target.value)}
+            onChange={(e) => handleRegionChange(e.target.value)}
             className="h-[34px] px-3 bg-white border border-[#cbd5e1] rounded-[6px] text-[12.5px] font-medium text-[#1e293b] focus:outline-none focus:ring-1 focus:ring-[#0d6efd]"
           >
             {mockAnatomyRegions.map((reg) => (
@@ -401,7 +429,7 @@ function LatihanContent() {
               <div className="flex items-center gap-2">
                 <i className="bi bi-box text-[#0d6efd] text-[15px]"></i>
                 <h2 className="metis-card-title">
-                  Model Anatomi: Anggota Gerak Atas
+                  Model Anatomi: {selectedRegion.name}
                 </h2>
               </div>
               <span className="text-[11.5px] text-[#64748b]">
@@ -421,6 +449,7 @@ function LatihanContent() {
                 incorrectStructureId={incorrectStructureId}
                 hintStructureId={hintStructureId}
                 onMeshClick={handleMeshClick}
+                modelUrl={selectedRegion.modelUrl}
                 className="flex-1"
               />
             </div>
