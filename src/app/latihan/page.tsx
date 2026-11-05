@@ -52,9 +52,9 @@ function LatihanContent() {
   const searchParams = useSearchParams();
   const topicParam = searchParams.get("topic") || searchParams.get("topik");
 
-  // Default to Regio Caput (focused module with real 3D Skull & Facial scan)
+  // Default to Regio Caput (focused module with real 3D Skull & Muscles)
   const [selectedRegionId, setSelectedRegionId] = useState("reg-caput");
-  const [caputModelLayer, setCaputModelLayer] = useState<"skull" | "head">(
+  const [caputModelLayer, setCaputModelLayer] = useState<"skull" | "muscles">(
     "skull"
   );
   const [selectedStructureId, setSelectedStructureId] = useState<string | null>(
@@ -131,12 +131,12 @@ function LatihanContent() {
     );
   }, [selectedRegionId]);
 
-  // Dynamic active model URL (supports dual skull & face layer for Caput)
+  // Dynamic active model URL (supports dual skull & muscles layer for Caput)
   const activeModelUrl = useMemo(() => {
     if (selectedRegionId === "reg-caput") {
       return caputModelLayer === "skull"
         ? "/models/skull.glb"
-        : "/models/head.glb";
+        : "/models/muscles.glb";
     }
     return selectedRegion.modelUrl;
   }, [selectedRegionId, caputModelLayer, selectedRegion]);
@@ -424,9 +424,9 @@ function LatihanContent() {
                     type="button"
                     onClick={() => {
                       setCaputModelLayer("skull");
-                      showToast("Model diubah ke Lapisan Tengkorak (3D Skull)");
+                      showToast("Model diubah ke Lapisan Tulang Tengkorak");
                     }}
-                    className={`px-2.5 py-1 text-[11px] font-semibold rounded-[4px] transition flex items-center gap-1.5 ${
+                    className={`px-2.5 py-1 text-[11px] font-semibold rounded-[4px] transition flex items-center gap-1.5 cursor-pointer ${
                       caputModelLayer === "skull"
                         ? "bg-white text-[#0d6efd] shadow-2xs border border-[#cbd5e1]"
                         : "text-[#64748b] hover:text-[#1e293b]"
@@ -434,23 +434,23 @@ function LatihanContent() {
                     title="Tampilkan model 3D tengkorak dan tulang kraniofasial"
                   >
                     <span>💀</span>
-                    <span>Lapisan Tengkorak (3D Skull)</span>
+                    <span>Lapisan Tulang Tengkorak</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => {
-                      setCaputModelLayer("head");
-                      showToast("Model diubah ke Lapisan Wajah & Otot Mimik (3D Face)");
+                      setCaputModelLayer("muscles");
+                      showToast("Model diubah ke Lapisan Otot Kepala & Wajah");
                     }}
-                    className={`px-2.5 py-1 text-[11px] font-semibold rounded-[4px] transition flex items-center gap-1.5 ${
-                      caputModelLayer === "head"
+                    className={`px-2.5 py-1 text-[11px] font-semibold rounded-[4px] transition flex items-center gap-1.5 cursor-pointer ${
+                      caputModelLayer === "muscles"
                         ? "bg-white text-[#0d6efd] shadow-2xs border border-[#cbd5e1]"
                         : "text-[#64748b] hover:text-[#1e293b]"
                     }`}
-                    title="Tampilkan model 3D ekspresi wajah dan otot mimik"
+                    title="Tampilkan model 3D serat otot mimik dan pengunyah kepala"
                   >
-                    <span>🧬</span>
-                    <span>Lapisan Wajah & Otot (3D Face)</span>
+                    <span>🥩</span>
+                    <span>Lapisan Otot Kepala & Wajah</span>
                   </button>
                 </div>
               ) : (

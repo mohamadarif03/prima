@@ -32,6 +32,50 @@ interface RealGLBModelProps {
   onClick: (id: string) => void;
 }
 
+const CAPUT_HEAD_MUSCLE_NAMES = new Set([
+  "frontalis",
+  "occipitalis",
+  "epicranial-aponeurosis",
+  "temporoparietalis",
+  "orbicularis-oculi",
+  "corrugator-supercilii",
+  "procerus",
+  "nasalis",
+  "depressor-septi-nasi",
+  "levator-labii-superioris-alaeque-nasi",
+  "levator-labii-superioris",
+  "zygomaticus-minor",
+  "zygomaticus-major",
+  "levator-anguli-oris",
+  "risorius",
+  "orbicularis-oris",
+  "buccinator",
+  "depressor-anguli-oris",
+  "depressor-labii-inferioris",
+  "mentalis",
+  "masseter",
+  "temporalis",
+  "medial-pterygoid",
+  "lateral-pterygoid",
+  "platysma",
+  "sternocleidomastoid",
+  "digastric",
+  "stylohyoid",
+  "mylohyoid",
+  "geniohyoid",
+  "sternohyoid",
+  "omohyoid",
+  "sternothyroid",
+  "thyrohyoid",
+  "scalenus-anterior",
+  "scalenus-medius",
+  "scalenus-posterior",
+  "longus-colli",
+  "longus-capitis",
+  "rectus-capitis-anterior",
+  "rectus-capitis-lateralis",
+]);
+
 function RealGLBModel({
   modelUrl,
   structures,
@@ -48,6 +92,31 @@ function RealGLBModel({
 
   // Clone scene & normalize dimensions
   const cloned = useMemo(() => {
+    const isCaput = structures.some(
+      (s) =>
+        s.id.startsWith("struct-c-") ||
+        s.id.startsWith("caput-") ||
+        s.meshId === "frontalis"
+    );
+
+    // If using muscles model for Head/Caput, isolate only the head & facial muscles
+    if (modelUrl.includes("muscles") && isCaput) {
+      const headGroup = new THREE.Group();
+      headGroup.name = "HeadMusclesGroup";
+      scene.traverse((c: any) => {
+        if (c.isMesh && CAPUT_HEAD_MUSCLE_NAMES.has(c.name)) {
+          headGroup.add(c.clone());
+        }
+      });
+      const box = new THREE.Box3().setFromObject(headGroup);
+      const size = new THREE.Vector3();
+      box.getSize(size);
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const s = 2.45 / (maxDim || 1);
+      headGroup.scale.set(s, s, s);
+      return headGroup;
+    }
+
     const c = scene.clone(true);
     const box = new THREE.Box3().setFromObject(c);
     const size = new THREE.Vector3();
@@ -69,7 +138,7 @@ function RealGLBModel({
       c.scale.set(1.35, 1.35, 1.35);
     }
     return c;
-  }, [scene, modelUrl]);
+  }, [scene, modelUrl, structures]);
 
   // Lookup map for structure by mesh name or id
   const structureByMeshId = useMemo(() => {
@@ -101,6 +170,16 @@ function RealGLBModel({
           child.material.color.set("#e5dcc5"); // Authentic skull bone ivory
           child.material.roughness = 0.45;
           child.material.metalness = 0.05;
+        } else if (modelUrl.includes("muscles")) {
+          if (child.name.includes("aponeurosis")) {
+            child.material.color.set("#e2e8f0"); // Whitish aponeurotic tendon
+            child.material.roughness = 0.4;
+            child.material.metalness = 0.08;
+          } else {
+            child.material.color.set("#b91c1c"); // Authentic anatomical muscle striated deep crimson
+            child.material.roughness = 0.55;
+            child.material.metalness = 0.05;
+          }
         } else if (modelUrl.includes("head")) {
           child.material.color.set("#d4a373");
           child.material.roughness = 0.6;
@@ -142,6 +221,8 @@ function RealGLBModel({
           finalColor = "#38bdf8"; // Light sky blue
           emissiveColor = "#0284c7";
           emissiveIntensity = 0.45;
+        } else if (modelUrl.includes("muscles")) {
+          finalColor = child.name.includes("aponeurosis") ? "#e2e8f0" : "#b91c1c";
         }
 
         child.material.color.set(finalColor);
