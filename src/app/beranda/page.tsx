@@ -271,7 +271,7 @@ export default function BerandaPage() {
             </div>
             <div className="text-[11.5px] mt-0.5 flex items-center gap-1">
               <span className="text-[#087990] font-semibold">20 Nov 2026</span>
-              <span className="text-[#64748b]">· Blok Muskuloskeletal</span>
+              <span className="text-[#64748b]">· {mockDashboardStats.examName}</span>
             </div>
           </div>
         </div>
@@ -356,7 +356,7 @@ export default function BerandaPage() {
           <div>
             <h2 className="metis-card-title">Peta Kelemahan Topik Anatomi</h2>
             <p className="text-[12px] text-[#64748b] mt-0.5">
-              Regio Extremitas Superior · Diurutkan dari topik yang paling membutuhkan repetisi
+              Silabus 3 Modul Praktikum (Muskuloskeletal, Respirasi, Kardiovaskuler) · Diurutkan dari topik yang paling kritis
             </p>
           </div>
           <Link href="/kelemahan" className="text-[12.5px] font-semibold text-[#0d6efd] hover:underline">

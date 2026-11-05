@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/Skeleton";
 import {
   mockAnatomyRegions,
   getStructuresByRegion,
+  mockDetailedAnatomyTopics,
   Anatomy3DStructure,
 } from "@/lib/mock-data";
 
@@ -61,9 +62,31 @@ function LatihanContent() {
   const [isFullWidth, setIsFullWidth] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Handle URL search params mapping to regions
+  // Handle URL search params mapping to regions (by topic ID or name)
   useEffect(() => {
     if (!topicParam) return;
+
+    // Check if topicParam matches a topic ID in mockDetailedAnatomyTopics
+    const matchedTopic = mockDetailedAnatomyTopics.find(
+      (t) => t.id === topicParam
+    );
+    if (matchedTopic) {
+      if (matchedTopic.regio.includes("Caput")) {
+        setSelectedRegionId("reg-caput");
+      } else if (matchedTopic.regio.includes("Collum")) {
+        setSelectedRegionId("reg-collum");
+      } else if (matchedTopic.regio.includes("Thorax")) {
+        setSelectedRegionId("reg-thorax");
+      } else if (matchedTopic.regio.includes("Abdomen")) {
+        setSelectedRegionId("reg-abdomen");
+      } else if (matchedTopic.regio.includes("Pelvis")) {
+        setSelectedRegionId("reg-pelvis");
+      } else if (matchedTopic.regio.includes("Membrum")) {
+        setSelectedRegionId("reg-membrum");
+      }
+      return;
+    }
+
     const lower = topicParam.toLowerCase();
     if (lower.includes("caput") || lower.includes("kepala")) {
       setSelectedRegionId("reg-caput");
@@ -72,7 +95,9 @@ function LatihanContent() {
     } else if (
       lower.includes("thorax") ||
       lower.includes("dada") ||
-      lower.includes("jantung")
+      lower.includes("jantung") ||
+      lower.includes("cor") ||
+      lower.includes("pulmo")
     ) {
       setSelectedRegionId("reg-thorax");
     } else if (lower.includes("abdomen") || lower.includes("perut")) {
@@ -82,7 +107,8 @@ function LatihanContent() {
     } else if (
       lower.includes("membrum") ||
       lower.includes("lengan") ||
-      lower.includes("gerak")
+      lower.includes("gerak") ||
+      lower.includes("tungkai")
     ) {
       setSelectedRegionId("reg-membrum");
     }
