@@ -50,6 +50,25 @@ const CAPUT_HEAD_MUSCLE_NAMES = new Set([
   "mentalis",
 ]);
 
+// 15 Verified Cervical Muscles available in muscles.glb matching FK ULM Syllabus
+const COLLUM_NECK_MUSCLE_NAMES = new Set([
+  "platysma",
+  "sternocleidomastoid",
+  "digastric",
+  "stylohyoid",
+  "mylohyoid",
+  "geniohyoid",
+  "sternohyoid",
+  "omohyoid",
+  "sternothyroid",
+  "thyrohyoid",
+  "scalenus-anterior",
+  "scalenus-medius",
+  "scalenus-posterior",
+  "splenius-capitis",
+  "levator-scapulae",
+]);
+
 function RealGLBModel({
   modelUrl,
   structures,
@@ -71,6 +90,12 @@ function RealGLBModel({
         s.id.startsWith("struct-c-") ||
         s.id.startsWith("caput-") ||
         s.meshId === "frontalis"
+    );
+    const isCollum = structures.some(
+      (s) =>
+        s.id.startsWith("struct-col-") ||
+        s.id.startsWith("collum-") ||
+        s.meshId === "sternocleidomastoid"
     );
 
     // If using muscles model for Head/Caput, isolate only the head & facial muscles
@@ -97,6 +122,32 @@ function RealGLBModel({
 
       headGroup.scale.set(s, s, s);
       return headGroup;
+    }
+
+    // If using muscles model for Neck/Collum, isolate only the 15 verified neck muscles
+    if (modelUrl.includes("muscles") && isCollum) {
+      const neckGroup = new THREE.Group();
+      neckGroup.name = "NeckMusclesGroup";
+      scene.traverse((c: any) => {
+        if (c.isMesh && COLLUM_NECK_MUSCLE_NAMES.has(c.name)) {
+          neckGroup.add(c.clone());
+        }
+      });
+      const box = new THREE.Box3().setFromObject(neckGroup);
+      const center = new THREE.Vector3();
+      box.getCenter(center);
+      const size = new THREE.Vector3();
+      box.getSize(size);
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const s = 2.45 / (maxDim || 1);
+
+      // Re-center all child meshes so neckGroup center is exactly at (0, 0, 0)
+      neckGroup.children.forEach((child) => {
+        child.position.sub(center);
+      });
+
+      neckGroup.scale.set(s, s, s);
+      return neckGroup;
     }
 
     const c = scene.clone(true);
@@ -146,10 +197,22 @@ function RealGLBModel({
             child.material.color.set("#e2e8f0"); // Whitish aponeurotic tendon
             child.material.roughness = 0.4;
             child.material.metalness = 0.08;
+            child.material.transparent = false;
+            child.material.opacity = 1.0;
+          } else if (child.name === "platysma") {
+            // Platysma: thin broad subcutaneous sheet covering anterior neck
+            // Slightly translucent so deeper muscles are visible, opaque when focused
+            child.material.color.set("#c2410c");
+            child.material.roughness = 0.6;
+            child.material.metalness = 0.02;
+            child.material.transparent = true;
+            child.material.opacity = 0.72;
           } else {
             child.material.color.set("#b91c1c"); // Authentic anatomical muscle striated deep crimson
             child.material.roughness = 0.55;
             child.material.metalness = 0.05;
+            child.material.transparent = false;
+            child.material.opacity = 1.0;
           }
         } else if (modelUrl.includes("head")) {
           child.material.color.set("#d4a373");
@@ -176,24 +239,33 @@ function RealGLBModel({
           finalColor = "#10b981"; // Emerald green
           emissiveColor = "#059669";
           emissiveIntensity = 0.65;
+          child.material.opacity = 1.0;
         } else if (isIncorrect) {
           finalColor = "#ef4444"; // Rose red
           emissiveColor = "#dc2626";
           emissiveIntensity = 0.7;
+          child.material.opacity = 1.0;
         } else if (isHint) {
           finalColor = "#f59e0b"; // Pulsing amber
           emissiveColor = "#d97706";
           emissiveIntensity = 0.8;
+          child.material.opacity = 1.0;
         } else if (isHighlighted) {
           finalColor = "#2563eb"; // Royal blue
           emissiveColor = "#1d4ed8";
           emissiveIntensity = 0.55;
+          child.material.opacity = 1.0;
         } else if (isHovered) {
           finalColor = "#38bdf8"; // Light sky blue
           emissiveColor = "#0284c7";
           emissiveIntensity = 0.45;
+          child.material.opacity = 1.0;
         } else if (modelUrl.includes("muscles")) {
-          finalColor = child.name.includes("aponeurosis") ? "#e2e8f0" : "#b91c1c";
+          finalColor = child.name.includes("aponeurosis")
+            ? "#e2e8f0"
+            : child.name === "platysma"
+            ? "#c2410c"
+            : "#b91c1c";
         }
 
         child.material.color.set(finalColor);
@@ -213,8 +285,10 @@ function RealGLBModel({
     hoveredStructureId,
   ]);
 
+  const modelKey = `${modelUrl}-${structures[0]?.id || "group"}`;
+
   return (
-    <Center key={modelUrl}>
+    <Center key={modelKey}>
       <group>
         <primitive
           object={cloned}
@@ -385,12 +459,13 @@ export function AnatomyViewer({
     }
   };
 
-  // Automatically reset camera view whenever modelUrl changes so the new layer is instantly centered and framed
+  // Automatically reset camera view whenever modelUrl or region structures change so the new layer is instantly centered and framed
+  const activeRegionKey = `${modelUrl}-${structures[0]?.id || "def"}`;
   useEffect(() => {
     if (controlsRef.current) {
       controlsRef.current.reset();
     }
-  }, [modelUrl]);
+  }, [activeRegionKey]);
 
   if (!isWebGLSupported) {
     return (
