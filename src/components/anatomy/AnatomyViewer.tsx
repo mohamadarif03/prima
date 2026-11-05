@@ -102,6 +102,22 @@ const PELVIS_HIP_MUSCLE_NAMES = new Set([
   "external-anal-sphincter",
 ]);
 
+// 12 Verified Thoracic & Chest Muscles available in muscles.glb matching FK ULM Syllabus
+const THORAX_CHEST_MUSCLE_NAMES = new Set([
+  "pectoralis-major",
+  "pectoralis-minor",
+  "subclavius",
+  "serratus-anterior",
+  "external-intercostals",
+  "internal-intercostals",
+  "innermost-intercostals",
+  "transversus-thoracis",
+  "serratus-posterior-superior",
+  "serratus-posterior-inferior",
+  "levatores-costarum",
+  "diaphragm",
+]);
+
 function RealGLBModel({
   modelUrl,
   structures,
@@ -141,6 +157,12 @@ function RealGLBModel({
         s.id.startsWith("struct-pel-") ||
         s.id.startsWith("pel-") ||
         s.meshId === "gluteus-maximus"
+    );
+    const isThorax = structures.some(
+      (s) =>
+        s.id.startsWith("struct-th-") ||
+        s.id.startsWith("th-") ||
+        s.meshId === "pectoralis-major"
     );
 
     // If using muscles model for Head/Caput, isolate only the head & facial muscles
@@ -245,6 +267,32 @@ function RealGLBModel({
 
       pelvisGroup.scale.set(s, s, s);
       return pelvisGroup;
+    }
+
+    // If using muscles model for Thorax, isolate only the 12 verified thoracic muscles
+    if (modelUrl.includes("muscles") && isThorax) {
+      const thoraxGroup = new THREE.Group();
+      thoraxGroup.name = "ThoraxMusclesGroup";
+      scene.traverse((c: any) => {
+        if (c.isMesh && THORAX_CHEST_MUSCLE_NAMES.has(c.name)) {
+          thoraxGroup.add(c.clone());
+        }
+      });
+      const box = new THREE.Box3().setFromObject(thoraxGroup);
+      const center = new THREE.Vector3();
+      box.getCenter(center);
+      const size = new THREE.Vector3();
+      box.getSize(size);
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const s = 2.45 / (maxDim || 1);
+
+      // Re-center all child meshes so thoraxGroup center is exactly at (0, 0, 0)
+      thoraxGroup.children.forEach((child) => {
+        child.position.sub(center);
+      });
+
+      thoraxGroup.scale.set(s, s, s);
+      return thoraxGroup;
     }
 
     const c = scene.clone(true);
