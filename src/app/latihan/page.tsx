@@ -52,11 +52,8 @@ function LatihanContent() {
   const searchParams = useSearchParams();
   const topicParam = searchParams.get("topic") || searchParams.get("topik");
 
-  // Default to Regio Caput (focused module with real 3D Skull & Muscles)
+  // Default to Regio Caput (focused module on 3D Head & Facial Muscles)
   const [selectedRegionId, setSelectedRegionId] = useState("reg-caput");
-  const [caputModelLayer, setCaputModelLayer] = useState<"skull" | "muscles">(
-    "skull"
-  );
   const [selectedStructureId, setSelectedStructureId] = useState<string | null>(
     null
   );
@@ -131,15 +128,10 @@ function LatihanContent() {
     );
   }, [selectedRegionId]);
 
-  // Dynamic active model URL (supports dual skull & muscles layer for Caput)
+  // Active 3D model URL
   const activeModelUrl = useMemo(() => {
-    if (selectedRegionId === "reg-caput") {
-      return caputModelLayer === "skull"
-        ? "/models/skull.glb"
-        : "/models/muscles.glb";
-    }
-    return selectedRegion.modelUrl;
-  }, [selectedRegionId, caputModelLayer, selectedRegion]);
+    return selectedRegion.modelUrl || "/models/muscles.glb";
+  }, [selectedRegion]);
 
   // Structures for active region
   const structures = useMemo(() => {
@@ -417,52 +409,14 @@ function LatihanContent() {
                 </h2>
               </div>
 
-              {/* Head Layer Switcher (Khusus Regio Caput) */}
-              {selectedRegionId === "reg-caput" ? (
-                <div className="flex items-center gap-1.5 bg-[#f1f5f9] p-1 rounded-[6px] border border-[#e2e8f0]">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setCaputModelLayer("skull");
-                      showToast("Model diubah ke Lapisan Tulang Tengkorak");
-                    }}
-                    className={`px-2.5 py-1 text-[11px] font-semibold rounded-[4px] transition flex items-center gap-1.5 cursor-pointer ${
-                      caputModelLayer === "skull"
-                        ? "bg-white text-[#0d6efd] shadow-2xs border border-[#cbd5e1]"
-                        : "text-[#64748b] hover:text-[#1e293b]"
-                    }`}
-                    title="Tampilkan model 3D tengkorak dan tulang kraniofasial"
-                  >
-                    <span>💀</span>
-                    <span>Lapisan Tulang Tengkorak</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setCaputModelLayer("muscles");
-                      showToast("Model diubah ke Lapisan Otot Kepala & Wajah");
-                    }}
-                    className={`px-2.5 py-1 text-[11px] font-semibold rounded-[4px] transition flex items-center gap-1.5 cursor-pointer ${
-                      caputModelLayer === "muscles"
-                        ? "bg-white text-[#0d6efd] shadow-2xs border border-[#cbd5e1]"
-                        : "text-[#64748b] hover:text-[#1e293b]"
-                    }`}
-                    title="Tampilkan model 3D serat otot mimik dan pengunyah kepala"
-                  >
-                    <span>🥩</span>
-                    <span>Lapisan Otot Kepala & Wajah</span>
-                  </button>
-                </div>
-              ) : (
-                <div className="flex items-center gap-2">
-                  {activeStructure && (
-                    <span className="bg-[#eff6ff] text-[#0d6efd] border border-[#bfdbfe] text-[11px] font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#0d6efd] animate-pulse"></span>
-                      <span>Terpilih: {activeStructure.nameIndo}</span>
-                    </span>
-                  )}
-                </div>
-              )}
+              <div className="flex items-center gap-2">
+                {activeStructure && (
+                  <span className="bg-[#eff6ff] text-[#0d6efd] border border-[#bfdbfe] text-[11px] font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#0d6efd] animate-pulse"></span>
+                    <span>Terpilih: {activeStructure.nameLatin}</span>
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* 3D Canvas Container */}
@@ -576,24 +530,66 @@ function LatihanContent() {
 
                       {/* Kategori Filter Chips */}
                       <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-none text-[11px]">
-                        {(selectedRegionId === "reg-caput"
-                          ? [
-                              { id: "Semua", label: `Semua (${structures.length})` },
-                              { id: "tulang", label: "Osteologi (19)" },
-                              { id: "otot", label: "Miologi (15)" },
-                              { id: "saraf", label: "Saraf Kranial (2)" },
-                              { id: "vaskular", label: "Vaskular (2)" },
-                              { id: "organ", label: "Organ & Sinus (2)" },
-                            ]
-                          : [
-                              { id: "Semua", label: `Semua (${structures.length})` },
-                              { id: "tulang", label: "Tulang" },
-                              { id: "otot", label: "Otot" },
-                              { id: "saraf", label: "Saraf" },
-                              { id: "vaskular", label: "Vaskular" },
-                              { id: "organ", label: "Organ" },
-                            ]
-                        ).map((catItem) => (
+                        {[
+                          { id: "Semua", label: `Semua (${structures.length})` },
+                          ...(structures.some((s) => s.category === "otot")
+                            ? [
+                                {
+                                  id: "otot",
+                                  label: `Miologi / Otot (${
+                                    structures.filter((s) => s.category === "otot")
+                                      .length
+                                  })`,
+                                },
+                              ]
+                            : []),
+                          ...(structures.some((s) => s.category === "tulang")
+                            ? [
+                                {
+                                  id: "tulang",
+                                  label: `Tulang (${
+                                    structures.filter(
+                                      (s) => s.category === "tulang"
+                                    ).length
+                                  })`,
+                                },
+                              ]
+                            : []),
+                          ...(structures.some((s) => s.category === "saraf")
+                            ? [
+                                {
+                                  id: "saraf",
+                                  label: `Saraf (${
+                                    structures.filter((s) => s.category === "saraf")
+                                      .length
+                                  })`,
+                                },
+                              ]
+                            : []),
+                          ...(structures.some((s) => s.category === "vaskular")
+                            ? [
+                                {
+                                  id: "vaskular",
+                                  label: `Vaskular (${
+                                    structures.filter(
+                                      (s) => s.category === "vaskular"
+                                    ).length
+                                  })`,
+                                },
+                              ]
+                            : []),
+                          ...(structures.some((s) => s.category === "organ")
+                            ? [
+                                {
+                                  id: "organ",
+                                  label: `Organ (${
+                                    structures.filter((s) => s.category === "organ")
+                                      .length
+                                  })`,
+                                },
+                              ]
+                            : []),
+                        ].map((catItem) => (
                           <button
                             key={catItem.id}
                             type="button"
