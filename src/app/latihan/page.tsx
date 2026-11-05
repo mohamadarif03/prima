@@ -52,8 +52,11 @@ function LatihanContent() {
   const searchParams = useSearchParams();
   const topicParam = searchParams.get("topic") || searchParams.get("topik");
 
-  // Default to Regio Thorax (features real 3D heart model)
-  const [selectedRegionId, setSelectedRegionId] = useState("reg-thorax");
+  // Default to Regio Caput (focused module with real 3D Skull & Facial scan)
+  const [selectedRegionId, setSelectedRegionId] = useState("reg-caput");
+  const [caputModelLayer, setCaputModelLayer] = useState<"skull" | "head">(
+    "skull"
+  );
   const [selectedStructureId, setSelectedStructureId] = useState<string | null>(
     null
   );
@@ -61,6 +64,12 @@ function LatihanContent() {
   const [selectedCategory, setSelectedCategory] = useState<string>("Semua");
   const [isFullWidth, setIsFullWidth] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
   // Handle URL search params mapping to regions (by topic ID or name)
   useEffect(() => {
@@ -118,9 +127,19 @@ function LatihanContent() {
   const selectedRegion = useMemo(() => {
     return (
       mockAnatomyRegions.find((r) => r.id === selectedRegionId) ||
-      mockAnatomyRegions[2] // Fallback to Thorax
+      mockAnatomyRegions[0] // Fallback to Caput
     );
   }, [selectedRegionId]);
+
+  // Dynamic active model URL (supports dual skull & face layer for Caput)
+  const activeModelUrl = useMemo(() => {
+    if (selectedRegionId === "reg-caput") {
+      return caputModelLayer === "skull"
+        ? "/models/skull.glb"
+        : "/models/head.glb";
+    }
+    return selectedRegion.modelUrl;
+  }, [selectedRegionId, caputModelLayer, selectedRegion]);
 
   // Structures for active region
   const structures = useMemo(() => {
@@ -390,21 +409,60 @@ function LatihanContent() {
               isFullWidth ? "lg:col-span-12" : "lg:col-span-8"
             }`}
           >
-            <div className="metis-card-header">
+            <div className="metis-card-header flex-wrap gap-2">
               <div className="flex items-center gap-2">
                 <i className="bi bi-box text-[#0d6efd] text-[15px]"></i>
                 <h2 className="metis-card-title">
                   Visualisasi 3D: {selectedRegion.name} ({selectedRegion.subName})
                 </h2>
               </div>
-              <div className="flex items-center gap-2">
-                {activeStructure && (
-                  <span className="bg-[#eff6ff] text-[#0d6efd] border border-[#bfdbfe] text-[11px] font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#0d6efd] animate-pulse"></span>
-                    <span>Terpilih: {activeStructure.nameIndo}</span>
-                  </span>
-                )}
-              </div>
+
+              {/* Head Layer Switcher (Khusus Regio Caput) */}
+              {selectedRegionId === "reg-caput" ? (
+                <div className="flex items-center gap-1.5 bg-[#f1f5f9] p-1 rounded-[6px] border border-[#e2e8f0]">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCaputModelLayer("skull");
+                      showToast("Model diubah ke Lapisan Tengkorak (3D Skull)");
+                    }}
+                    className={`px-2.5 py-1 text-[11px] font-semibold rounded-[4px] transition flex items-center gap-1.5 ${
+                      caputModelLayer === "skull"
+                        ? "bg-white text-[#0d6efd] shadow-2xs border border-[#cbd5e1]"
+                        : "text-[#64748b] hover:text-[#1e293b]"
+                    }`}
+                    title="Tampilkan model 3D tengkorak dan tulang kraniofasial"
+                  >
+                    <span>💀</span>
+                    <span>Lapisan Tengkorak (3D Skull)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCaputModelLayer("head");
+                      showToast("Model diubah ke Lapisan Wajah & Otot Mimik (3D Face)");
+                    }}
+                    className={`px-2.5 py-1 text-[11px] font-semibold rounded-[4px] transition flex items-center gap-1.5 ${
+                      caputModelLayer === "head"
+                        ? "bg-white text-[#0d6efd] shadow-2xs border border-[#cbd5e1]"
+                        : "text-[#64748b] hover:text-[#1e293b]"
+                    }`}
+                    title="Tampilkan model 3D ekspresi wajah dan otot mimik"
+                  >
+                    <span>🧬</span>
+                    <span>Lapisan Wajah & Otot (3D Face)</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  {activeStructure && (
+                    <span className="bg-[#eff6ff] text-[#0d6efd] border border-[#bfdbfe] text-[11px] font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#0d6efd] animate-pulse"></span>
+                      <span>Terpilih: {activeStructure.nameIndo}</span>
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* 3D Canvas Container */}
@@ -417,7 +475,7 @@ function LatihanContent() {
                 incorrectStructureId={null}
                 hintStructureId={null}
                 onMeshClick={handleMeshClick}
-                modelUrl={selectedRegion.modelUrl}
+                modelUrl={activeModelUrl}
                 className="flex-1"
               />
             </div>
@@ -518,26 +576,41 @@ function LatihanContent() {
 
                       {/* Kategori Filter Chips */}
                       <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-none text-[11px]">
-                        {["Semua", "organ", "vaskular", "otot", "tulang", "saraf"].map(
-                          (cat) => (
-                            <button
-                              key={cat}
-                              type="button"
-                              onClick={() => setSelectedCategory(cat)}
-                              className={`px-2 py-0.5 rounded-[4px] font-medium whitespace-nowrap transition capitalize ${
-                                selectedCategory === cat
-                                  ? "bg-[#0d6efd] text-white"
-                                  : "bg-[#f1f5f9] text-[#64748b] hover:bg-[#e2e8f0]"
-                              }`}
-                            >
-                              {cat}
-                            </button>
-                          )
-                        )}
+                        {(selectedRegionId === "reg-caput"
+                          ? [
+                              { id: "Semua", label: `Semua (${structures.length})` },
+                              { id: "tulang", label: "Osteologi (19)" },
+                              { id: "otot", label: "Miologi (15)" },
+                              { id: "saraf", label: "Saraf Kranial (2)" },
+                              { id: "vaskular", label: "Vaskular (2)" },
+                              { id: "organ", label: "Organ & Sinus (2)" },
+                            ]
+                          : [
+                              { id: "Semua", label: `Semua (${structures.length})` },
+                              { id: "tulang", label: "Tulang" },
+                              { id: "otot", label: "Otot" },
+                              { id: "saraf", label: "Saraf" },
+                              { id: "vaskular", label: "Vaskular" },
+                              { id: "organ", label: "Organ" },
+                            ]
+                        ).map((catItem) => (
+                          <button
+                            key={catItem.id}
+                            type="button"
+                            onClick={() => setSelectedCategory(catItem.id)}
+                            className={`px-2 py-0.5 rounded-[4px] font-medium whitespace-nowrap transition ${
+                              selectedCategory === catItem.id
+                                ? "bg-[#0d6efd] text-white"
+                                : "bg-[#f1f5f9] text-[#64748b] hover:bg-[#e2e8f0]"
+                            }`}
+                          >
+                            {catItem.label}
+                          </button>
+                        ))}
                       </div>
 
                       {/* List of structures */}
-                      <div className="max-h-[170px] overflow-y-auto space-y-1 pr-1">
+                      <div className="max-h-[220px] overflow-y-auto space-y-1 pr-1">
                         {filteredStructures.map((struct) => {
                           const isSelected =
                             selectedStructureId === struct.id ||
@@ -554,21 +627,63 @@ function LatihanContent() {
                               }`}
                             >
                               <div className="min-w-0 flex-1 truncate">
-                                <span className="block truncate">
-                                  {struct.nameIndo}
-                                </span>
-                                <span className="text-[10px] text-[#64748b] italic block truncate">
+                                <div className="flex items-center gap-1.5">
+                                  <span
+                                    className="text-[9.5px] uppercase font-bold px-1 py-0.2 rounded-[3px]"
+                                    style={{
+                                      backgroundColor: `${struct.baseColor}15`,
+                                      color: struct.baseColor,
+                                    }}
+                                  >
+                                    {struct.category}
+                                  </span>
+                                  <span className="block truncate font-medium">
+                                    {struct.nameIndo}
+                                  </span>
+                                </div>
+                                <span className="text-[10px] text-[#64748b] italic block truncate mt-0.5">
                                   {struct.nameLatin}
                                 </span>
                               </div>
                               <span
                                 className="w-2.5 h-2.5 rounded-full ml-2 flex-shrink-0"
                                 style={{ backgroundColor: struct.baseColor }}
-                                title={`Warna: ${struct.category}`}
+                                title={`Kategori: ${struct.category}`}
                               />
                             </button>
                           );
                         })}
+                      </div>
+
+                      {/* Tombol Aksi Cepat */}
+                      <div className="flex items-center justify-between gap-1.5 pt-2 border-t border-[#f1f5f9]">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (activeStructure) {
+                              navigator.clipboard?.writeText(activeStructure.nameLatin);
+                              showToast(`Terminologi "${activeStructure.nameLatin}" disalin`);
+                            }
+                          }}
+                          className="h-[28px] px-2.5 bg-white hover:bg-[#f8fafc] border border-[#cbd5e1] text-[#475569] hover:text-[#0f172a] text-[11px] font-medium rounded-[5px] transition flex items-center gap-1 shadow-2xs"
+                          title="Salin nama Latin ke clipboard"
+                        >
+                          <i className="bi bi-copy text-[11px]"></i>
+                          <span>Salin Latin</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (activeStructure) {
+                              showToast(`Status "${activeStructure.nameIndo}" diperbarui: Dikuasai`);
+                            }
+                          }}
+                          className="h-[28px] px-2.5 bg-[#ecfdf5] hover:bg-[#d1fae5] border border-[#a7f3d0] text-[#047857] text-[11px] font-semibold rounded-[5px] transition flex items-center gap-1 shadow-2xs"
+                          title="Tandai struktur ini sudah dikuasai"
+                        >
+                          <i className="bi bi-check2-circle text-[12px]"></i>
+                          <span>Tandai Dikuasai</span>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -581,6 +696,14 @@ function LatihanContent() {
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="fixed bottom-5 right-5 z-50 bg-[#1e293b] text-white text-[12.5px] px-4 py-2.5 rounded-[7px] shadow-lg flex items-center gap-2 border border-[#334155] animate-fade-in">
+          <i className="bi bi-check-circle-fill text-[#10b981]"></i>
+          <span>{toastMessage}</span>
         </div>
       )}
     </div>

@@ -46,8 +46,30 @@ function RealGLBModel({
 }: RealGLBModelProps) {
   const { scene } = useGLTF(modelUrl);
 
-  // Clone scene so materials are isolated
-  const cloned = useMemo(() => scene.clone(true), [scene]);
+  // Clone scene & normalize dimensions
+  const cloned = useMemo(() => {
+    const c = scene.clone(true);
+    const box = new THREE.Box3().setFromObject(c);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+    const maxDim = Math.max(size.x, size.y, size.z);
+
+    if (modelUrl.includes("skull")) {
+      // Skull model from VRE has Z pointing up; rotate upright and normalize
+      c.rotation.x = -Math.PI / 2;
+      const s = 2.45 / (maxDim || 1);
+      c.scale.set(s, s, s);
+    } else if (modelUrl.includes("head")) {
+      const s = 2.4 / (maxDim || 1);
+      c.scale.set(s, s, s);
+    } else if (maxDim > 5 || maxDim < 0.5) {
+      const s = 2.4 / (maxDim || 1);
+      c.scale.set(s, s, s);
+    } else {
+      c.scale.set(1.35, 1.35, 1.35);
+    }
+    return c;
+  }, [scene, modelUrl]);
 
   // Lookup map for structure by mesh name or id
   const structureByMeshId = useMemo(() => {
@@ -59,10 +81,32 @@ function RealGLBModel({
     return map;
   }, [structures]);
 
-  // Update materials dynamically when quiz states change
+  // Currently selected structure for 3D Pin Indicator
+  const selectedStruct = useMemo(() => {
+    return structures.find(
+      (s) => s.id === selectedStructureId || s.meshId === selectedStructureId
+    );
+  }, [structures, selectedStructureId]);
+
+  // Update materials dynamically when states change
   useEffect(() => {
     cloned.traverse((child: any) => {
       if (child.isMesh) {
+        if (!child.material._isCustom) {
+          child.material = child.material.clone();
+          child.material._isCustom = true;
+        }
+
+        if (modelUrl.includes("skull")) {
+          child.material.color.set("#e5dcc5"); // Authentic skull bone ivory
+          child.material.roughness = 0.45;
+          child.material.metalness = 0.05;
+        } else if (modelUrl.includes("head")) {
+          child.material.color.set("#d4a373");
+          child.material.roughness = 0.6;
+          child.material.metalness = 0.02;
+        }
+
         const struct = structureByMeshId.get(child.name);
         if (!struct) return;
 
@@ -73,12 +117,6 @@ function RealGLBModel({
           highlightedStructureId === struct.id ||
           selectedStructureId === struct.id;
         const isHovered = hoveredStructureId === struct.id;
-
-        // Ensure distinct material instance
-        if (!child.material._isCustom) {
-          child.material = child.material.clone();
-          child.material._isCustom = true;
-        }
 
         let finalColor = struct.baseColor;
         let emissiveColor = "#000000";
@@ -109,12 +147,11 @@ function RealGLBModel({
         child.material.color.set(finalColor);
         child.material.emissive.set(emissiveColor);
         child.material.emissiveIntensity = emissiveIntensity;
-        child.material.roughness = 0.4;
-        child.material.metalness = 0.15;
       }
     });
   }, [
     cloned,
+    modelUrl,
     structureByMeshId,
     correctStructureId,
     incorrectStructureId,
@@ -126,28 +163,55 @@ function RealGLBModel({
 
   return (
     <Center>
-      <primitive
-        object={cloned}
-        scale={[1.35, 1.35, 1.35]}
-        onClick={(e: any) => {
-          e.stopPropagation();
-          const struct = structureByMeshId.get(e.object.name);
-          if (struct) {
-            onClick(struct.id);
-          }
-        }}
-        onPointerOver={(e: any) => {
-          e.stopPropagation();
-          const struct = structureByMeshId.get(e.object.name);
-          if (struct) {
-            onHover(struct.id);
-          }
-        }}
-        onPointerOut={(e: any) => {
-          e.stopPropagation();
-          onHover(null);
-        }}
-      />
+      <group>
+        <primitive
+          object={cloned}
+          onClick={(e: any) => {
+            e.stopPropagation();
+            const struct = structureByMeshId.get(e.object.name);
+            if (struct) {
+              onClick(struct.id);
+            }
+          }}
+          onPointerOver={(e: any) => {
+            e.stopPropagation();
+            const struct = structureByMeshId.get(e.object.name);
+            if (struct) {
+              onHover(struct.id);
+            }
+          }}
+          onPointerOut={(e: any) => {
+            e.stopPropagation();
+            onHover(null);
+          }}
+        />
+
+        {/* 3D Anatomical Pin Indicator for Selected Structure */}
+        {selectedStruct && (
+          <group position={selectedStruct.position}>
+            {/* Core glowing marker */}
+            <mesh>
+              <sphereGeometry args={[0.07, 16, 16]} />
+              <meshStandardMaterial
+                color="#0d6efd"
+                emissive="#2563eb"
+                emissiveIntensity={0.8}
+                roughness={0.2}
+              />
+            </mesh>
+            {/* Outer halo ring */}
+            <mesh rotation={[Math.PI / 2, 0, 0]}>
+              <ringGeometry args={[0.085, 0.13, 24]} />
+              <meshBasicMaterial
+                color="#38bdf8"
+                side={THREE.DoubleSide}
+                transparent
+                opacity={0.85}
+              />
+            </mesh>
+          </group>
+        )}
+      </group>
     </Center>
   );
 }
