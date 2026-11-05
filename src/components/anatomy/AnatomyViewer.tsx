@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useRef, useState, useEffect, useMemo, Suspense } from "react";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, PerspectiveCamera, Center, useGLTF } from "@react-three/drei";
+import { Canvas, useThree, useFrame } from "@react-three/fiber";
+import { OrbitControls, TrackballControls, PerspectiveCamera, Center, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { Anatomy3DStructure } from "@/lib/mock-data";
 
@@ -317,6 +317,91 @@ function StructureMesh({
   );
 }
 
+interface CameraControllerProps {
+  controlMode: "trackball" | "orbit";
+  isAutoRotating: boolean;
+  targetView: { position: [number, number, number]; up: [number, number, number] } | null;
+  onViewTransitionEnd: () => void;
+  controlsRef: React.MutableRefObject<any>;
+}
+
+function CameraController({
+  controlMode,
+  isAutoRotating,
+  targetView,
+  onViewTransitionEnd,
+  controlsRef,
+}: CameraControllerProps) {
+  const { camera } = useThree();
+
+  useFrame((_, delta) => {
+    // Smooth transition to preset target view
+    if (targetView) {
+      const targetPos = new THREE.Vector3(...targetView.position);
+      const targetUp = new THREE.Vector3(...targetView.up);
+      camera.position.lerp(targetPos, 0.14);
+      camera.up.lerp(targetUp, 0.14);
+      camera.lookAt(0, 0, 0);
+
+      if (controlsRef.current) {
+        controlsRef.current.target?.set?.(0, 0, 0);
+        controlsRef.current.update?.();
+      }
+
+      if (camera.position.distanceTo(targetPos) < 0.04) {
+        camera.position.copy(targetPos);
+        camera.up.copy(targetUp);
+        camera.lookAt(0, 0, 0);
+        if (controlsRef.current) {
+          controlsRef.current.target?.set?.(0, 0, 0);
+          controlsRef.current.update?.();
+        }
+        onViewTransitionEnd();
+      }
+      return;
+    }
+
+    // Auto rotate around origin Y axis when enabled
+    if (isAutoRotating) {
+      const angle = delta * 0.9;
+      const x = camera.position.x;
+      const z = camera.position.z;
+      camera.position.x = x * Math.cos(angle) - z * Math.sin(angle);
+      camera.position.z = x * Math.sin(angle) + z * Math.cos(angle);
+      camera.lookAt(0, 0, 0);
+      if (controlsRef.current) {
+        controlsRef.current.target?.set?.(0, 0, 0);
+        controlsRef.current.update?.();
+      }
+    }
+  });
+
+  return controlMode === "trackball" ? (
+    <TrackballControls
+      key="trackball"
+      ref={controlsRef}
+      rotateSpeed={2.4}
+      zoomSpeed={1.2}
+      panSpeed={0.8}
+      staticMoving={false}
+      dynamicDampingFactor={0.16}
+      minDistance={1.2}
+      maxDistance={7.5}
+    />
+  ) : (
+    <OrbitControls
+      key="orbit"
+      ref={controlsRef}
+      enablePan={true}
+      enableZoom={true}
+      enableRotate={true}
+      minDistance={1.2}
+      maxDistance={7.5}
+      dampingFactor={0.06}
+    />
+  );
+}
+
 export function AnatomyViewer({
   structures,
   selectedStructureId,
@@ -330,6 +415,12 @@ export function AnatomyViewer({
 }: AnatomyViewerProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [isWebGLSupported, setIsWebGLSupported] = useState<boolean>(true);
+  const [controlMode, setControlMode] = useState<"trackball" | "orbit">("trackball");
+  const [isAutoRotating, setIsAutoRotating] = useState<boolean>(false);
+  const [targetView, setTargetView] = useState<{
+    position: [number, number, number];
+    up: [number, number, number];
+  } | null>(null);
   const controlsRef = useRef<any>(null);
 
   // Check WebGL availability
@@ -352,11 +443,38 @@ export function AnatomyViewer({
     };
   }, [hoveredId]);
 
+  // Handle Preset Views
+  const handleSelectView = (
+    view: "anterior" | "posterior" | "lateral-right" | "lateral-left" | "superior" | "inferior"
+  ) => {
+    setIsAutoRotating(false);
+    switch (view) {
+      case "anterior":
+        setTargetView({ position: [0, 0, 3.8], up: [0, 1, 0] });
+        break;
+      case "posterior":
+        setTargetView({ position: [0, 0, -3.8], up: [0, 1, 0] });
+        break;
+      case "lateral-right":
+        setTargetView({ position: [3.8, 0, 0], up: [0, 1, 0] });
+        break;
+      case "lateral-left":
+        setTargetView({ position: [-3.8, 0, 0], up: [0, 1, 0] });
+        break;
+      case "superior":
+        setTargetView({ position: [0, 3.8, 0.001], up: [0, 0, -1] });
+        break;
+      case "inferior":
+        // Base of skull (Basis Cranii / Norma Basalis)
+        setTargetView({ position: [0, -3.8, 0.001], up: [0, 0, 1] });
+        break;
+    }
+  };
+
   // Reset Camera View
   const handleResetCamera = () => {
-    if (controlsRef.current) {
-      controlsRef.current.reset();
-    }
+    setIsAutoRotating(false);
+    setTargetView({ position: [0, 0, 3.8], up: [0, 1, 0] });
   };
 
   if (!isWebGLSupported) {
@@ -380,27 +498,122 @@ export function AnatomyViewer({
     <div
       className={`relative w-full h-[400px] sm:h-[480px] lg:h-full min-h-[380px] bg-gradient-to-b from-[#f8fafc] to-[#e2e8f0] rounded-[8px] border border-[#cbd5e1] overflow-hidden select-none ${className}`}
     >
-      {/* Badge Top Left: Model Status */}
-      <div className="absolute top-3 left-3 z-10 flex items-center gap-2">
+      {/* Top Left Controls: Model Badge & 360 Mode Switch */}
+      <div className="absolute top-3 left-3 z-10 flex flex-wrap items-center gap-2">
         <span className="bg-white/95 backdrop-blur-xs border border-[#cbd5e1] text-[#334155] text-[11px] font-semibold px-2.5 py-1 rounded-[5px] shadow-2xs flex items-center gap-1.5">
           <span
             className={`w-2 h-2 rounded-full ${
               modelUrl ? "bg-[#10b981]" : "bg-[#0d6efd]"
             } animate-pulse`}
           ></span>
-          <span>{modelUrl ? "Model 3D Medis Nyata (BodyParts3D)" : "Model Placeholder 3D"}</span>
+          <span>{modelUrl ? "Model 3D Nyata" : "Model 3D"}</span>
         </span>
+
+        {/* Mode Rotasi: 360 Bebas vs Meja Putar */}
+        <div className="inline-flex rounded-[6px] border border-[#cbd5e1] bg-white/95 backdrop-blur-xs p-0.5 shadow-2xs">
+          <button
+            onClick={() => {
+              setControlMode("trackball");
+              setIsAutoRotating(false);
+            }}
+            className={`px-2 py-0.5 text-[10.5px] font-semibold rounded-[4px] transition flex items-center gap-1 cursor-pointer ${
+              controlMode === "trackball"
+                ? "bg-[#0d6efd] text-white shadow-xs"
+                : "text-[#64748b] hover:text-[#1e293b]"
+            }`}
+            title="Rotasi bebas 360° ke segala arah (atas, bawah, samping, terbalik) tanpa batas polar"
+          >
+            <i className="bi bi-globe"></i>
+            <span>360° Bebas</span>
+          </button>
+          <button
+            onClick={() => {
+              setControlMode("orbit");
+              setIsAutoRotating(false);
+            }}
+            className={`px-2 py-0.5 text-[10.5px] font-semibold rounded-[4px] transition flex items-center gap-1 cursor-pointer ${
+              controlMode === "orbit"
+                ? "bg-[#0d6efd] text-white shadow-xs"
+                : "text-[#64748b] hover:text-[#1e293b]"
+            }`}
+            title="Rotasi meja putar (turntable) dengan batas sudut kemiringan"
+          >
+            <i className="bi bi-arrow-repeat"></i>
+            <span>Meja Putar</span>
+          </button>
+        </div>
       </div>
 
-      {/* Control Buttons Top Right: Reset View */}
-      <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5">
+      {/* Top Right Controls: Preset Views, Auto-Rotate & Reset */}
+      <div className="absolute top-3 right-3 z-10 flex flex-wrap items-center justify-end gap-1.5">
+        {/* Preset Angles Quick Bar */}
+        <div className="hidden sm:flex items-center gap-1 bg-white/95 backdrop-blur-xs border border-[#cbd5e1] p-0.5 rounded-[6px] shadow-2xs text-[10.5px]">
+          <button
+            onClick={() => handleSelectView("anterior")}
+            className="px-1.5 py-0.5 rounded-[4px] hover:bg-[#f1f5f9] text-[#475569] font-medium transition cursor-pointer"
+            title="Tampak Depan (Anterior)"
+          >
+            Depan
+          </button>
+          <button
+            onClick={() => handleSelectView("posterior")}
+            className="px-1.5 py-0.5 rounded-[4px] hover:bg-[#f1f5f9] text-[#475569] font-medium transition cursor-pointer"
+            title="Tampak Belakang (Posterior)"
+          >
+            Belakang
+          </button>
+          <button
+            onClick={() => handleSelectView("lateral-right")}
+            className="px-1.5 py-0.5 rounded-[4px] hover:bg-[#f1f5f9] text-[#475569] font-medium transition cursor-pointer"
+            title="Tampak Kanan (Lateral Dextra)"
+          >
+            Kanan
+          </button>
+          <button
+            onClick={() => handleSelectView("lateral-left")}
+            className="px-1.5 py-0.5 rounded-[4px] hover:bg-[#f1f5f9] text-[#475569] font-medium transition cursor-pointer"
+            title="Tampak Kiri (Lateral Sinistra)"
+          >
+            Kiri
+          </button>
+          <button
+            onClick={() => handleSelectView("superior")}
+            className="px-1.5 py-0.5 rounded-[4px] hover:bg-[#f1f5f9] text-[#475569] font-medium transition cursor-pointer"
+            title="Tampak Atas (Superior / Calvaria)"
+          >
+            Atas
+          </button>
+          <button
+            onClick={() => handleSelectView("inferior")}
+            className="px-1.5 py-0.5 rounded-[4px] hover:bg-[#eff6ff] text-[#0d6efd] font-semibold transition cursor-pointer"
+            title="Tampak Bawah (Basis Cranii / Dasar Tengkorak)"
+          >
+            Basis Cranii
+          </button>
+        </div>
+
+        {/* Auto Rotate Toggle */}
+        <button
+          onClick={() => setIsAutoRotating(!isAutoRotating)}
+          className={`h-[28px] px-2 border rounded-[5px] text-[11px] font-semibold shadow-2xs transition flex items-center gap-1 cursor-pointer ${
+            isAutoRotating
+              ? "bg-[#0d6efd] text-white border-[#0d6efd]"
+              : "bg-white/95 hover:bg-white text-[#334155] border-[#cbd5e1]"
+          }`}
+          title="Putar Otomatis 360 Derajat"
+        >
+          <i className={`bi ${isAutoRotating ? "bi-pause-fill" : "bi-play-fill"} text-[12px]`}></i>
+          <span className="hidden md:inline">{isAutoRotating ? "Berhenti" : "Auto 360°"}</span>
+        </button>
+
+        {/* Reset Camera Button */}
         <button
           onClick={handleResetCamera}
-          className="h-[30px] px-2.5 bg-white/90 hover:bg-white border border-[#cbd5e1] text-[#334155] text-[11.5px] font-semibold rounded-[5px] shadow-2xs transition flex items-center gap-1"
-          title="Reset Sudut Pandang Kamera"
+          className="h-[28px] px-2 bg-white/95 hover:bg-white border border-[#cbd5e1] text-[#334155] text-[11px] font-semibold rounded-[5px] shadow-2xs transition flex items-center gap-1 cursor-pointer"
+          title="Reset Sudut Pandang Kamera ke Tampak Depan"
         >
-          <i className="bi bi-arrow-counterclockwise text-[13px]"></i>
-          <span className="hidden sm:inline">Reset Sudut</span>
+          <i className="bi bi-arrow-counterclockwise text-[12px]"></i>
+          <span className="hidden sm:inline">Reset</span>
         </button>
       </div>
 
@@ -455,22 +668,24 @@ export function AnatomyViewer({
           )}
         </Suspense>
 
-        {/* Camera Controls */}
-        <OrbitControls
-          ref={controlsRef}
-          enablePan={true}
-          enableZoom={true}
-          enableRotate={true}
-          minDistance={1.8}
-          maxDistance={7.5}
-          dampingFactor={0.05}
+        {/* Omnidirectional 360 Camera Controls */}
+        <CameraController
+          controlMode={controlMode}
+          isAutoRotating={isAutoRotating}
+          targetView={targetView}
+          onViewTransitionEnd={() => setTargetView(null)}
+          controlsRef={controlsRef}
         />
       </Canvas>
 
       {/* Bottom Controls Helper Hint */}
-      <div className="absolute bottom-2.5 inset-x-0 z-10 flex justify-center pointer-events-none">
-        <span className="bg-white/90 backdrop-blur-xs text-[#475569] text-[11px] font-medium px-3 py-1 rounded-full border border-[#cbd5e1]/70 shadow-2xs">
-          🖱️ Seret untuk memutar · Gulir untuk zoom · Klik kanan untuk menggeser
+      <div className="absolute bottom-2.5 inset-x-0 z-10 flex justify-center pointer-events-none px-3">
+        <span className="bg-white/95 backdrop-blur-xs text-[#334155] text-[11px] font-medium px-3 py-1 rounded-full border border-[#cbd5e1] shadow-2xs text-center leading-tight">
+          {controlMode === "trackball" ? (
+            <>🌐 <strong>Rotasi Bebas 360° Aktif:</strong> Seret mouse ke segala arah (atas, bawah, samping, jungkir balik) · Gulir untuk zoom · Klik kanan untuk geser</>
+          ) : (
+            <>🔄 <strong>Mode Meja Putar:</strong> Seret untuk rotasi horizontal · Gulir zoom · Klik kanan geser</>
+          )}
         </span>
       </div>
     </div>
