@@ -109,34 +109,38 @@ function RealGLBModel({
         }
       });
       const box = new THREE.Box3().setFromObject(headGroup);
+      const center = new THREE.Vector3();
+      box.getCenter(center);
       const size = new THREE.Vector3();
       box.getSize(size);
       const maxDim = Math.max(size.x, size.y, size.z);
       const s = 2.45 / (maxDim || 1);
+
+      // Re-center all child meshes so headGroup center is exactly at (0, 0, 0)
+      headGroup.children.forEach((child) => {
+        child.position.sub(center);
+      });
+
       headGroup.scale.set(s, s, s);
       return headGroup;
     }
 
     const c = scene.clone(true);
-    const box = new THREE.Box3().setFromObject(c);
-    const size = new THREE.Vector3();
-    box.getSize(size);
-    const maxDim = Math.max(size.x, size.y, size.z);
-
     if (modelUrl.includes("skull")) {
       // Skull model from VRE has Z pointing up; rotate upright and normalize
       c.rotation.x = -Math.PI / 2;
-      const s = 2.45 / (maxDim || 1);
-      c.scale.set(s, s, s);
-    } else if (modelUrl.includes("head")) {
-      const s = 2.4 / (maxDim || 1);
-      c.scale.set(s, s, s);
-    } else if (maxDim > 5 || maxDim < 0.5) {
-      const s = 2.4 / (maxDim || 1);
-      c.scale.set(s, s, s);
-    } else {
-      c.scale.set(1.35, 1.35, 1.35);
     }
+
+    const box = new THREE.Box3().setFromObject(c);
+    const center = new THREE.Vector3();
+    box.getCenter(center);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const s = 2.45 / (maxDim || 1);
+    c.scale.set(s, s, s);
+    c.position.set(-center.x * s, -center.y * s, -center.z * s);
+
     return c;
   }, [scene, modelUrl, structures]);
 
@@ -243,7 +247,7 @@ function RealGLBModel({
   ]);
 
   return (
-    <Center>
+    <Center key={modelUrl}>
       <group>
         <primitive
           object={cloned}
@@ -439,6 +443,13 @@ export function AnatomyViewer({
       controlsRef.current.reset();
     }
   };
+
+  // Automatically reset camera view whenever modelUrl changes so the new layer is instantly centered and framed
+  useEffect(() => {
+    if (controlsRef.current) {
+      controlsRef.current.reset();
+    }
+  }, [modelUrl]);
 
   if (!isWebGLSupported) {
     return (
