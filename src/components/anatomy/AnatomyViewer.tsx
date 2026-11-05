@@ -154,13 +154,6 @@ function RealGLBModel({
     return map;
   }, [structures]);
 
-  // Currently selected structure for 3D Pin Indicator
-  const selectedStruct = useMemo(() => {
-    return structures.find(
-      (s) => s.id === selectedStructureId || s.meshId === selectedStructureId
-    );
-  }, [structures, selectedStructureId]);
-
   // Update materials dynamically when states change
   useEffect(() => {
     cloned.traverse((child: any) => {
@@ -270,32 +263,6 @@ function RealGLBModel({
             onHover(null);
           }}
         />
-
-        {/* 3D Anatomical Pin Indicator for Selected Structure */}
-        {selectedStruct && (
-          <group position={selectedStruct.position}>
-            {/* Core glowing marker */}
-            <mesh>
-              <sphereGeometry args={[0.07, 16, 16]} />
-              <meshStandardMaterial
-                color="#0d6efd"
-                emissive="#2563eb"
-                emissiveIntensity={0.8}
-                roughness={0.2}
-              />
-            </mesh>
-            {/* Outer halo ring */}
-            <mesh rotation={[Math.PI / 2, 0, 0]}>
-              <ringGeometry args={[0.085, 0.13, 24]} />
-              <meshBasicMaterial
-                color="#38bdf8"
-                side={THREE.DoubleSide}
-                transparent
-                opacity={0.85}
-              />
-            </mesh>
-          </group>
-        )}
       </group>
     </Center>
   );
