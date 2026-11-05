@@ -118,6 +118,28 @@ const THORAX_CHEST_MUSCLE_NAMES = new Set([
   "diaphragm",
 ]);
 
+// 18 Verified Limb & Extremity Muscles available in muscles.glb matching FK ULM Syllabus
+const MEMBRUM_LIMB_MUSCLE_NAMES = new Set([
+  "deltoid",
+  "supraspinatus",
+  "infraspinatus",
+  "biceps-brachii",
+  "brachialis",
+  "triceps-brachii",
+  "brachioradialis",
+  "pronator-teres",
+  "sartorius",
+  "rectus-femoris",
+  "vastus-lateralis",
+  "vastus-medialis",
+  "gracilis",
+  "biceps-femoris",
+  "tibialis-anterior",
+  "gastrocnemius",
+  "soleus",
+  "calcaneal-tendon",
+]);
+
 function RealGLBModel({
   modelUrl,
   structures,
@@ -163,6 +185,13 @@ function RealGLBModel({
         s.id.startsWith("struct-th-") ||
         s.id.startsWith("th-") ||
         s.meshId === "pectoralis-major"
+    );
+    const isMembrum = structures.some(
+      (s) =>
+        s.id.startsWith("struct-m-") ||
+        s.id.startsWith("membrum-") ||
+        s.meshId === "deltoid" ||
+        s.meshId === "biceps-brachii"
     );
 
     // If using muscles model for Head/Caput, isolate only the head & facial muscles
@@ -295,6 +324,32 @@ function RealGLBModel({
       return thoraxGroup;
     }
 
+    // If using muscles model for Membrum (Limbs/Extremities), isolate the 18 verified limb muscles
+    if (modelUrl.includes("muscles") && isMembrum) {
+      const membrumGroup = new THREE.Group();
+      membrumGroup.name = "MembrumMusclesGroup";
+      scene.traverse((c: any) => {
+        if (c.isMesh && MEMBRUM_LIMB_MUSCLE_NAMES.has(c.name)) {
+          membrumGroup.add(c.clone());
+        }
+      });
+      const box = new THREE.Box3().setFromObject(membrumGroup);
+      const center = new THREE.Vector3();
+      box.getCenter(center);
+      const size = new THREE.Vector3();
+      box.getSize(size);
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const s = 2.45 / (maxDim || 1);
+
+      // Re-center all child meshes so membrumGroup center is exactly at (0, 0, 0)
+      membrumGroup.children.forEach((child) => {
+        child.position.sub(center);
+      });
+
+      membrumGroup.scale.set(s, s, s);
+      return membrumGroup;
+    }
+
     const c = scene.clone(true);
     if (modelUrl.includes("skull")) {
       // Skull model from VRE has Z pointing up; rotate upright and normalize
@@ -338,7 +393,11 @@ function RealGLBModel({
           child.material.roughness = 0.45;
           child.material.metalness = 0.05;
         } else if (modelUrl.includes("muscles")) {
-          if (child.name.includes("aponeurosis") || child.name === "linea-alba") {
+          if (
+            child.name.includes("aponeurosis") ||
+            child.name === "linea-alba" ||
+            child.name === "calcaneal-tendon"
+          ) {
             child.material.color.set("#e2e8f0"); // Whitish aponeurotic fibrous tendon
             child.material.roughness = 0.4;
             child.material.metalness = 0.08;
@@ -407,7 +466,9 @@ function RealGLBModel({
           child.material.opacity = 1.0;
         } else if (modelUrl.includes("muscles")) {
           finalColor =
-            child.name.includes("aponeurosis") || child.name === "linea-alba"
+            child.name.includes("aponeurosis") ||
+            child.name === "linea-alba" ||
+            child.name === "calcaneal-tendon"
               ? "#e2e8f0"
               : child.name === "platysma"
               ? "#c2410c"
