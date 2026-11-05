@@ -83,6 +83,25 @@ const ABDOMEN_MUSCLE_NAMES = new Set([
   "diaphragm",
 ]);
 
+// 15 Verified Pelvic & Hip Muscles available in muscles.glb matching FK ULM Syllabus
+const PELVIS_HIP_MUSCLE_NAMES = new Set([
+  "gluteus-maximus",
+  "gluteus-medius",
+  "gluteus-minimus",
+  "tensor-fasciae-latae",
+  "piriformis",
+  "gemellus-superior",
+  "obturator-internus",
+  "gemellus-inferior",
+  "quadratus-femoris",
+  "obturator-externus",
+  "pubococcygeus",
+  "puborectalis",
+  "iliococcygeus",
+  "coccygeus",
+  "external-anal-sphincter",
+]);
+
 function RealGLBModel({
   modelUrl,
   structures,
@@ -116,6 +135,12 @@ function RealGLBModel({
         s.id.startsWith("struct-ab-") ||
         s.id.startsWith("ab-") ||
         s.meshId === "rectus-abdominis"
+    );
+    const isPelvis = structures.some(
+      (s) =>
+        s.id.startsWith("struct-pel-") ||
+        s.id.startsWith("pel-") ||
+        s.meshId === "gluteus-maximus"
     );
 
     // If using muscles model for Head/Caput, isolate only the head & facial muscles
@@ -194,6 +219,32 @@ function RealGLBModel({
 
       abGroup.scale.set(s, s, s);
       return abGroup;
+    }
+
+    // If using muscles model for Pelvis, isolate only the 15 verified pelvic & hip muscles
+    if (modelUrl.includes("muscles") && isPelvis) {
+      const pelvisGroup = new THREE.Group();
+      pelvisGroup.name = "PelvisMusclesGroup";
+      scene.traverse((c: any) => {
+        if (c.isMesh && PELVIS_HIP_MUSCLE_NAMES.has(c.name)) {
+          pelvisGroup.add(c.clone());
+        }
+      });
+      const box = new THREE.Box3().setFromObject(pelvisGroup);
+      const center = new THREE.Vector3();
+      box.getCenter(center);
+      const size = new THREE.Vector3();
+      box.getSize(size);
+      const maxDim = Math.max(size.x, size.y, size.z);
+      const s = 2.45 / (maxDim || 1);
+
+      // Re-center all child meshes so pelvisGroup center is exactly at (0, 0, 0)
+      pelvisGroup.children.forEach((child) => {
+        child.position.sub(center);
+      });
+
+      pelvisGroup.scale.set(s, s, s);
+      return pelvisGroup;
     }
 
     const c = scene.clone(true);
