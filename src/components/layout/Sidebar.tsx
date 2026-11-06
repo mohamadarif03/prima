@@ -40,7 +40,7 @@ const mainNavItems: NavMenuItem[] = [
     badgeColor: "bg-[#0d6efd]",
   },
   {
-    name: "Perencana Belajar",
+    name: "Rencana Belajar",
     href: "/perencana",
     icon: "bi bi-calendar-event",
   },
