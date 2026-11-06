@@ -52,6 +52,13 @@ const mainNavItems: NavMenuItem[] = [
     badgeColor: "bg-[#0d6efd]",
   },
   {
+    name: "Latihan Soal",
+    href: "/latihan-materials",
+    icon: "bi bi-ui-checks",
+    badge: "AI",
+    badgeColor: "bg-[#0d6efd]",
+  },
+  {
     name: "Peta Kelemahan",
     href: "/kelemahan",
     icon: "bi bi-graph-up",
@@ -86,7 +93,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
         {mainNavItems.map((item) => {
           const isActive =
             pathname === item.href ||
-            (item.href === "/materi" && pathname.startsWith("/materi"));
+            (item.href === "/materi" && pathname.startsWith("/materi")) ||
+            (item.href === "/latihan-materials" && pathname.startsWith("/latihan-materials"));
           return (
             <Link
               key={item.href}

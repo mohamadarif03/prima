@@ -362,7 +362,7 @@ export const mock14DaySchedule: DaySchedule[] = [
         category: "Latihan Soal",
         activityType: "soal",
         durationMinutes: 25,
-        actionUrl: "/latihan",
+        actionUrl: "/latihan-materials?materi=mat-01",
         itemCount: 10,
         completed: false,
       },
@@ -418,7 +418,7 @@ export const mock14DaySchedule: DaySchedule[] = [
         category: "Latihan Soal",
         activityType: "soal",
         durationMinutes: 20,
-        actionUrl: "/latihan",
+        actionUrl: "/latihan-materials?materi=mat-02",
         itemCount: 8,
         completed: false,
       },
@@ -3871,5 +3871,371 @@ export const mockMaterials: MaterialItem[] = [
       "Gagal mengekstrak teks slide: Format berkas presentasi memerlukan pemindaian ulang atau unggah ulang dokumen asli.",
     subtopics: [],
     previewPages: [],
+  },
+];
+
+// ==========================================
+// FITUR F4: LATIHAN SOAL OLEH AI
+// ==========================================
+
+export interface QuizOption {
+  id: "A" | "B" | "C" | "D";
+  text: string;
+}
+
+export interface MaterialQuizQuestion {
+  id: string;
+  materialId: string;
+  subtopicId: string;
+  subtopicTitle: string;
+  region: "Thorax" | "Membrum";
+  difficulty: "mudah" | "sedang" | "sulit";
+  vignette?: string;
+  questionText: string;
+  latinTerms: string[];
+  options: QuizOption[];
+  correctOptionId: "A" | "B" | "C" | "D";
+  explanation: string;
+  materialSource: {
+    materialId: string;
+    subtopicId: string;
+    page: number;
+    quote: string;
+  };
+}
+
+export interface QuizSessionHistoryItem {
+  id: string;
+  dateStr: string;
+  materialTitle: string;
+  materialId: string;
+  mode: "latihan" | "simulasi";
+  score: number;
+  totalQuestions: number;
+  correctCount: number;
+  durationSeconds: number;
+}
+
+export const mockMaterialQuizQuestions: MaterialQuizQuestion[] = [
+  // MAT-01: ANATOMI JANTUNG & MEDIASTINUM (6 Soal)
+  {
+    id: "q-01",
+    materialId: "mat-01",
+    subtopicId: "sub-01-1",
+    subtopicTitle: "Morfologi Eksterna & Ruang Jantung",
+    region: "Thorax",
+    difficulty: "mudah",
+    questionText: "Bagian manakah dari cavitates cordis yang membentuk apex cordis dan memiliki dinding miokardial paling tebal?",
+    latinTerms: ["Apex cordis", "Ventriculus sinister", "Myocardium"],
+    options: [
+      { id: "A", text: "Atrium dextrum" },
+      { id: "B", text: "Atrium sinistrum" },
+      { id: "C", text: "Ventriculus dexter" },
+      { id: "D", text: "Ventriculus sinister" },
+    ],
+    correctOptionId: "D",
+    explanation: "Apex cordis dibentuk secara eksklusif oleh pars inferolateral ventriculus sinister (ICS V linea medioclavicularis sinistra). Dinding miokardium ventrikel kiri 3x lebih tebal daripada ventrikel kanan untuk menghasilkan tekanan sirkulasi sistemik yang tinggi.",
+    materialSource: {
+      materialId: "mat-01",
+      subtopicId: "sub-01-1",
+      page: 8,
+      quote: "Apex cordis dibentuk secara eksklusif oleh pars inferolateral ventriculus sinister.",
+    },
+  },
+  {
+    id: "q-02",
+    materialId: "mat-01",
+    subtopicId: "sub-01-2",
+    subtopicTitle: "Aparatus Valvularis & Rangka Fibrosa",
+    region: "Thorax",
+    difficulty: "sedang",
+    vignette: "Seorang wanita 45 tahun datang dengan keluhan sesak napas saat aktivitas. Pada auskultasi jantung di sela iga (ICS) V linea medioclavicularis sinistra, terdengar bising middiastolik bergemuruh (rumble) dengan opening snap.",
+    questionText: "Katup manakah yang paling mungkin mengalami kelainan patologis stenosis pada pasien ini?",
+    latinTerms: ["Valva bicuspidalis / mitralis", "Auscultatio cordis"],
+    options: [
+      { id: "A", text: "Valva tricuspidalis (Atrioventrikular kanan)" },
+      { id: "B", text: "Valva bicuspidalis / mitralis (Atrioventrikular kiri)" },
+      { id: "C", text: "Valva aortae (Semilunaris)" },
+      { id: "D", text: "Valva trunci pulmonalis (Semilunaris)" },
+    ],
+    correctOptionId: "B",
+    explanation: "Auskultasi di ICS V linea medioclavicularis sinistra adalah punctum maximum untuk katup mitral (valva bicuspidalis). Bising middiastolik dengan opening snap adalah karakteristik klasik dari mitral stenosis (stenosis katup mitral).",
+    materialSource: {
+      materialId: "mat-01",
+      subtopicId: "sub-01-2",
+      page: 17,
+      quote: "Fokus auskultasi: Katup Mitral di ICS V linea medioclavicularis sinistra.",
+    },
+  },
+  {
+    id: "q-03",
+    materialId: "mat-01",
+    subtopicId: "sub-01-3",
+    subtopicTitle: "Sistem Konduksi Jantung",
+    region: "Thorax",
+    difficulty: "sedang",
+    questionText: "Di manakah letak anatomis spesifik dari nodus sinuatrialis (SA Node) yang bertindak sebagai pemacu denyut jantung primer?",
+    latinTerms: ["Nodus sinuatrialis", "Crista terminalis", "Vena cava superior"],
+    options: [
+      { id: "A", text: "Di trigonum fibrosum dextrum pada septum membranaceum" },
+      { id: "B", text: "Tautan dinding anterolateral atrium dextrum dan vena cava superior di dekat crista terminalis" },
+      { id: "C", text: "Pada pars membranacea septum interventriculare di bawah katup aorta" },
+      { id: "D", text: "Di dasar atrium sinistrum dekat muara vena pulmonalis" },
+    ],
+    correctOptionId: "B",
+    explanation: "Nodus sinuatrialis (SA node) berlokasi secara anatomis pada tautan antara vena cava superior dan atrium dextrum, tepat di ujung kranial crista terminalis dekat sulcus terminalis.",
+    materialSource: {
+      materialId: "mat-01",
+      subtopicId: "sub-01-3",
+      page: 20,
+      quote: "Nodus Sinuatrialis (SA Node) berlokasi pada tautan VCS dan crista terminalis atrium dextrum.",
+    },
+  },
+  {
+    id: "q-04",
+    materialId: "mat-01",
+    subtopicId: "sub-01-4",
+    subtopicTitle: "Sirkulasi Koroner & Drainase Vena",
+    region: "Thorax",
+    difficulty: "sulit",
+    vignette: "Seorang pria 58 tahun mengeluhkan nyeri dada retrosternal menjalar ke rahang kiri. Rekaman EKG menunjukkan elevasi segmen ST pada sadapan V1 hingga V4 (STEMI dinding anterior dan septum).",
+    questionText: "Pembuluh darah koroner manakah yang paling sering mengalami oklusi total pada gambaran klinis ini?",
+    latinTerms: ["Ramus interventricularis anterior", "Arteria coronaria sinistra"],
+    options: [
+      { id: "A", text: "Ramus circumflexus (LCx)" },
+      { id: "B", text: "Arteria coronaria dextra (RCA)" },
+      { id: "C", text: "Ramus interventricularis anterior (LAD)" },
+      { id: "D", text: "Ramus marginalis dexter" },
+    ],
+    correctOptionId: "C",
+    explanation: "Sadapan V1-V4 merekam dinding anterior ventrikel kiri dan septum interventrikulare bagian anterior. Wilayah ini diperdarahi secara langsung oleh Ramus Interventricularis Anterior (LAD / Left Anterior Descending artery), cabang dari LCA.",
+    materialSource: {
+      materialId: "mat-01",
+      subtopicId: "sub-01-4",
+      page: 26,
+      quote: "LAD memperdarahi 2/3 anterior septum interventrikular dan dinding anterior ventrikel kiri.",
+    },
+  },
+  {
+    id: "q-05",
+    materialId: "mat-01",
+    subtopicId: "sub-01-2",
+    subtopicTitle: "Aparatus Valvularis & Rangka Fibrosa",
+    region: "Thorax",
+    difficulty: "mudah",
+    questionText: "Berapa banyak daun katup (cuspis) yang menyusun Valva Atrioventricularis Dextra dan apa saja namanya?",
+    latinTerms: ["Valva atrioventricularis dextra", "Cuspis anterior/posterior/septalis"],
+    options: [
+      { id: "A", text: "Dua kuspis: anterior dan posterior" },
+      { id: "B", text: "Tiga kuspis: anterior, posterior, dan septalis" },
+      { id: "C", text: "Tiga kuspis: dextra, sinistra, dan posterior" },
+      { id: "D", text: "Empat kuspis: medialis, lateralis, superior, dan inferior" },
+    ],
+    correctOptionId: "B",
+    explanation: "Valva atrioventricularis dextra (katup trikuspidalis) memiliki tiga kuspis yaitu cuspis anterior, cuspis posterior, dan cuspis septalis yang dihubungkan dengan chordae tendineae ke musculi papillares.",
+    materialSource: {
+      materialId: "mat-01",
+      subtopicId: "sub-01-2",
+      page: 15,
+      quote: "Valva Atrioventricularis Dextra memiliki 3 kuspis: anterior, posterior, dan septalis.",
+    },
+  },
+  {
+    id: "q-06",
+    materialId: "mat-01",
+    subtopicId: "sub-01-4",
+    subtopicTitle: "Sirkulasi Koroner & Drainase Vena",
+    region: "Thorax",
+    difficulty: "sulit",
+    questionText: "Pada mayoritas populasi manusia (~90%), Ramus nodi atrioventricularis yang memperdarahi Nodus AV dipercabangkan oleh:",
+    latinTerms: ["Ramus nodi atrioventricularis", "Arteria coronaria dextra"],
+    options: [
+      { id: "A", text: "Arteria coronaria dextra (RCA)" },
+      { id: "B", text: "Ramus circumflexus (LCx)" },
+      { id: "C", text: "Ramus interventricularis anterior (LAD)" },
+      { id: "D", text: "Truncus coeliacus" },
+    ],
+    correctOptionId: "A",
+    explanation: "Pada ~90% individu, Ramus nodi atrioventricularis berasal dari Arteria Coronaria Dextra (RCA) di dekat crux cordis (pola sirkulasi koroner dominan kanan).",
+    materialSource: {
+      materialId: "mat-01",
+      subtopicId: "sub-01-4",
+      page: 26,
+      quote: "RCA memperdarahi atrium dextrum, ventrikel dextrum, nodus SA (60%), dan nodus AV (90%).",
+    },
+  },
+
+  // MAT-02: PLEKSUS BRAKIALIS & INERVASI EKSTREMITAS SUPERIOR (6 Soal)
+  {
+    id: "q-07",
+    materialId: "mat-02",
+    subtopicId: "sub-02-1",
+    subtopicTitle: "Radices dan Trunci Pleksus Brakialis",
+    region: "Membrum",
+    difficulty: "mudah",
+    questionText: "Truncus superior pada plexus brachialis dibentuk oleh persatuan serabut dari rami anteriores medula spinalis segmen:",
+    latinTerms: ["Truncus superior", "Radices anteriores C5-C6"],
+    options: [
+      { id: "A", text: "C3 dan C4" },
+      { id: "B", text: "C5 dan C6" },
+      { id: "C", text: "C7 dan C8" },
+      { id: "D", text: "C8 dan T1" },
+    ],
+    correctOptionId: "B",
+    explanation: "Plexus brachialis dibentuk oleh rami anteriores C5-T1. Radix C5 dan C6 bersatu membentuk Truncus Superior, radix C7 membentuk Truncus Medius, dan radices C8 serta T1 membentuk Truncus Inferior.",
+    materialSource: {
+      materialId: "mat-02",
+      subtopicId: "sub-02-1",
+      page: 5,
+      quote: "Radices C5 dan C6 bergabung membentuk Truncus Superior.",
+    },
+  },
+  {
+    id: "q-08",
+    materialId: "mat-02",
+    subtopicId: "sub-02-4",
+    subtopicTitle: "Korelasi Klinis Deformitas Ekstremitas",
+    region: "Membrum",
+    difficulty: "sedang",
+    vignette: "Seorang bayi baru lahir setelah partus dengan distosia bahu. Pada pemeriksaan tampak ekstremitas atas kanan tergantung lemas di sisi tubuh dengan bahu adduksi dan rotasi interna, sendi siku ekstensi, serta pergelangan tangan pronasi ('waiter's tip position').",
+    questionText: "Kerusakan struktur manakah yang paling mendasari kondisi palsy ini?",
+    latinTerms: ["Erb-Duchenne palsy", "Truncus superior C5-C6"],
+    options: [
+      { id: "A", text: "Truncus superior (C5-C6) / Erb-Duchenne palsy" },
+      { id: "B", text: "Truncus inferior (C8-T1) / Klumpke palsy" },
+      { id: "C", text: "Nervus ulnaris di sulcus epicondyli medialis" },
+      { id: "D", text: "Nervus medianus di fossa cubitalis" },
+    ],
+    correctOptionId: "A",
+    explanation: "Traksi berlebih pada leher bayi saat proses persalinan dapat meregangkan atau merobek truncus superior (C5-C6), memicu kelumpuhan Erb-Duchenne dengan postur klasik 'waiter's tip hand' akibat paresis abduktor bahu, rotator eksterna, dan fleksor siku.",
+    materialSource: {
+      materialId: "mat-02",
+      subtopicId: "sub-02-4",
+      page: 24,
+      quote: "Erb-Duchenne Palsy (C5-C6): Lengan adduksi, rotasi interna, siku ekstensi, tangan pronasi ('Waiter's tip position').",
+    },
+  },
+  {
+    id: "q-09",
+    materialId: "mat-02",
+    subtopicId: "sub-02-3",
+    subtopicTitle: "Cabang Terminal & Distribusi Motorik-Sensorik",
+    region: "Membrum",
+    difficulty: "sedang",
+    questionText: "Saraf perifer manakah yang berjalan melalui spatium quadrangulare bersama vasa circumflexa humeri posterior untuk menginervasi musculus deltoideus dan teres minor?",
+    latinTerms: ["Nervus axillaris", "Spatium quadrangulare", "Musculus deltoideus"],
+    options: [
+      { id: "A", text: "Nervus radialis" },
+      { id: "B", text: "Nervus axillaris" },
+      { id: "C", text: "Nervus musculocutaneus" },
+      { id: "D", text: "Nervus suprascapularis" },
+    ],
+    correctOptionId: "B",
+    explanation: "Nervus axillaris melintasi spatium quadrangulare di regio bahu posterior bersama arteri circumflexa humeri posterior, menginervasi m. deltoideus dan m. teres minor serta sensorik kulit di atas insersio deltoid.",
+    materialSource: {
+      materialId: "mat-02",
+      subtopicId: "sub-02-3",
+      page: 15,
+      quote: "N. Axillaris melintasi spatium quadrangulare bersama vasa circumflexa humeri posterior.",
+    },
+  },
+  {
+    id: "q-10",
+    materialId: "mat-02",
+    subtopicId: "sub-02-4",
+    subtopicTitle: "Korelasi Klinis Deformitas Ekstremitas",
+    region: "Membrum",
+    difficulty: "sulit",
+    vignette: "Pria 22 tahun mengalami fraktur transversal pada sepertiga tengah corpus humeri setelah kecelakaan sepeda motor. Pasien mengeluh tidak dapat mengangkat atau mengekstensikan pergelangan tangan dan jari-jarinya ('wrist drop').",
+    questionText: "Nervus manakah yang paling rentan mengalami cedera karena posisinya melintasi sulcus spiralis humeri?",
+    latinTerms: ["Nervus radialis", "Wrist drop", "Sulcus nervi radialis"],
+    options: [
+      { id: "A", text: "Nervus musculocutaneus" },
+      { id: "B", text: "Nervus ulnaris" },
+      { id: "C", text: "Nervus radialis" },
+      { id: "D", text: "Nervus medianus" },
+    ],
+    correctOptionId: "C",
+    explanation: "Nervus radialis berjalan melingkar di permukaan posterior corpus humeri pada sulcus nervi radialis (sulcus spiralis). Fraktur sepertiga tengah corpus humeri sangat rentan mencederai saraf ini, menyebabkan kelumpuhan seluruh otot ekstensor tangan ('wrist drop').",
+    materialSource: {
+      materialId: "mat-02",
+      subtopicId: "sub-02-4",
+      page: 25,
+      quote: "Fraktur corpus humeri sepertiga tengah rentan merusak N. radialis pada sulcus spiralis, menyebabkan 'wrist drop'.",
+    },
+  },
+  {
+    id: "q-11",
+    materialId: "mat-02",
+    subtopicId: "sub-02-3",
+    subtopicTitle: "Cabang Terminal & Distribusi Motorik-Sensorik",
+    region: "Membrum",
+    difficulty: "sedang",
+    vignette: "Seorang sekretaris 42 tahun mengeluhkan kebas dan kesemutan di sisi palmar ibu jari, telunjuk, jari tengah, dan setengah sisi lateral jari manis kanan. Gejala memberat di malam hari. Tampak mulai ada atrofi pada eminentia thenaris.",
+    questionText: "Nervus manakah yang mengalami kompresi saat melintasi canalis carpi di bawah retinaculum musculorum flexorum?",
+    latinTerms: ["Nervus medianus", "Canalis carpi", "Carpal tunnel syndrome"],
+    options: [
+      { id: "A", text: "Nervus medianus" },
+      { id: "B", text: "Nervus ulnaris" },
+      { id: "C", text: "Nervus radialis ramus superficialis" },
+      { id: "D", text: "Nervus cutaneus antebrachii medialis" },
+    ],
+    correctOptionId: "A",
+    explanation: "Sindrom lorong karpal (Carpal Tunnel Syndrome) disebabkan kompresi pada Nervus Medianus di bawah retinaculum flexorum di pergelangan tangan, mengakibatkan parestesia pada distribusi sensorik jari I-III serta setengah lateral jari IV dan kelemahan otot-otot thenar.",
+    materialSource: {
+      materialId: "mat-02",
+      subtopicId: "sub-02-4",
+      page: 28,
+      quote: "Carpal Tunnel Syndrome adalah neuropati jepitan N. medianus di bawah retinaculum flexorum.",
+    },
+  },
+  {
+    id: "q-12",
+    materialId: "mat-02",
+    subtopicId: "sub-02-4",
+    subtopicTitle: "Korelasi Klinis Deformitas Ekstremitas",
+    region: "Membrum",
+    difficulty: "sulit",
+    questionText: "Deformitas 'Claw hand' (tangan cakar) terutama pada digiti IV dan V yang disertai hilangnya kemampuan adduksi ibu jari (tanda Froment positif) diakibatkan oleh lesi pada:",
+    latinTerms: ["Nervus ulnaris", "Claw hand", "Froment test"],
+    options: [
+      { id: "A", text: "Nervus ulnaris" },
+      { id: "B", text: "Nervus radialis" },
+      { id: "C", text: "Nervus musculocutaneus" },
+      { id: "D", text: "Nervus thoracicus longus" },
+    ],
+    correctOptionId: "A",
+    explanation: "Nervus ulnaris menginervasi sebagian besar otot intrinsik tangan termasuk musculi interossei palmares/dorsales, lumbricales 3-4, dan m. adductor pollicis. Kelumpuhan otot ini menyebabkan hiperekstensi sendi MCP dan fleksi sendi IP (claw hand) serta tanda Froment positif saat menjepit kertas.",
+    materialSource: {
+      materialId: "mat-02",
+      subtopicId: "sub-02-4",
+      page: 26,
+      quote: "Tangan Cakar (Claw hand): Hiperekstensi sendi MCP dan fleksi IP akibat lesi N. ulnaris.",
+    },
+  },
+];
+
+export const mockQuizSessionHistories: QuizSessionHistoryItem[] = [
+  {
+    id: "hist-01",
+    dateStr: "Kemarin, 14:20",
+    materialTitle: "Anatomi Jantung dan Vaskularisasi Mediastinum",
+    materialId: "mat-01",
+    mode: "latihan",
+    score: 80,
+    totalQuestions: 5,
+    correctCount: 4,
+    durationSeconds: 245,
+  },
+  {
+    id: "hist-02",
+    dateStr: "4 Nov 2026, 09:15",
+    materialTitle: "Pleksus Brakialis dan Inervasi Ekstremitas",
+    materialId: "mat-02",
+    mode: "simulasi",
+    score: 60,
+    totalQuestions: 5,
+    correctCount: 3,
+    durationSeconds: 310,
   },
 ];

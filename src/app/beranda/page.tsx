@@ -187,13 +187,13 @@ export default function BerandaPage() {
 
         {/* Action Buttons */}
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => showToast("Memulai sesi latihan adaptif 10 menit...")}
+          <Link
+            href="/latihan-materials"
             className="h-[34px] px-3.5 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white text-[13px] font-medium rounded-[6px] flex items-center gap-1.5 shadow-sm transition"
           >
             <i className="bi bi-play-fill text-[16px]"></i>
-            <span>Mulai Sesi Adaptif (10 Mnt)</span>
-          </button>
+            <span>Mulai Latihan Soal</span>
+          </Link>
           <Link
             href="/latihan"
             className="h-[34px] px-3 bg-white hover:bg-[#f8fafc] border border-[#cbd5e1] text-[#475569] text-[13px] font-medium rounded-[6px] flex items-center gap-1.5 transition"
