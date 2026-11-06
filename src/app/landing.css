@@ -169,22 +169,25 @@
       transform: translateX(-50%);
       top: 20px;
       height: 42px;
+      width: max-content;
+      margin: 0 auto;
       padding: 4px 6px;
       display: flex;
       align-items: center;
-      gap: 3px;
+      justify-content: center;
+      gap: 4px;
       border: 1px solid rgba(255,255,255,.55);
       border-radius: 22px;
-      background: rgba(245,249,255,.28);
-      box-shadow: 0 0 12px rgba(255,255,255,.7), inset 0 0 12px rgba(255,255,255,.42);
-      backdrop-filter: blur(17px);
-      -webkit-backdrop-filter: blur(17px);
+      background: rgba(245,249,255,.32);
+      box-shadow: 0 0 14px rgba(255,255,255,.7), inset 0 0 12px rgba(255,255,255,.45);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
       z-index: 15;
     }
 
     .nav a {
       height: 32px;
-      padding: 0 14px;
+      padding: 0 16px;
       font-size: 14.5px;
       white-space: nowrap;
       border-radius: 18px;
@@ -1138,6 +1141,7 @@
       }
 
       .is-phone .header {
+        flex-wrap: wrap;
         grid-area: head;
         position: relative;
         height: auto;
@@ -1145,6 +1149,16 @@
         align-items: center;
         justify-content: space-between;
         padding: clamp(14px, 4vw, 20px) 0 0;
+      }
+
+      .is-phone .nav {
+        position: static;
+        transform: none;
+        margin: 10px auto 0;
+        width: max-content;
+        max-width: 100%;
+        display: flex;
+        justify-content: center;
       }
 
       .is-phone .brand {

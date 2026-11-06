@@ -888,7 +888,7 @@ export default function LandingPage() {
                 { label: "Atlas 3D", href: "#home" },
                 { label: "Cara Belajar", href: "#cara-belajar" },
                 { label: "Kurikulum FK", href: "#kurikulum" },
-                { label: "Peta Kelemahan", href: "/kelemahan" },
+                
                 { label: "FAQ", href: "#faq" },
               ].map((item) => (
                 <a
@@ -941,7 +941,7 @@ export default function LandingPage() {
                 { label: "Atlas 3D", href: "#home" },
                 { label: "Cara Belajar", href: "#cara-belajar" },
                 { label: "Kurikulum FK", href: "#kurikulum" },
-                { label: "Peta Kelemahan", href: "/kelemahan" },
+                
                 { label: "FAQ", href: "#faq" },
               ].map((item) => (
                 <a
