@@ -4239,3 +4239,384 @@ export const mockQuizSessionHistories: QuizSessionHistoryItem[] = [
     durationSeconds: 310,
   },
 ];
+
+// ==========================================
+// FITUR F5: FLASHCARD ISTILAH PENTING
+// ==========================================
+
+export interface FlashcardItem {
+  id: string;
+  deckId: string;
+  front: string;
+  latin: string;
+  back: string;
+  clinicalHint?: string;
+  status: "unlearned" | "hesitant" | "mastered";
+  marked?: boolean;
+}
+
+export interface FlashcardDeck {
+  id: string;
+  title: string;
+  region: "Caput" | "Collum" | "Thorax" | "Abdomen" | "Pelvis" | "Membrum";
+  materialId?: string;
+  materialTitle?: string;
+  cardCount: number;
+  masteredCount: number;
+  hesitantCount: number;
+  unlearnedCount: number;
+  lastStudied?: string;
+}
+
+export const mockFlashcardDecks: FlashcardDeck[] = [
+  {
+    id: "deck-01",
+    title: "Istilah Anatomi Jantung & Mediastinum",
+    region: "Thorax",
+    materialId: "mat-01",
+    materialTitle: "Anatomi Jantung dan Vaskularisasi Mediastinum",
+    cardCount: 12,
+    masteredCount: 8,
+    hesitantCount: 3,
+    unlearnedCount: 1,
+    lastStudied: "Kemarin",
+  },
+  {
+    id: "deck-02",
+    title: "Pleksus Brakialis & Saraf Ekstremitas Superior",
+    region: "Membrum",
+    materialId: "mat-02",
+    materialTitle: "Pleksus Brakialis dan Inervasi Ekstremitas Superior",
+    cardCount: 12,
+    masteredCount: 6,
+    hesitantCount: 4,
+    unlearnedCount: 2,
+    lastStudied: "2 hari lalu",
+  },
+  {
+    id: "deck-03",
+    title: "Basis Cranii Interna & Nervi Craniales",
+    region: "Caput",
+    materialId: "mat-03",
+    materialTitle: "Osteologi Caput dan Basis Cranii Interna",
+    cardCount: 10,
+    masteredCount: 5,
+    hesitantCount: 3,
+    unlearnedCount: 2,
+    lastStudied: "4 hari lalu",
+  },
+];
+
+export const mockFlashcards: FlashcardItem[] = [
+  // ================= DECK 1: ANATOMI JANTUNG (12 Kartu) =================
+  {
+    id: "fc-01-01",
+    deckId: "deck-01",
+    front: "Puncak Jantung",
+    latin: "Apex cordis",
+    back: "Ujung tumpul anteroinferior yang dibentuk secara eksklusif oleh pars inferolateral ventriculus sinister, berlokasi di sela iga (ICS) V linea medioclavicularis sinistra.",
+    clinicalHint: "Iktus kordis teraba paling kuat di apeks; bergeser lateral pada kardiomegali.",
+    status: "mastered",
+  },
+  {
+    id: "fc-01-02",
+    deckId: "deck-01",
+    front: "Basis Jantung",
+    latin: "Basis cordis",
+    back: "Permukaan posterosuperior jantung yang menghadap ke arah korpus vertebra T6-T9, terutama dibentuk oleh atrium sinistrum dan sebagian atrium dextrum.",
+    clinicalHint: "Tempat keluar-masuknya vasa magna (aorta, truncus pulmonalis, venae cavae).",
+    status: "mastered",
+  },
+  {
+    id: "fc-01-03",
+    deckId: "deck-01",
+    front: "Fosa Ovalis",
+    latin: "Fossa ovalis",
+    back: "Cekungan oval pada permukaan kanan septum interatriale yang merupakan sisa embriologis dari foramen ovale tertutup.",
+    clinicalHint: "Defek septum atrium (ASD) sering terjadi akibat kegagalan penutupan foramen ovale.",
+    status: "mastered",
+  },
+  {
+    id: "fc-01-04",
+    deckId: "deck-01",
+    front: "Katup Bikuspid / Mitral",
+    latin: "Valva mitralis / Valva bicuspidalis",
+    back: "Katup atrioventrikular sisi kiri jantung yang tersusun atas dua kuspis (anterior dan posterior), mencegah regurgitasi darah ke atrium kiri saat sistol ventrikel.",
+    clinicalHint: "Stenosis mitral menimbulkan murmur middiastolik rumble di ICS V midklavikula.",
+    status: "mastered",
+  },
+  {
+    id: "fc-01-05",
+    deckId: "deck-01",
+    front: "Katup Trikuspid",
+    latin: "Valva tricuspidalis",
+    back: "Katup atrioventrikular sisi kanan jantung yang memiliki tiga kuspis: anterior, posterior, dan septalis.",
+    clinicalHint: "Terdengar paling jelas pada punctum maximum di ICS IV linea parasternalis sinistra.",
+    status: "hesitant",
+  },
+  {
+    id: "fc-01-06",
+    deckId: "deck-01",
+    front: "Tali Tendon Katup",
+    latin: "Chordae tendineae",
+    back: "Serabut tali fibrosa kolagen yang menghubungkan cuspis katup AV dengan musculi papillares pada dinding ventrikel.",
+    clinicalHint: "Ruptur chordae tendineae akibat endokarditis menyebabkan insufisiensi katup akut.",
+    status: "mastered",
+  },
+  {
+    id: "fc-01-07",
+    deckId: "deck-01",
+    front: "Nodus Sinoatrial (SA Node)",
+    latin: "Nodus sinuatrialis",
+    back: "Pusat pacu jantung alami primer (frekuensi 60-100 x/mnt) yang berlokasi di tautan anterolateral vena cava superior dan atrium kanan dekat crista terminalis.",
+    clinicalHint: "Dipersarafi oleh cabang simpatis dan N. vagus (parasimpatis).",
+    status: "mastered",
+  },
+  {
+    id: "fc-01-08",
+    deckId: "deck-01",
+    front: "Nodus Atrioventrikular (AV Node)",
+    latin: "Nodus atrioventricularis",
+    back: "Pusat tunda konduksi impuls listrik (~0.12 detik) yang terletak di dasar atrium kanan posterior dekat septum interatriale (Trigonum Koch).",
+    clinicalHint: "Menunda depolarisasi agar atrium selesai mengosongkan darah ke dalam ventrikel.",
+    status: "hesitant",
+  },
+  {
+    id: "fc-01-09",
+    deckId: "deck-01",
+    front: "Berkas Atrioventrikular (His)",
+    latin: "Fasciculus atrioventricularis",
+    back: "Jalur konduksi tunggal yang menembus skeleton fibrosum cordis menuju ke pars membranacea septum interventriculare.",
+    clinicalHint: "Bercabang menjadi Crus dextrum dan Crus sinistrum di septum ventrikel.",
+    status: "unlearned",
+  },
+  {
+    id: "fc-01-10",
+    deckId: "deck-01",
+    front: "Arteri Koroner Desenden Anterior (LAD)",
+    latin: "Ramus interventricularis anterior",
+    back: "Cabang utama arteria coronaria sinistra yang melintasi sulcus interventricularis anterior menuju apeks, menyuplai 2/3 anterior septum dan ventrikel kiri.",
+    clinicalHint: "Sering disebut 'widow maker' karena oklusi LAD menyebabkan infark miokard anterior luas.",
+    status: "mastered",
+  },
+  {
+    id: "fc-01-11",
+    deckId: "deck-01",
+    front: "Sinus Koronarius",
+    latin: "Sinus coronarius",
+    back: "Saluran vena lebar di facies diaphragmatica jantung (sulcus coronarius posterior) tempat bermuaranya sebagian besar vena kardiaka sebelum masuk ke atrium kanan.",
+    clinicalHint: "Bermuara langsung ke atrium dextrum di antara ostium vena cava inferior dan katup trikuspid.",
+    status: "hesitant",
+  },
+  {
+    id: "fc-01-12",
+    deckId: "deck-01",
+    front: "Rangka Jantung",
+    latin: "Skeleton cordis",
+    back: "Struktur jaringan ikat fibrosa padat pembentuk 4 anulus fibrosus katup yang berfungsi sebagai tempat perlekatan miokardium dan isolator listrik antara atrium dan ventrikel.",
+    clinicalHint: "Mencegah penyebaran depolarisasi acak langsung dari atrium ke ventrikel.",
+    status: "mastered",
+  },
+
+  // ================= DECK 2: PLEKSUS BRAKIALIS (12 Kartu) =================
+  {
+    id: "fc-02-01",
+    deckId: "deck-02",
+    front: "Akar Pleksus Brakialis",
+    latin: "Radices anteriores C5-T1",
+    back: "Rami anteriores saraf spinal servikal ke-5 hingga torakal ke-1 yang melintas di celah spatium interscalenicum antara m. scalenus anterior dan medius.",
+    clinicalHint: "Keluar di atas arteri subclavia di trigonum colli posterius.",
+    status: "mastered",
+  },
+  {
+    id: "fc-02-02",
+    deckId: "deck-02",
+    front: "Batang Saraf Atas",
+    latin: "Truncus superior",
+    back: "Penyatuan radix anterior C5 dan C6 tepat di lateral m. scalenus anterior.",
+    clinicalHint: "Lesi pada truncus superior menyebabkan Erb-Duchenne palsy (waiter's tip position).",
+    status: "mastered",
+  },
+  {
+    id: "fc-02-03",
+    deckId: "deck-02",
+    front: "Batang Saraf Bawah",
+    latin: "Truncus inferior",
+    back: "Penyatuan radix anterior C8 dan T1 yang melengkung di atas permukaan costa I di belakang arteria subclavia.",
+    clinicalHint: "Lesi pada truncus inferior memicu Klumpke palsy (claw hand total).",
+    status: "hesitant",
+  },
+  {
+    id: "fc-02-04",
+    deckId: "deck-02",
+    front: "Fasikulus Posterior",
+    latin: "Fasciculus posterior",
+    back: "Fasikulus yang dibentuk oleh persatuan seluruh divisi posterior dari ketiga truncus (C5-T1), terletak di posterior pars secunda A. axillaris.",
+    clinicalHint: "Mencabangkan Nervus Radialis dan Nervus Axillaris.",
+    status: "mastered",
+  },
+  {
+    id: "fc-02-05",
+    deckId: "deck-02",
+    front: "Fasikulus Lateral",
+    latin: "Fasciculus lateralis",
+    back: "Dibentuk oleh gabungan divisi anterior truncus superior dan truncus medius (serabut C5, C6, C7).",
+    clinicalHint: "Mencabangkan N. musculocutaneus dan radix lateralis N. medianus.",
+    status: "hesitant",
+  },
+  {
+    id: "fc-02-06",
+    deckId: "deck-02",
+    front: "Saraf Radialis",
+    latin: "Nervus radialis",
+    back: "Cabang terbesar fasciculus posterior (C5-T1) yang berjalan di sulcus nervi radialis humeri, mempersarafi seluruh otot ekstensor lengan dan tangan.",
+    clinicalHint: "Fraktur corpus humeri sepertiga tengah menyebabkan 'wrist drop'.",
+    status: "mastered",
+  },
+  {
+    id: "fc-02-07",
+    deckId: "deck-02",
+    front: "Saraf Medianus",
+    latin: "Nervus medianus",
+    back: "Dibentuk oleh gabungan radix lateralis dan radix medialis di depan A. axillaris, menginervasi otot fleksor kompartemen anterior antebrachium dan otot thenar.",
+    clinicalHint: "Terjepit di canalis carpi menimbulkan Carpal Tunnel Syndrome (kesemutan jari I-III).",
+    status: "mastered",
+  },
+  {
+    id: "fc-02-08",
+    deckId: "deck-02",
+    front: "Saraf Ulnaris",
+    latin: "Nervus ulnaris",
+    back: "Kelanjutan langsung fasciculus medialis (C8-T1) yang melintasi posterior epicondylus medialis humeri, menginervasi sebagian besar otot intrinsik manus.",
+    clinicalHint: "Kerusakan saraf ini menyebabkan 'Claw hand' pada jari ke-4 dan ke-5.",
+    status: "unlearned",
+  },
+  {
+    id: "fc-02-09",
+    deckId: "deck-02",
+    front: "Saraf Aksilaris",
+    latin: "Nervus axillaris",
+    back: "Cabang fasciculus posterior (C5-C6) yang melintasi spatium quadrangulare mengelilingi collum chirurgicum humeri untuk menginervasi m. deltoideus dan teres minor.",
+    clinicalHint: "Rentan cedera pada dislokasi sendi bahu anterior.",
+    status: "hesitant",
+  },
+  {
+    id: "fc-02-10",
+    deckId: "deck-02",
+    front: "Saraf Torasikus Panjang",
+    latin: "Nervus thoracicus longus",
+    back: "Berasal langsung dari radices C5, C6, dan C7 yang melintasi dinding lateral toraks untuk menginervasi musculus serratus anterior.",
+    clinicalHint: "Lesi pasca mastektomi memicu deformitas 'winged scapula' (skapula alata).",
+    status: "mastered",
+  },
+  {
+    id: "fc-02-11",
+    deckId: "deck-02",
+    front: "Kelumpuhan Erb-Duchenne",
+    latin: "Paralysis Erb-Duchenne",
+    back: "Kondisi paresis ekstremitas atas akibat traksi pada truncus superior (C5-C6) saat persalinan; ekstremitas adduksi, rotasi interna, siku ekstensi, tangan pronasi.",
+    clinicalHint: "Disebut juga 'waiter's tip position' atau 'porter's tip deformity'.",
+    status: "hesitant",
+  },
+  {
+    id: "fc-02-12",
+    deckId: "deck-02",
+    front: "Kelumpuhan Klumpke",
+    latin: "Paralysis Klumpke",
+    back: "Kondisi paresis tangan akibat tarikan mendadak saat meraih pegangan jatuh yang merusak truncus inferior (C8-T1); memicu atrofi otot intrinsik tangan ('claw hand').",
+    clinicalHint: "Sering disertai sindrom Horner unilateral akibat keterlibatan serabut T1 simpatis.",
+    status: "unlearned",
+  },
+
+  // ================= DECK 3: BASIS CRANII (10 Kartu) =================
+  {
+    id: "fc-03-01",
+    deckId: "deck-03",
+    front: "Pelat Bertapis",
+    latin: "Lamina cribrosa",
+    back: "Pelat horizontal bertapis pada os ethmoidale di fossa cranii anterior yang dilalui oleh serabut nervus olfactorius (N. I).",
+    clinicalHint: "Fraktur fossa anterior dapat memicu anosmia dan rinorea cairan serebrospinal (CSF leak).",
+    status: "mastered",
+  },
+  {
+    id: "fc-03-02",
+    deckId: "deck-03",
+    front: "Saluran Optik",
+    latin: "Canalis opticus",
+    back: "Saluran pada ala minor ossis sphenoidalis yang menghubungkan orbita dengan fossa cranii media, dilalui oleh N. opticus (N. II) dan A. ophthalmica.",
+    clinicalHint: "Lesi kompresif menyebabkan defek lapang pandang monokular.",
+    status: "mastered",
+  },
+  {
+    id: "fc-03-03",
+    deckId: "deck-03",
+    front: "Celah Orbita Atas",
+    latin: "Fissura orbitalis superior",
+    back: "Celah antara ala major dan ala minor sphenoid yang dilalui N. III, N. IV, N. V1 (ophthalmicus), N. VI, dan vena ophthalmica superior.",
+    clinicalHint: "Sindrom fissura orbitalis superior melumpuhkan pergerakan bola mata (oftalmoplegia total).",
+    status: "hesitant",
+  },
+  {
+    id: "fc-03-04",
+    deckId: "deck-03",
+    front: "Lubang Bundar",
+    latin: "Foramen rotundum",
+    back: "Foramen sirkular di ala major ossis sphenoidalis yang dilewati oleh Nervus maxillaris (N. V2) menuju fossa pterygopalatina.",
+    clinicalHint: "Menyalurkan sensasi sensorik pipi, palatum, dan gigi atas.",
+    status: "mastered",
+  },
+  {
+    id: "fc-03-05",
+    deckId: "deck-03",
+    front: "Lubang Lonjong",
+    latin: "Foramen ovale",
+    back: "Foramen oval di ala major ossis sphenoidalis yang dilalui oleh Nervus mandibularis (N. V3), A. meningea accessoria, dan N. petrosus minor.",
+    clinicalHint: "Mnemonic MALE: Mandibular nerve, Accessory meningeal artery, Lesser petrosal nerve, Emissary vein.",
+    status: "mastered",
+  },
+  {
+    id: "fc-03-06",
+    deckId: "deck-03",
+    front: "Lubang Duri",
+    latin: "Foramen spinosum",
+    back: "Foramen kecil posterolateral foramen ovale yang dilalui oleh Arteria meningea media dan Ramus meningeus N. V3.",
+    clinicalHint: "Ruptur A. meningea media akibat trauma pelipis (pterion) memicu Hematoma Epidural (EDH).",
+    status: "hesitant",
+  },
+  {
+    id: "fc-03-07",
+    deckId: "deck-03",
+    front: "Liang Telinga Dalam",
+    latin: "Meatus acusticus internus",
+    back: "Saluran pada pars petrosa ossis temporalis di fossa cranii posterior yang dilalui oleh N. facialis (N. VII), N. vestibulocochlearis (N. VIII), dan A. labyrinthi.",
+    clinicalHint: "Lokasi pertumbuhan vestibular schwannoma (akustikus neurinoma).",
+    status: "mastered",
+  },
+  {
+    id: "fc-03-08",
+    deckId: "deck-03",
+    front: "Lubang Jugularis",
+    latin: "Foramen jugulare",
+    back: "Foramen lebar antara os temporale dan os occipitale yang dilalui oleh N. IX, N. X, N. XI, dan merupakan tempat berawalnya Vena Jugularis Interna.",
+    clinicalHint: "Sindrom foramen jugulare (Vernet) menyebabkan disfagia dan paralisis pita suara.",
+    status: "unlearned",
+  },
+  {
+    id: "fc-03-09",
+    deckId: "deck-03",
+    front: "Saluran Saraf Hipoglosus",
+    latin: "Canalis nervi hypoglossi",
+    back: "Saluran pada condylus occipitalis yang dilalui secara eksklusif oleh Nervus hypoglossus (N. XII) menuju otot intrinsik dan ekstrinsik lidah.",
+    clinicalHint: "Lesi N. XII menyebabkan deviasi lidah ke sisi yang sakit saat dijulurkan.",
+    status: "hesitant",
+  },
+  {
+    id: "fc-03-10",
+    deckId: "deck-03",
+    front: "Lubang Besar Tengkorak",
+    latin: "Foramen magnum",
+    back: "Lubang terbesar pada dasar tengkorak (os occipitale) tempat transisi medulla oblongata menjadi medulla spinalis, dilalui juga oleh A. vertebralis dan radix spinalis N. XI.",
+    clinicalHint: "Herniasi tonsil serebelar melalui foramen magnum menekan pusat pernapasan di medula.",
+    status: "unlearned",
+  },
+];
