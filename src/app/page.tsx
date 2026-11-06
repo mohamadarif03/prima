@@ -64,6 +64,72 @@ export default function LandingPage() {
   const caputStructures = useMemo(() => getStructuresByRegion("reg-caput"), []);
   const [highlightedStructureId, setHighlightedStructureId] = useState<string>("struct-c-01");
 
+  // Planner Day State & Interactive Checklist (Panggung 01)
+  const [plannerDayIdx, setPlannerDayIdx] = useState(3); // Kamis (Hari Ini)
+  const [p1Checklist, setP1Checklist] = useState([
+    {
+      id: "p1-1",
+      title: "M. Frontalis & M. Temporalis",
+      category: "Miologi Kraniofasial",
+      count: 8,
+      completed: true,
+    },
+    {
+      id: "p1-2",
+      title: "Percabangan N. Facialis (CN VII) & N. V3",
+      category: "Inervasi Motorik & Sensorik",
+      count: 6,
+      completed: true,
+    },
+    {
+      id: "p1-3",
+      title: "Foramina Kranium & A. Temporalis Sup.",
+      category: "Repetisi Adaptif / Spaced",
+      count: 6,
+      completed: false,
+    },
+  ]);
+
+  const toggleP1Checklist = useCallback((id: string) => {
+    setUserHasInteracted(true);
+    setP1Checklist((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, completed: !item.completed } : item
+      )
+    );
+  }, []);
+
+  const p1CompletedCount = p1Checklist
+    .filter((c) => c.completed)
+    .reduce((acc, c) => acc + c.count, 0);
+  const p1TotalCount = 20;
+  const p1Percent = Math.round((p1CompletedCount / p1TotalCount) * 100);
+
+  // Spaced Repetition Interactive Simulator (Panggung 03)
+  const [criticalInterval, setCriticalInterval] = useState("1 Hari");
+  const [consolidatedInterval, setConsolidatedInterval] = useState("14 Hari");
+  const [simulatedFeedback, setSimulatedFeedback] = useState<{
+    type: "reset" | "boost";
+    msg: string;
+  } | null>(null);
+
+  const handleSimulateRetention = useCallback((type: "reset" | "boost") => {
+    setUserHasInteracted(true);
+    if (type === "reset") {
+      setCriticalInterval("Besok");
+      setSimulatedFeedback({
+        type: "reset",
+        msg: "Algoritma FSR otomatis mereset interval ke 1 Hari agar struktur kritis diulang sebelum lupa.",
+      });
+    } else {
+      setConsolidatedInterval("21 Hari");
+      setSimulatedFeedback({
+        type: "boost",
+        msg: "Retensi kuat terdeteksi: Interval otomatis dinaikkan ke 21 Hari (konsolidasi jangka panjang)!",
+      });
+    }
+  }, []);
+
   const handleMeshClick = useCallback((structureId: string) => {
     setUserHasInteracted(true);
     setHighlightedStructureId(structureId);
@@ -1267,77 +1333,146 @@ export default function LandingPage() {
                   <div className="cara-p1-header">
                     <div>
                       <span className="cara-target-tag">
-                        Target Modul
+                        Perencana Blok Kedokteran
                       </span>
                       <p className="cara-target-title">
-                        Regio: kepala &amp; leher (Caput)
+                        Regio: Kepala &amp; Leher (Caput)
                       </p>
                     </div>
                     <div className="cara-badge-exam">
-                      Ujian Blok: 14 Des (H-28)
+                      Ujian Blok: 24 Nov 2026 · <strong style={{ color: "#dc2626" }}>H-18</strong>
                     </div>
                   </div>
 
-                  {/* Baris Hari Horizontal (Sen-Min) dengan Target Harian */}
-                  <div className="cara-calendar-box">
-                    <div className="cara-cal-label">
-                      Jadwal Belajar Pekan Ini
+                  {/* Kalender Baris Hari Aktif (Sen - Min) */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="cara-cal-label" style={{ margin: 0 }}>
+                        Jadwal Belajar Pekan Ini
+                      </span>
+                      <span className="text-[11px] font-semibold text-[#1169dc]">
+                        Target Harian: 20 Struktur
+                      </span>
                     </div>
                     <div className="cara-cal-grid">
-                      <div className="cara-day-card">
-                        <span className="cara-day-name">Sen</span>
-                        <span className="cara-day-num">18</span>
-                        <span className="cara-day-pill">16 str</span>
-                      </div>
+                      {[
+                        { day: "Sen", date: "17", count: "16 str", done: true },
+                        { day: "Sel", date: "18", count: "18 str", done: true },
+                        { day: "Rab", date: "19", count: "18 str", done: true },
+                        { day: "Kam", date: "20", count: "20 str", today: true },
+                        { day: "Jum", date: "21", count: "16 str" },
+                        { day: "Sab", date: "22", count: "Kuis" },
+                        { day: "Min", date: "23", count: "Ulang" },
+                      ].map((item, idx) => {
+                        const isSelected = plannerDayIdx === idx;
+                        return (
+                          <button
+                            key={item.day}
+                            type="button"
+                            onClick={() => {
+                              setUserHasInteracted(true);
+                              setPlannerDayIdx(idx);
+                            }}
+                            className={
+                              item.today
+                                ? "cara-day-today"
+                                : isSelected
+                                ? "cara-day-card"
+                                : "cara-day-card"
+                            }
+                            style={
+                              isSelected && !item.today
+                                ? {
+                                    borderColor: "#1169dc",
+                                    background: "rgba(17,105,220,0.08)",
+                                  }
+                                : undefined
+                            }
+                          >
+                            <span className="cara-day-name">{item.day}</span>
+                            <span className="cara-day-num">{item.date}</span>
+                            <span className="cara-day-pill">
+                              {item.done ? "✓ Selesai" : item.count}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
 
-                      <div className="cara-day-card">
-                        <span className="cara-day-name">Sel</span>
-                        <span className="cara-day-num">19</span>
-                        <span className="cara-day-pill">18 str</span>
-                      </div>
+                  {/* Checklist Target Interaktif Harian (Dari /perencana) */}
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-[11.5px] font-semibold text-[#06192f]">
+                        Sasaran Belajar Hari Ini (Kamis, 20 Nov)
+                      </span>
+                      <span className="text-[11px] font-bold text-[#1169dc]">
+                        {p1CompletedCount} / {p1TotalCount} Selesai ({p1Percent}%)
+                      </span>
+                    </div>
 
-                      <div className="cara-day-card">
-                        <span className="cara-day-name">Rab</span>
-                        <span className="cara-day-num">20</span>
-                        <span className="cara-day-pill">18 str</span>
-                      </div>
+                    <div className="cara-planner-checklist">
+                      {p1Checklist.map((target) => (
+                        <div
+                          key={target.id}
+                          onClick={() => toggleP1Checklist(target.id)}
+                          className={`cara-check-item ${
+                            target.completed ? "is-done" : ""
+                          }`}
+                        >
+                          <div className="flex items-center min-w-0 flex-1">
+                            <span className="cara-check-checkbox">
+                              {target.completed && (
+                                <svg
+                                  className="w-3 h-3"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                  strokeWidth="3"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M5 13l4 4L19 7"
+                                  />
+                                </svg>
+                              )}
+                            </span>
+                            <div className="cara-check-text truncate">
+                              <p className="cara-check-title truncate">
+                                {target.title}
+                              </p>
+                              <span className="cara-check-sub">
+                                {target.category}
+                              </span>
+                            </div>
+                          </div>
+                          <span className="cara-check-badge">
+                            {target.count} str
+                          </span>
+                        </div>
+                      ))}
+                    </div>
 
-                      {/* Hari Ini */}
-                      <div className="cara-day-today">
-                        <span className="cara-day-name">Hari ini</span>
-                        <span className="cara-day-num">Kam 21</span>
-                        <span className="cara-day-pill">20 str</span>
-                      </div>
-
-                      <div className="cara-day-card">
-                        <span className="cara-day-name">Jum</span>
-                        <span className="cara-day-num">22</span>
-                        <span className="cara-day-pill">16 str</span>
-                      </div>
-
-                      <div className="cara-day-card">
-                        <span className="cara-day-name">Sab</span>
-                        <span className="cara-day-num">23</span>
-                        <span className="cara-day-pill">Kuis</span>
-                      </div>
-
-                      <div className="cara-day-card">
-                        <span className="cara-day-name">Min</span>
-                        <span className="cara-day-num">24</span>
-                        <span className="cara-day-pill">Ulang</span>
+                    {/* Progress Bar Pencapaian */}
+                    <div className="mt-2.5">
+                      <div className="w-full h-1.5 bg-[#e2e8f0] rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-[#1169dc] transition-all duration-300 rounded-full"
+                          style={{ width: `${p1Percent}%` }}
+                        ></div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Footer Panggung 01 */}
-                  <div className="cara-p1-footer">
-                    <span>
-                      Topik aktif hari ini:{" "}
-                      <strong>Miologi kraniofasial &amp; otot mimik wajah</strong>
-                    </span>
-                    <span className="target-count">
-                      Target: 15 struktur
-                    </span>
+                  {/* Smart Suggestion Hint Box */}
+                  <div className="cara-smart-hint">
+                    <span style={{ fontSize: "14px" }}>💡</span>
+                    <div>
+                      <strong>Beban Terbagi Otomatis:</strong> 20 struktur per
+                      hari memastikan 15 otot kraniofasial tuntas diulang sebelum
+                      H-7 ujian blok.
+                    </div>
                   </div>
                 </div>
 
@@ -1449,6 +1584,7 @@ export default function LandingPage() {
                 </div>
 
                 {/* PANGGUNG 03: Diulang otomatis */}
+                {/* PANGGUNG 03: Diulang otomatis */}
                 <div
                   id="panel-2"
                   role="tabpanel"
@@ -1459,127 +1595,134 @@ export default function LandingPage() {
                 >
                   {/* Header Panggung 03 */}
                   <div className="cara-p2-header">
-                    <span className="cara-target-tag">
-                      Jadwal Retensi Memori
-                    </span>
+                    <div>
+                      <span className="cara-target-tag">
+                        Mesin Spaced Repetition Adaptif
+                      </span>
+                      <p className="cara-target-title">
+                        Peta Retensi &amp; Interval Memori
+                      </p>
+                    </div>
                     <span className="cara-interval-badge">
-                      Interval Spaced Repetition
+                      Algoritma FSR / SuperMemo SM-2
                     </span>
                   </div>
 
-                  {/* Garis Waktu Jeda Ulang: 1 hari -> 3 hari -> 7 hari */}
-                  <div className="cara-timeline-box">
-                    <div>
-                      <div className="cara-cal-label">
-                        Siklus Pengulangan Terjadwal
-                      </div>
-                      <div className="cara-timeline-card">
-                        <div
-                          className="cara-timeline-dashed"
-                          aria-hidden="true"
-                        ></div>
-
-                        <div className="cara-timeline-step">
-                          <span className="cara-tl-bubble navy">
-                            1
-                          </span>
-                          <span className="cara-tl-days">
-                            1 hari
-                          </span>
-                          <span className="cara-tl-sub">
-                            Review awal
-                          </span>
+                  {/* Tiga Kartu Status Memori Nyata (Dari /kelemahan) */}
+                  <div className="cara-retention-list">
+                    {/* Item 1: Kritis (Interval 1 Hari) */}
+                    <div className="cara-retention-card">
+                      <div className="cara-ret-left truncate">
+                        <div className="cara-ret-score red">
+                          <span>38%</span>
                         </div>
-
-                        <div className="cara-timeline-step">
-                          <span className="cara-tl-bubble blue">
-                            3
-                          </span>
-                          <span className="cara-tl-days">
-                            3 hari
-                          </span>
-                          <span className="cara-tl-sub">
-                            Konsolidasi
-                          </span>
-                        </div>
-
-                        <div className="cara-timeline-step">
-                          <span className="cara-tl-bubble green">
-                            7
-                          </span>
-                          <span className="cara-tl-days">
-                            7 hari
-                          </span>
-                          <span className="cara-tl-sub">
-                            Retensi permanen
+                        <div className="truncate">
+                          <p className="text-[12.5px] font-semibold text-[#06192f] truncate m-0">
+                            N. Facialis (CN VII) - R. Temporalis &amp; Buccalis
+                          </p>
+                          <span className="text-[10.5px] text-[#64748b]">
+                            Sering salah: 4x · Terakhir dilatih: Kemarin
                           </span>
                         </div>
                       </div>
+                      <span className="cara-status-pill red">
+                        ⚠️ Jatuh Tempo: {criticalInterval}
+                      </span>
                     </div>
 
-                    {/* Peta Kelemahan: Tiga Bar Horizontal (Tulang, Otot, Saraf) */}
-                    <div>
-                      <div className="cara-bar-head" style={{ marginBottom: "0.75rem" }}>
-                        <span className="cara-cal-label" style={{ marginBottom: 0 }}>
-                          Peta Kelemahan Sistem Tubuh
-                        </span>
-                        <span style={{ fontSize: "11px", color: "#77899c" }}>
-                          berdasarkan tingkat retensi
-                        </span>
-                      </div>
-
-                      <div className="cara-weakness-card">
-                        {/* Bar 1: Tulang */}
-                        <div className="cara-bar-item">
-                          <div className="cara-bar-head">
-                            <span>Tulang (Skeletal)</span>
-                            <span style={{ fontWeight: 700, color: "#1169dc" }}>
-                              88%
-                            </span>
-                          </div>
-                          <div className="cara-bar-track">
-                            <div className="cara-bar-fill blue"></div>
-                          </div>
+                    {/* Item 2: Konsolidasi (Interval 3 Hari) */}
+                    <div className="cara-retention-card">
+                      <div className="cara-ret-left truncate">
+                        <div className="cara-ret-score amber">
+                          <span>65%</span>
                         </div>
-
-                        {/* Bar 2: Otot */}
-                        <div className="cara-bar-item">
-                          <div className="cara-bar-head">
-                            <span>Otot (Muscular)</span>
-                            <span style={{ fontWeight: 700, color: "#06192f" }}>
-                              64%
-                            </span>
-                          </div>
-                          <div className="cara-bar-track">
-                            <div className="cara-bar-fill navy"></div>
-                          </div>
-                        </div>
-
-                        {/* Bar 3: Saraf */}
-                        <div className="cara-bar-item">
-                          <div className="cara-bar-head">
-                            <span style={{ display: "inline-flex", alignItems: "center" }}>
-                              <span>Saraf (Nervous)</span>
-                              <span className="cara-bar-badge">
-                                Perlu diulang
-                              </span>
-                            </span>
-                            <span style={{ fontWeight: 700, color: "#e11d48" }}>
-                              26%
-                            </span>
-                          </div>
-                          <div className="cara-bar-track">
-                            <div className="cara-bar-fill rose"></div>
-                          </div>
+                        <div className="truncate">
+                          <p className="text-[12.5px] font-semibold text-[#06192f] truncate m-0">
+                            Musculus Masseter &amp; M. Temporalis
+                          </p>
+                          <span className="text-[10.5px] text-[#64748b]">
+                            Sering salah: 1x · Retensi meningkat
+                          </span>
                         </div>
                       </div>
+                      <span className="cara-status-pill amber">
+                        📅 Review: +3 Hari
+                      </span>
+                    </div>
+
+                    {/* Item 3: Kuat (Interval 14 Hari) */}
+                    <div className="cara-retention-card">
+                      <div className="cara-ret-left truncate">
+                        <div className="cara-ret-score green">
+                          <span>94%</span>
+                        </div>
+                        <div className="truncate">
+                          <p className="text-[12.5px] font-semibold text-[#06192f] truncate m-0">
+                            Galea Aponeurotica &amp; Venter Frontalis
+                          </p>
+                          <span className="text-[10.5px] text-[#64748b]">
+                            3x berturut-turut benar · Memori stabil
+                          </span>
+                        </div>
+                      </div>
+                      <span className="cara-status-pill green">
+                        ✅ Interval: {consolidatedInterval}
+                      </span>
                     </div>
                   </div>
 
-                  {/* Footer Panggung 03 */}
-                  <div className="cara-p3-footer">
-                    Sistem otomatis memprioritaskan soal plexus brachialis dan
-                    nervus perifer pada sesi berikutnya.
+                  {/* Widget Interaktif: Uji Respon Spaced Repetition */}
+                  <div className="cara-sim-box">
+                    <div className="cara-sim-row">
+                      <span className="text-[11px] font-semibold text-[#06192f]">
+                        Simulasi Kalibrasi Algoritma:
+                      </span>
+                      <span className="text-[10px] text-[#77899c]">
+                        Klik untuk coba respon sistem
+                      </span>
+                    </div>
+
+                    <div className="cara-sim-row">
+                      <button
+                        type="button"
+                        onClick={() => handleSimulateRetention("reset")}
+                        className="cara-sim-btn wrong"
+                      >
+                        <span>❌ Jawab Lupa / Sulit</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleSimulateRetention("boost")}
+                        className="cara-sim-btn correct"
+                      >
+                        <span>✅ Jawab Ingat / Tepat</span>
+                      </button>
+                    </div>
+
+                    {simulatedFeedback && (
+                      <div
+                        className={`cara-sim-feedback ${
+                          simulatedFeedback.type === "reset" ? "red" : "green"
+                        }`}
+                      >
+                        {simulatedFeedback.msg}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Distribusi Retensi Seluruh Regio (Dari /beranda) */}
+                  <div>
+                    <div className="flex justify-between items-center text-[11px] text-[#64748b] mb-1">
+                      <span>Distribusi 20 Struktur Regio Caput:</span>
+                      <span className="font-semibold text-[#06192f]">
+                        3 Kritis · 5 Konsolidasi · 12 Dikuasai
+                      </span>
+                    </div>
+                    <div className="cara-retention-segmented-bar">
+                      <div className="cara-seg-red" title="15% Kritis (Ulang Harian)"></div>
+                      <div className="cara-seg-amber" title="25% Konsolidasi (3-7 Hari)"></div>
+                      <div className="cara-seg-green" title="60% Dikuasai (14-21 Hari)"></div>
+                    </div>
                   </div>
                 </div>
               </div>
