@@ -46,11 +46,18 @@ export default function KelemahanPage() {
     return [...topics].sort((a, b) => a.masteryScore - b.masteryScore)[0];
   }, [topics]);
 
-  // Regio options
+  // Regio options (Urutan 6 Regio Tubuh Standar Anatomis)
   const regioOptions = useMemo(() => {
-    const list = Array.from(new Set(topics.map((t) => t.regio)));
-    return ["Semua", ...list];
-  }, [topics]);
+    return [
+      "Semua",
+      "Regio Caput",
+      "Regio Collum",
+      "Regio Thorax",
+      "Regio Abdomen",
+      "Regio Pelvis",
+      "Regio Membrum",
+    ];
+  }, []);
 
   // Filtered & Sorted Topics
   const filteredTopics = useMemo(() => {
@@ -835,7 +842,7 @@ function TopicDetailContent({ selectedTopic, trendChartRef }: TopicDetailContent
             className="h-[34px] bg-[#0d6efd] hover:bg-[#0b5ed7] text-white text-[12.5px] font-semibold rounded-[6px] flex items-center justify-center gap-1.5 shadow-2xs transition"
           >
             <i className="bi bi-play-fill text-[15px]"></i>
-            <span>Latih Sekarang</span>
+            <span>Latih di 3D ({selectedTopic.regio})</span>
           </Link>
 
           <Link

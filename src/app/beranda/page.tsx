@@ -421,12 +421,12 @@ export default function BerandaPage() {
                       <span className={badgeClass}>{statusText}</span>
                     </td>
                     <td className="text-right">
-                      <button
-                        onClick={() => showToast(`Menyiapkan sesi latihan topik: ${topic.topicNameIndo}`)}
-                        className="h-[28px] px-2.5 bg-[#f1f5f9] hover:bg-[#e2e8f0] text-[#1e293b] text-[11.5px] font-semibold rounded-[4px] transition"
+                      <Link
+                        href={`/latihan?topik=${topic.system.toLowerCase().replace("regio ", "")}`}
+                        className="h-[28px] px-2.5 bg-[#f1f5f9] hover:bg-[#0d6efd] hover:text-white text-[#1e293b] text-[11.5px] font-semibold rounded-[4px] inline-flex items-center justify-center transition"
                       >
-                        Latih
-                      </button>
+                        Latih 3D
+                      </Link>
                     </td>
                   </tr>
                 );

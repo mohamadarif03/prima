@@ -308,11 +308,11 @@ function LatihanContent() {
                         isSelected ? "text-[#0d6efd]" : "text-[#1e293b]"
                       }`}
                     >
-                      {reg.subName}
+                      {reg.name}
                     </h3>
                   </div>
                   <span className="text-[10.5px] text-[#64748b] block truncate mt-0.5 font-medium">
-                    {reg.name}
+                    {reg.subName}
                   </span>
                 </div>
 
@@ -501,7 +501,7 @@ function LatihanContent() {
                     <div className="space-y-2 pt-2 border-t border-[#f1f5f9]">
                       <div className="flex items-center justify-between">
                         <label className="text-[12px] font-bold text-[#1e293b]">
-                          Struktur di {selectedRegion.subName} ({filteredStructures.length}):
+                          Struktur di {selectedRegion.name} ({filteredStructures.length}):
                         </label>
                         <span className="text-[11px] text-[#64748b]">
                           Klik untuk menyorot
