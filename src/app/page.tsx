@@ -885,7 +885,7 @@ export default function LandingPage() {
 
             <nav className="nav" aria-label="Main navigation">
               {[
-                { label: "Atlas 3D", href: "/atlas" },
+                { label: "Atlas 3D", href: "#home" },
                 { label: "Cara Belajar", href: "#cara-belajar" },
                 { label: "Kurikulum FK", href: "#kurikulum" },
                 
@@ -938,7 +938,7 @@ export default function LandingPage() {
               aria-hidden={!isMenuOpen}
             >
               {[
-                { label: "Atlas 3D", href: "/atlas" },
+                { label: "Atlas 3D", href: "#home" },
                 { label: "Cara Belajar", href: "#cara-belajar" },
                 { label: "Kurikulum FK", href: "#kurikulum" },
                 
