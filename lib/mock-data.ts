@@ -3361,3 +3361,515 @@ export const mockAppInfoSettings: AppInfoSettings = {
     { name: "Bootstrap Icons", category: "Ikon" },
   ],
 };
+
+// ==========================================
+// FITUR F3: UNGGAH MATERI & RANGKUMAN AI
+// ==========================================
+
+export interface MaterialSubtopic {
+  id: string;
+  title: string;
+  latinTerm: string;
+  overview: string;
+  keyPoints: string[];
+  keyTerms: {
+    term: string;
+    latin: string;
+    definition: string;
+  }[];
+  clinicalCorrelation?: string;
+}
+
+export interface MaterialDocumentPage {
+  pageNumber: number;
+  sectionTitle: string;
+  previewSnippet: string;
+}
+
+export interface MaterialItem {
+  id: string;
+  title: string;
+  region: "Caput" | "Collum" | "Thorax" | "Abdomen" | "Pelvis" | "Membrum";
+  fileName: string;
+  fileSize: string;
+  fileType: "pdf" | "ppt";
+  pageCount: number;
+  uploadedAt: string;
+  status: "ready" | "processing" | "failed";
+  processingProgress?: number;
+  aiSummaryOverview?: string;
+  subtopics: MaterialSubtopic[];
+  previewPages: MaterialDocumentPage[];
+}
+
+export const mockMaterials: MaterialItem[] = [
+  {
+    id: "mat-01",
+    title: "Anatomi Jantung dan Vaskularisasi Mediastinum",
+    region: "Thorax",
+    fileName: "Kuliah-Kardiovaskular-Blok-Thorax.pdf",
+    fileSize: "14.2 MB",
+    fileType: "pdf",
+    pageCount: 38,
+    uploadedAt: "4 Nov 2026",
+    status: "ready",
+    processingProgress: 100,
+    aiSummaryOverview:
+      "Rangkuman komprehensif mengenai konfigurasi ruang jantung (atria dan ventriculi), aparatus valvularis atrioventrikular dan semilunaris, jaras konduksi otomatis miokardium, serta percabangan arteria coronaria dan sinus coronarius.",
+    subtopics: [
+      {
+        id: "sub-01-1",
+        title: "Morfologi Eksterna & Ruang Jantung",
+        latinTerm: "Cor: Morfologia Externa et Cavitates Cordis",
+        overview:
+          "Jantung berorientasi miring dalam mediastinum medium dengan basis menghadap posteriosuperior dan apex mengarah inferolateral ke sela iga V sinistra.",
+        keyPoints: [
+          "Basis cordis terutama dibentuk oleh atrium sinistrum dan sebagian atrium dextrum.",
+          "Apex cordis dibentuk secara eksklusif oleh pars inferolateral ventriculus sinister (ICS V linea medioclavicularis sinistra).",
+          "Atrium dextrum menerima darah terdeoksigenasi via Vena Cava Superior, Vena Cava Inferior, dan Sinus Coronarius; terdapat Fossa Ovalis pada septum interatriale.",
+          "Ventriculus sinister memiliki dinding miokardial 3x lebih tebal daripada ventriculus dexter untuk mengatasi resistensi vaskular sistemik tinggi.",
+        ],
+        keyTerms: [
+          {
+            term: "Basis Jantung",
+            latin: "Basis cordis",
+            definition: "Permukaan posterosuperior jantung tempat keluarnya pembuluh darah besar.",
+          },
+          {
+            term: "Puncak Jantung",
+            latin: "Apex cordis",
+            definition: "Ujung tumpul anteroinferior ventriculus sinister pada ICS V kiri.",
+          },
+          {
+            term: "Fosa Ovalis",
+            latin: "Fossa ovalis",
+            definition: "Sisa lekukan embriologis foramen ovale pada septum interatriale.",
+          },
+          {
+            term: "Otot Papilaris",
+            latin: "Musculi papillares",
+            definition: "Proyeksi miokardium ventrikel penyangga chordae tendineae katup AV.",
+          },
+        ],
+        clinicalCorrelation:
+          "Hipertrofi ventrikel kiri (LVH) sering terjadi akibat hipertensi kronis tak terkontrol, menggeser iktus kordis lebih lateral dari linea medioclavicularis.",
+      },
+      {
+        id: "sub-01-2",
+        title: "Aparatus Valvularis & Rangka Fibrosa",
+        latinTerm: "Valvae Cordis et Skeleton Cardis",
+        overview:
+          "Empat katup utama mencegah aliran balik (regurgitasi) darah durante sistol dan diastol, tertanam pada skeleton fibrosum anuli fibrosi.",
+        keyPoints: [
+          "Valva Atrioventricularis Dextra (Trikuspidalis) memiliki 3 kuspis: anterior, posterior, dan septalis.",
+          "Valva Atrioventricularis Sinistra (Bikuspidalis/Mitralis) memiliki 2 kuspis kokoh: anterior dan posterior.",
+          "Chordae tendineae menahan tepi katup AV agar tidak prolaps ke dalam atrium saat fase ejeksi sistolik ventrikel.",
+          "Valva Semilunaris (Aortae dan Trunci Pulmonalis) memiliki masing-masing 3 valvula semilunaris dengan nodulus valvulae di tengahnya.",
+        ],
+        keyTerms: [
+          {
+            term: "Katup Mitral",
+            latin: "Valva mitralis / bicuspidalis",
+            definition: "Katup bikuspid antara atrium kiri dan ventrikel kiri.",
+          },
+          {
+            term: "Tali Tendon",
+            latin: "Chordae tendineae",
+            definition: "Struktur fibrosa penahan tepi katup atrioventrikular.",
+          },
+          {
+            term: "Sinus Aorta",
+            latin: "Sinus aortae (Valsalva)",
+            definition: "Kantung di pangkal aorta tempat muara arteria coronaria.",
+          },
+        ],
+        clinicalCorrelation:
+          "Stenosis mitral akibat demam reumatik menyebabkan peningkatan tekanan atrium kiri yang diteruskan ke vena pulmonalis, memicu edema paru kardiogenik.",
+      },
+      {
+        id: "sub-01-3",
+        title: "Sistem Konduksi Jantung",
+        latinTerm: "Systema Conducens Cordis",
+        overview:
+          "Jaringan nodus dan serabut miokardial khusus yang memulai serta mengoordinasikan kontraksi ritmis otomatis dinding jantung.",
+        keyPoints: [
+          "Nodus Sinuatrialis (SA Node) bertindak sebagai pacemaker fisiologis dominan (60-100 denyut/menit), berlokasi pada tautan VCS dan krista terminalis atrium dextrum.",
+          "Nodus Atrioventricularis (AV Node) terletak di segitiga Koch, memberikan perlambatan konduksi fisiologis (~0.12 detik) agar ventrikel terisi optimal.",
+          "Fasciculus Atrioventricularis (Bundle of His) menembus trigonum fibrosum dextrum menuju septum interventriculare.",
+          "Rami subendocardiales (Purkinje fibers) menyalurkan depolarisasi cepat ke seluruh dinding ventrikel dari apeks ke basis.",
+        ],
+        keyTerms: [
+          {
+            term: "Nodus SA",
+            latin: "Nodus sinuatrialis",
+            definition: "Pemicu pacu jantung primer di dinding anterolateral atrium kanan.",
+          },
+          {
+            term: "Nodus AV",
+            latin: "Nodus atrioventricularis",
+            definition: "Pusat tunda konduksi impuls sebelum diteruskan ke ventrikel.",
+          },
+          {
+            term: "Berkas His",
+            latin: "Fasciculus atrioventricularis",
+            definition: "Satu-satunya koneksi konduksi fisiologis melintasi anulus fibrosus.",
+          },
+        ],
+        clinicalCorrelation:
+          "Blok AV derajat 3 (total AV block) menunjukkan disosiasi komplet antara depolarisasi atrium dan ventrikel, memerlukan pemasangan pacemaker permanen.",
+      },
+      {
+        id: "sub-01-4",
+        title: "Sirkulasi Koroner & Drainase Vena",
+        latinTerm: "Vasa Sanguinea Cordis",
+        overview:
+          "Arteria coronaria dextra dan sinistra memperdarahi miokardium secara langsung saat fase diastol jantung ketika ostium aorta terbuka.",
+        keyPoints: [
+          "A. Coronaria Sinistra (LCA) segera bercabang menjadi Ramus Interventricularis Anterior (LAD) dan Ramus Circumflexus (LCx).",
+          "LAD memperdarahi 2/3 anterior septum interventrikular dan dinding anterior ventrikel kiri (sering disebut pembuluh penyebab infark fatal).",
+          "A. Coronaria Dextra (RCA) memperdarahi atrium dextrum, ventrikel dextrum, nodus SA (60% populasi), dan nodus AV (90% populasi).",
+          "Sebagian besar darah vena jantung bermuara ke Sinus Coronarius yang bermuara langsung di atrium kanan posterior.",
+        ],
+        keyTerms: [
+          {
+            term: "Arteri Koroner Kiri",
+            latin: "A. coronaria sinistra",
+            definition: "Arteri utama pembagi LAD dan Circumflexus.",
+          },
+          {
+            term: "Cabang Penentu (LAD)",
+            latin: "Ramus interventricularis anterior",
+            definition: "Cabang koroner yang menyuplai dinding anterior dan apeks ventrikel kiri.",
+          },
+          {
+            term: "Sinus Koronarius",
+            latin: "Sinus coronarius",
+            definition: "Saluran vena lebar pada sulcus coronarius sisi posterior jantung.",
+          },
+        ],
+        clinicalCorrelation:
+          "Oklusi aterosklerotik pada LAD memicu Infark Miokard Akut (STEMI) dinding anterior yang memiliki risiko komplikasi kardiogenik tertinggi.",
+      },
+    ],
+    previewPages: [
+      {
+        pageNumber: 1,
+        sectionTitle: "Slide 1: Pengantar Anatomi Toraks & Mediastinum",
+        previewSnippet:
+          "Mediastinum merupakan kompartemen sentral rongga toraks yang dibatasi oleh pleura mediastinalis lateral, apertura thoracis superior, dan diafragma inferior. Jantung terletak pada mediastinum medium terlindung pericardium fibrosum.",
+      },
+      {
+        pageNumber: 8,
+        sectionTitle: "Slide 8: Anatomi Makroskopis Jantung",
+        previewSnippet:
+          "Konfigurasi eksterna meliputi 4 sulkus utama: Sulcus Coronarius (atrioventricularis), Sulcus Interventricularis Anterior, dan Sulcus Interventricularis Posterior yang dilalui vasa coronaria.",
+      },
+      {
+        pageNumber: 17,
+        sectionTitle: "Slide 17: Mekanisme Katup & Auskultasi",
+        previewSnippet:
+          "Fokus auskultasi: Katup Aorta di ICS II linea parasternalis dextra; Katup Pulmonal di ICS II linea parasternalis sinistra; Katup Trikuspid di ICS IV parasternalis sinistra; Katup Mitral di ICS V midklavikularis sinistra.",
+      },
+      {
+        pageNumber: 26,
+        sectionTitle: "Slide 26: Vaskularisasi Koroner & Dominansi",
+        previewSnippet:
+          "Dominansi koroner ditentukan oleh arteri yang mempercabangkan Ramus Interventricularis Posterior (PDA): RCA dominan pada ~85-90% individu, LCA dominan pada ~10-15%.",
+      },
+    ],
+  },
+  {
+    id: "mat-02",
+    title: "Pleksus Brakialis dan Inervasi Ekstremitas Superior",
+    region: "Membrum",
+    fileName: "Pleksus-Brakialis-Kuliah-Anatomi.pptx",
+    fileSize: "9.8 MB",
+    fileType: "ppt",
+    pageCount: 32,
+    uploadedAt: "5 Nov 2026",
+    status: "ready",
+    processingProgress: 100,
+    aiSummaryOverview:
+      "Ulasan komprehensif susunan jaringan saraf pleksus brakialis mulai dari rami anteriores servikal C5-T1, pengelompokan truncus, divisiones anterior-posterior, fasciculi axillaris, hingga cabang-cabang terminal nervus perifer serta manifestasi deformitas motorik klinisnya.",
+    subtopics: [
+      {
+        id: "sub-02-1",
+        title: "Radices dan Trunci Pleksus Brakialis",
+        latinTerm: "Radices et Trunci Plexus Brachialis",
+        overview:
+          "Pleksus dibentuk oleh rami anteriores segmen medula spinalis C5 sampai T1 yang melintas di trigonum colli posterius antara m. scalenus anterior dan medius.",
+        keyPoints: [
+          "Radices C5 dan C6 bergabung membentuk Truncus Superior.",
+          "Radix C7 melanjutkan diri secara tunggal membentuk Truncus Medius.",
+          "Radices C8 dan T1 bersatu membentuk Truncus Inferior yang melintas di atas iga I.",
+          "Cabang langsung dari radices: N. Dorsalis Scapulae (C5) dan N. Thoracicus Longus (C5-C7).",
+        ],
+        keyTerms: [
+          {
+            term: "Akar Saraf",
+            latin: "Radices anteriores",
+            definition: "Cabang primer ventral medula spinalis pembentuk pleksus brakialis.",
+          },
+          {
+            term: "Batang Saraf",
+            latin: "Truncus superior/medius/inferior",
+            definition: "Tiga unit gabungan saraf utama di regio servikal lateral.",
+          },
+          {
+            term: "Nervus Torasikus Longus",
+            latin: "N. thoracicus longus",
+            definition: "Saraf motorik m. serratus anterior pencegah winging scapula.",
+          },
+        ],
+        clinicalCorrelation:
+          "Traksi leher bayi berlebih saat persalinan sungsang dapat merobek truncus superior (C5-C6), memicu kelumpuhan Erb-Duchenne.",
+      },
+      {
+        id: "sub-02-2",
+        title: "Divisiones dan Fasciculi",
+        latinTerm: "Divisiones et Fasciculi Infraclaviculares",
+        overview:
+          "Tepat di belakang clavicula, masing-masing truncus membelah menjadi divisi anterior (fleksor) dan posterior (ekstensor), yang kemudian menyusun tiga fasikulus di aksila.",
+        keyPoints: [
+          "Fasciculus Lateralis dibentuk oleh divisi anterior truncus superior dan truncus medius.",
+          "Fasciculus Medialis merupakan kelanjutan langsung divisi anterior truncus inferior.",
+          "Fasciculus Posterior dibentuk oleh penyatuan seluruh divisi posterior dari ketiga truncus (superior, medius, inferior).",
+          "Penamaan fasikulus (lateral, medial, posterior) berpatokan pada posisinya terhadap pars secunda Arteria Axillaris.",
+        ],
+        keyTerms: [
+          {
+            term: "Fasikulus Lateral",
+            latin: "Fasciculus lateralis",
+            definition: "Fasikulus pembentuk N. musculocutaneus dan radix lateralis N. medianus.",
+          },
+          {
+            term: "Fasikulus Medial",
+            latin: "Fasciculus medialis",
+            definition: "Fasikulus pembentuk N. ulnaris dan radix medialis N. medianus.",
+          },
+          {
+            term: "Fasikulus Posterior",
+            latin: "Fasciculus posterior",
+            definition: "Fasikulus pembentuk N. radialis dan N. axillaris.",
+          },
+        ],
+        clinicalCorrelation:
+          "Kompresi arteri dan pleksus brakialis pada apertura thoracis superior (Thoracic Outlet Syndrome) sering mengenai truncus inferior atau fasciculus medialis.",
+      },
+      {
+        id: "sub-02-3",
+        title: "Cabang Terminal & Distribusi Motorik-Sensorik",
+        latinTerm: "Rami Terminales Plexus Brachialis",
+        overview:
+          "Lima nervus utama mempersarafi kompartemen otot lengan atas, lengan bawah, serta sensorik dermatom tangan.",
+        keyPoints: [
+          "N. Musculocutaneus mempersarafi otot fleksor kompartemen anterior brachium (m. biceps brachii, coracobrachialis, brachialis) lalu berlanjut sebagai N. cutaneus antebrachii lateralis.",
+          "N. Axillaris melintasi spatium quadrangulare bersama vasa circumflexa humeri posterior untuk m. deltoideus dan teres minor.",
+          "N. Radialis berjalan di sulcus nervi radialis humeri, mempersarafi seluruh otot ekstensor lengan dan tangan.",
+          "N. Medianus menginervasi sebagian besar fleksor dan pronator lengan bawah serta otot thenar lateral.",
+          "N. Ulnaris berjalan di belakang epikondilus medialis ('funny bone') mempersarafi m. flexor carpi ulnaris, setengah medial FDP, dan sebagian besar otot intrinsik manus.",
+        ],
+        keyTerms: [
+          {
+            term: "Saraf Radialis",
+            latin: "N. radialis",
+            definition: "Saraf ekstensor utama lengan atas, lengan bawah, dan pergelangan tangan.",
+          },
+          {
+            term: "Saraf Medianus",
+            latin: "N. medianus",
+            definition: "Saraf utama fleksor jari lateral dan gerakan oposisi pollex.",
+          },
+          {
+            term: "Saraf Ulnaris",
+            latin: "N. ulnaris",
+            definition: "Saraf utama keterampilan motorik halus tangan (musculi interossei).",
+          },
+        ],
+        clinicalCorrelation:
+          "Fraktur corpus humeri sepertiga tengah rentan merusak N. radialis pada sulcus spiralis, menyebabkan 'wrist drop'.",
+      },
+      {
+        id: "sub-02-4",
+        title: "Korelasi Klinis Deformitas Ekstremitas",
+        latinTerm: "Deformitates Clinicae Extremitatis Superioris",
+        overview:
+          "Pola cedera pada level tertentu di pleksus brakialis atau saraf perifer menghasilkan postur karakteristik klinis yang khas.",
+        keyPoints: [
+          "Erb-Duchenne Palsy (C5-C6): Lengan adduksi, rotasi interna, siku ekstensi, tangan pronasi ('Waiter's tip position').",
+          "Klumpke Palsy (C8-T1): Kerusakan saraf T1 menyebabkan hilangnya inervasi otot intrinsik tangan sehingga terjadi 'Claw hand' total, sering disertai Horner's syndrome.",
+          "Ape Hand Deformity: Atrofi eminentia thenaris akibat lesi kronis N. medianus proksimal, ibu jari sejajar dengan jari lain tanpa kemampuan oposisi.",
+          "Winged Scapula: Tepi medial dan angulus inferior skapula menonjol ke belakang akibat lesi N. thoracicus longus.",
+        ],
+        keyTerms: [
+          {
+            term: "Posisi Waiter's Tip",
+            latin: "Erb-Duchenne palsy",
+            definition: "Postur patologis akibat paresis m. abduktor dan rotasi eksterna bahu.",
+          },
+          {
+            term: "Tangan Cakar",
+            latin: "Claw hand / Main en griffe",
+            definition: "Hiperekstensi sendi MCP dan fleksi sendi IP akibat lesi N. ulnaris.",
+          },
+          {
+            term: "Skapula Bersayap",
+            latin: "Scapula alata",
+            definition: "Tonjolan skapula abnormal akibat hilangnya fiksasi m. serratus anterior.",
+          },
+        ],
+        clinicalCorrelation:
+          "Carpal Tunnel Syndrome adalah neuropati jepitan N. medianus di bawah retinaculum musculorum flexorum yang memicu parestesia jari I-III lateral.",
+      },
+    ],
+    previewPages: [
+      {
+        pageNumber: 1,
+        sectionTitle: "Slide 1: Skema Arsitektur Pleksus Brakialis",
+        previewSnippet:
+          "Rumus mnemonic klasik: Roots (5), Trunks (3), Divisions (6), Cords (3), Branches (5) — 'Robert Taylor Drinks Cold Beer'.",
+      },
+      {
+        pageNumber: 9,
+        sectionTitle: "Slide 9: Topografi Trigonum Colli & Klavikula",
+        previewSnippet:
+          "Hubungan erat dengan vasa subclavia: Trunci terletak di atas A. subclavia di antara m. scalenus anterior dan medius, sedangkan V. subclavia berjalan di anterior m. scalenus anterior.",
+      },
+      {
+        pageNumber: 18,
+        sectionTitle: "Slide 18: Inervasi Motorik Kompartemen Manus",
+        previewSnippet:
+          "Mnemonic LOAF untuk N. medianus di tangan: Lumbricals 1-2, Opponens pollicis, Abductor pollicis brevis, Flexor pollicis brevis (pars superficialis). Seluruh otot intrinsik lainnya diinervasi N. ulnaris.",
+      },
+      {
+        pageNumber: 27,
+        sectionTitle: "Slide 27: Diagnosis Banding Cedera Saraf Tangan",
+        previewSnippet:
+          "Pemeriksaan uji Tinel dan Phalen di palmar pergelangan tangan mengonfirmasi kompresi kanalis karpalis. Uji Froment positif pada paresis m. adductor pollicis (lesi N. ulnaris).",
+      },
+    ],
+  },
+  {
+    id: "mat-03",
+    title: "Osteologi Caput dan Basis Cranii Interna",
+    region: "Caput",
+    fileName: "Neuro-Anatomi-Basis-Cranii.pdf",
+    fileSize: "11.4 MB",
+    fileType: "pdf",
+    pageCount: 26,
+    uploadedAt: "3 Nov 2026",
+    status: "ready",
+    processingProgress: 100,
+    aiSummaryOverview:
+      "Rangkuman komparatif tiga kompartemen basis cranii interna (fossa cranii anterior, media, posterior), delineasi batas tulang neurokranium, serta jalur keluar 12 nervi kraniales dan vasa meningea.",
+    subtopics: [
+      {
+        id: "sub-03-1",
+        title: "Fossa Cranii Anterior & Media",
+        latinTerm: "Fossa Cranii Anterior et Media",
+        overview:
+          "Fossa anterior menopang lobus frontalis cerebri, sedangkan fossa cranii media menampung lobus temporalis dan corpus adiposum orbitae via fissura orbitalis.",
+        keyPoints: [
+          "Crista galli dan lamina cribrosa ossis ethmoidalis dilalui oleh fila olfactoria (N. I).",
+          "Canalis opticus pada ala minor ossis sphenoidalis dilewati oleh N. opticus (N. II) dan A. ophthalmica.",
+          "Fissura orbitalis superior dilalui oleh N. III, N. IV, N. V1 (ophthalmicus), N. VI, dan V. ophthalmica superior.",
+          "Foramen rotundum dilalui N. V2 (maxillaris), sedangkan Foramen ovale dilalui N. V3 (mandibularis).",
+        ],
+        keyTerms: [
+          {
+            term: "Lamina Kribrosa",
+            latin: "Lamina cribrosa",
+            definition: "Pelat bertapis pada os ethmoidale jalur serabut nervus olfaktorius.",
+          },
+          {
+            term: "Sella Tursika",
+            latin: "Sella turcica (Fossa hypophysialis)",
+            definition: "Cekungan pada korpus sfenoid tempat bersemayamnya kelenjar hipofisis.",
+          },
+        ],
+        clinicalCorrelation:
+          "Fraktur fossa anterior cranii dapat merobek duramater di lamina cribrosa menyebabkan rinorea cairan serebrospinal (CSF leak) dan anosmia.",
+      },
+      {
+        id: "sub-03-2",
+        title: "Fossa Cranii Posterior & Foramina Batang Otak",
+        latinTerm: "Fossa Cranii Posterior et Foramina Basilaria",
+        overview:
+          "Kompartemen terdalam dan terluas yang menampung cerebellum, pons, dan medulla oblongata.",
+        keyPoints: [
+          "Meatus acusticus internus dilalui oleh N. facialis (N. VII), N. vestibulocochlearis (N. VIII), dan A. labyrinthi.",
+          "Foramen jugulare merupakan pintu keluar N. glossopharyngeus (N. IX), N. vagus (N. X), N. accessorius (N. XI), serta awal V. jugularis interna.",
+          "Canalis nervi hypoglossi dilalui secara eksklusif oleh N. XII yang menginervasi seluruh otot lidah.",
+          "Foramen magnum dilalui oleh medulla oblongata, meninges, A. vertebralis, dan radix spinalis N. XI.",
+        ],
+        keyTerms: [
+          {
+            term: "Foramen Jugulare",
+            latin: "Foramen jugulare",
+            definition: "Celah antara os temporale dan occipitale muara V. jugularis interna dan N. IX-XI.",
+          },
+          {
+            term: "Foramen Magnum",
+            latin: "Foramen magnum",
+            definition: "Lubang terbesar basis kranii tempat sambungan batang otak dan medula spinalis.",
+          },
+        ],
+        clinicalCorrelation:
+          "Tumor Schwannoma vestibularis (akustikus) tumbuh di meatus acusticus internus menyebabkan gangguan pendengaran unilateral, tinitus, dan paresis fasialis.",
+      },
+    ],
+    previewPages: [
+      {
+        pageNumber: 1,
+        sectionTitle: "Halaman 1: Topografi Tengkorak & Basis",
+        previewSnippet:
+          "Basis cranii terbagi menjadi endokranium (fossa anterior, media, posterior) dan eksokranium (norma basilaris).",
+      },
+      {
+        pageNumber: 12,
+        sectionTitle: "Halaman 12: Pemetaan Foramina dan Saraf Otak",
+        previewSnippet:
+          "Tabel ringkasan lintasan 12 pasang nervi kraniales dari N. I di lamina cribrosa hingga N. XII di canalis hypoglossi.",
+      },
+    ],
+  },
+  {
+    id: "mat-04",
+    title: "Dinding Ventrolateral Abdomen dan Canalis Inguinalis",
+    region: "Abdomen",
+    fileName: "Dinding-Abdomen-dan-Hernia-2026.pdf",
+    fileSize: "7.1 MB",
+    fileType: "pdf",
+    pageCount: 18,
+    uploadedAt: "6 Nov 2026",
+    status: "processing",
+    processingProgress: 68,
+    aiSummaryOverview:
+      "Sedang memproses analisis subtopik, ekstraksi struktur anatomi dinding ventrolateral (m. obliquus externus/internus, m. transversus abdominis) dan kanalis inguinalis...",
+    subtopics: [],
+    previewPages: [
+      {
+        pageNumber: 1,
+        sectionTitle: "Halaman 1: Lapisan Dinding Abdomen",
+        previewSnippet:
+          "Kulit, fasia Camperi, fasia Scarpa, aponeurosis m. obliquus externus abdominis, m. obliquus internus, m. transversus abdominis, fasia transversalis, lemak preperitoneal, peritoneum parietale.",
+      },
+    ],
+  },
+  {
+    id: "mat-05",
+    title: "Topografi Regio Pelvis dan Diafragma Pelvis",
+    region: "Pelvis",
+    fileName: "Anatomi-Pelvis-Visera-Urogenital.pptx",
+    fileSize: "15.6 MB",
+    fileType: "ppt",
+    pageCount: 22,
+    uploadedAt: "6 Nov 2026",
+    status: "failed",
+    processingProgress: 0,
+    aiSummaryOverview:
+      "Gagal mengekstrak teks slide: Format berkas presentasi memerlukan pemindaian ulang atau unggah ulang dokumen asli.",
+    subtopics: [],
+    previewPages: [],
+  },
+];

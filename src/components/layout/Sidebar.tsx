@@ -45,6 +45,13 @@ const mainNavItems: NavMenuItem[] = [
     icon: "bi bi-calendar-event",
   },
   {
+    name: "Materi",
+    href: "/materi",
+    icon: "bi bi-file-earmark-medical",
+    badge: "AI",
+    badgeColor: "bg-[#0d6efd]",
+  },
+  {
     name: "Peta Kelemahan",
     href: "/kelemahan",
     icon: "bi bi-graph-up",
@@ -77,7 +84,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {mainNavItems.map((item) => {
-          const isActive = pathname === item.href;
+          const isActive =
+            pathname === item.href ||
+            (item.href === "/materi" && pathname.startsWith("/materi"));
           return (
             <Link
               key={item.href}
