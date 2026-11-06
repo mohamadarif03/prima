@@ -80,6 +80,13 @@ const accountNavItems: NavMenuItem[] = [
     href: "/pengaturan",
     icon: "bi bi-gear",
   },
+  {
+    name: "Masuk / Keluar",
+    href: "/masuk",
+    icon: "bi bi-box-arrow-in-right",
+    badge: "Auth",
+    badgeColor: "bg-[#475569]",
+  },
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({

@@ -10,6 +10,7 @@ interface TopbarProps {
 
 export const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
   const [showNotification, setShowNotification] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   return (
     <header className="h-[60px] bg-white border-b border-[#e5e7eb] flex items-center justify-between px-4 sticky top-0 z-30">
@@ -111,15 +112,68 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
         <div className="h-[24px] w-[1px] bg-[#e2e8f0] mx-0.5"></div>
 
         {/* User Profile */}
-        <button className="flex items-center gap-2 text-left">
-          <div className="w-[26px] h-[26px] rounded-full bg-[#64748b] text-white flex items-center justify-center overflow-hidden">
-            <i className="bi bi-person-circle text-[26px] leading-none text-[#64748b] bg-white"></i>
-          </div>
-          <span className="text-[13px] font-semibold text-[#1e293b] hidden sm:inline-block">
-            {mockUserProfile.name}
-          </span>
-          <i className="bi bi-chevron-down text-[11px] text-[#64748b] ml-0.5"></i>
-        </button>
+        <div className="relative">
+          <button
+            onClick={() => setShowUserMenu(!showUserMenu)}
+            className="flex items-center gap-2 text-left hover:bg-slate-50 p-1.5 rounded-lg transition"
+            aria-label="Menu Pengguna"
+            aria-expanded={showUserMenu}
+          >
+            <div className="w-[26px] h-[26px] rounded-full bg-[#64748b] text-white flex items-center justify-center overflow-hidden">
+              <i className="bi bi-person-circle text-[26px] leading-none text-[#64748b] bg-white"></i>
+            </div>
+            <span className="text-[13px] font-semibold text-[#1e293b] hidden sm:inline-block">
+              {mockUserProfile.name}
+            </span>
+            <i className={`bi bi-chevron-down text-[11px] text-[#64748b] ml-0.5 transition-transform ${showUserMenu ? "rotate-180" : ""}`}></i>
+          </button>
+
+          {showUserMenu && (
+            <>
+              <div
+                className="fixed inset-0 z-30"
+                onClick={() => setShowUserMenu(false)}
+              />
+              <div className="absolute right-0 mt-2 w-56 bg-white border border-[#e2e8f0] rounded-[8px] shadow-lg z-40 p-2 text-xs">
+                <div className="px-3 py-2 border-b border-[#f1f5f9]">
+                  <p className="font-bold text-[#1e293b]">{mockUserProfile.name}</p>
+                  <p className="text-[#64748b] text-[11px] truncate">{mockUserProfile.email}</p>
+                  <span className="inline-block mt-1 text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-blue-50 text-[#0d6efd] border border-blue-100">
+                    Semester {mockUserProfile.semester} • Preklinik
+                  </span>
+                </div>
+                <div className="py-1">
+                  <Link
+                    href="/pengaturan"
+                    onClick={() => setShowUserMenu(false)}
+                    className="flex items-center gap-2 px-3 py-2 text-[#475569] hover:text-[#0f172a] hover:bg-[#f8fafc] rounded text-[12px] transition"
+                  >
+                    <i className="bi bi-gear text-slate-400"></i>
+                    <span>Pengaturan Akun</span>
+                  </Link>
+                  <Link
+                    href="/onboarding"
+                    onClick={() => setShowUserMenu(false)}
+                    className="flex items-center gap-2 px-3 py-2 text-[#475569] hover:text-[#0f172a] hover:bg-[#f8fafc] rounded text-[12px] transition"
+                  >
+                    <i className="bi bi-magic text-slate-400"></i>
+                    <span>Ulangi Onboarding</span>
+                  </Link>
+                </div>
+                <div className="pt-1 border-t border-[#f1f5f9]">
+                  <Link
+                    href="/masuk"
+                    onClick={() => setShowUserMenu(false)}
+                    className="flex items-center gap-2 px-3 py-2 text-rose-600 hover:bg-rose-50 rounded text-[12px] font-medium transition"
+                  >
+                    <i className="bi bi-box-arrow-right text-rose-500"></i>
+                    <span>Keluar (ke Halaman Masuk)</span>
+                  </Link>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </header>
   );
