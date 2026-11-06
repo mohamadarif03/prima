@@ -61,13 +61,13 @@ export default function LandingPage() {
   const [indicatorTop, setIndicatorTop] = useState(0);
   const [userHasInteracted, setUserHasInteracted] = useState(false);
   const [quizAnswer, setQuizAnswer] = useState<"correct" | "wrong" | null>(null);
-  const membrumStructures = useMemo(() => getStructuresByRegion("reg-membrum"), []);
-  const [highlightedStructureId, setHighlightedStructureId] = useState<string>("struct-m-04");
+  const caputStructures = useMemo(() => getStructuresByRegion("reg-caput"), []);
+  const [highlightedStructureId, setHighlightedStructureId] = useState<string>("struct-c-01");
 
   const handleMeshClick = useCallback((structureId: string) => {
     setUserHasInteracted(true);
     setHighlightedStructureId(structureId);
-    if (structureId === "struct-m-04") {
+    if (structureId === "struct-c-01") {
       setQuizAnswer("correct");
     } else {
       setQuizAnswer("wrong");
@@ -1270,7 +1270,7 @@ export default function LandingPage() {
                         Target Modul
                       </span>
                       <p className="cara-target-title">
-                        Regio: anggota gerak atas
+                        Regio: kepala &amp; leher (Caput)
                       </p>
                     </div>
                     <div className="cara-badge-exam">
@@ -1333,10 +1333,10 @@ export default function LandingPage() {
                   <div className="cara-p1-footer">
                     <span>
                       Topik aktif hari ini:{" "}
-                      <strong>Osteologi humerus &amp; articulatio cubiti</strong>
+                      <strong>Miologi kraniofasial &amp; otot mimik wajah</strong>
                     </span>
                     <span className="target-count">
-                      Target: 20 struktur
+                      Target: 15 struktur
                     </span>
                   </div>
                 </div>
@@ -1356,17 +1356,17 @@ export default function LandingPage() {
                       Identifikasi Anatomi 3D
                     </span>
                     <span className="cara-specimen-badge">
-                      Model 3D Otot Ekstremitas
+                      Model 3D Kepala &amp; Wajah (Caput)
                     </span>
                   </div>
 
                   {/* Real 3D Interactive WebGL Anatomy Canvas */}
                   <div className="cara-3d-box">
                     <AnatomyViewer
-                      structures={membrumStructures}
+                      structures={caputStructures}
                       selectedStructureId={highlightedStructureId}
                       highlightedStructureId={highlightedStructureId}
-                      correctStructureId={quizAnswer === "correct" ? "struct-m-04" : null}
+                      correctStructureId={quizAnswer === "correct" ? "struct-c-01" : null}
                       incorrectStructureId={quizAnswer === "wrong" ? highlightedStructureId : null}
                       hintStructureId={null}
                       modelUrl="/models/muscles.glb"
@@ -1393,36 +1393,36 @@ export default function LandingPage() {
                     >
                       <button
                         type="button"
-                        onClick={() => handleQuizChoice("struct-m-04", true)}
+                        onClick={() => handleQuizChoice("struct-c-01", true)}
                         className={`cara-quiz-pill ${
-                          highlightedStructureId === "struct-m-04" && quizAnswer === "correct"
+                          highlightedStructureId === "struct-c-01" && quizAnswer === "correct"
                             ? "is-correct"
                             : ""
                         }`}
                       >
-                        M. Biceps Brachii
+                        M. Frontalis
                       </button>
                       <button
                         type="button"
-                        onClick={() => handleQuizChoice("struct-m-01", false)}
+                        onClick={() => handleQuizChoice("struct-c-04", false)}
                         className={`cara-quiz-pill ${
-                          highlightedStructureId === "struct-m-01" && quizAnswer === "wrong"
+                          highlightedStructureId === "struct-c-04" && quizAnswer === "wrong"
                             ? "is-wrong"
                             : ""
                         }`}
                       >
-                        M. Deltoideus
+                        M. Temporalis
                       </button>
                       <button
                         type="button"
-                        onClick={() => handleQuizChoice("struct-m-06", false)}
+                        onClick={() => handleQuizChoice("struct-c-05", false)}
                         className={`cara-quiz-pill ${
-                          highlightedStructureId === "struct-m-06" && quizAnswer === "wrong"
+                          highlightedStructureId === "struct-c-05" && quizAnswer === "wrong"
                             ? "is-wrong"
                             : ""
                         }`}
                       >
-                        M. Triceps Brachii
+                        M. Masseter
                       </button>
                     </div>
 
@@ -1439,9 +1439,9 @@ export default function LandingPage() {
                     >
                       <span>
                         {quizAnswer === "correct"
-                          ? "Benar! Musculus Biceps Brachii adalah fleksor kuat sendi siku dan supinator lengan bawah."
+                          ? "Benar! Musculus Frontalis berfungsi mengangkat alis dan mengerutkan kulit dahi (inervasi N. Facialis / CN VII)."
                           : quizAnswer === "wrong"
-                          ? "Kurang tepat. Struktur yang ditanyakan adalah M. Biceps Brachii (fleksor lengan atas)."
+                          ? "Kurang tepat. Struktur yang disorot adalah Musculus Frontalis pada regio dahi."
                           : ""}
                       </span>
                     </div>
