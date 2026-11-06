@@ -71,6 +71,52 @@ interface KurikulumRegion {
   topicParam: string;
 }
 
+
+interface FaqItem {
+  id: string;
+  question: string;
+  answer: string;
+}
+
+const FAQ_ITEMS: FaqItem[] = [
+  {
+    id: "faq-1",
+    question: "Apakah materi anatomi di PRIMA sesuai dengan kurikulum Fakultas Kedokteran di Indonesia?",
+    answer:
+      "Ya. Seluruh materi mengacu pada standar Terminologia Anatomica internasional dan silabus blok anatomi kurikulum kedokteran preklinik di Indonesia. Cakupan materi terbagi atas 6 regio tubuh standar: Caput, Collum, Thorax, Abdomen, Pelvis, dan Membrum lengkap dengan istilah Latin resmi.",
+  },
+  {
+    id: "faq-2",
+    question: "Bagaimana cara kerja algoritma Spaced Repetition dalam menentukan jadwal review saya?",
+    answer:
+      "PRIMA menggunakan algoritma spaced repetition terkalibrasi (FSR/SM-2) yang mencatat riwayat jawaban Anda. Struktur yang sering salah atau dinilai kritis otomatis dijadwalkan ulang lebih cepat (interval 1 hari atau 3 hari), sedangkan struktur yang stabil diingat diberi interval lebih panjang (7 hingga 14 hari) agar waktu belajar efisien.",
+  },
+  {
+    id: "faq-3",
+    question: "Apakah model 3D anatomi membutuhkan laptop atau HP berspesifikasi tinggi?",
+    answer:
+      "Tidak. Mesin WebGL dioptimasi ringan berbasis browser dengan kompresi mesh modern dan rendering client-side. Anda dapat memutar 360°, melakukan zoom, dan mengidentifikasi struktur secara lancar di laptop biasa maupun smartphone tanpa perlu menginstal aplikasi tambahan.",
+  },
+  {
+    id: "faq-4",
+    question: "Bagaimana fitur Perencana Belajar membagi beban materi menjelang ujian blok?",
+    answer:
+      "Cukup masukkan tanggal ujian blok Anda. Sistem secara otomatis menghitung selisih hari tersisa dan membagi total struktur menjadi target harian yang terukur (rata-rata 15–20 struktur per hari) lengkap dengan sesi evaluasi berkala, sehingga mencegah kram belajar semalam sebelum ujian.",
+  },
+  {
+    id: "faq-5",
+    question: "Apakah data kelemahan dan progres belajar saya tersimpan dengan aman?",
+    answer:
+      "Ya. PRIMA menyimpan analitik perkembangan belajar dan peta kelemahan secara terstruktur agar Anda dapat selalu memantau regio mana yang membutuhkan perhatian lebih sebelum menghadapi ujian blok atau praktikum anatomi.",
+  },
+  {
+    id: "faq-6",
+    question: "Apakah PRIMA dapat digunakan sebagai rujukan diagnosis atau penanganan klinis?",
+    answer:
+      "Tidak. PRIMA secara tegas dirancang khusus sebagai alat bantu belajar (edukasi) dan media review materi mahasiswa kedokteran. Platform ini tidak boleh digunakan untuk keperluan diagnosis pasien, keputusan klinis, maupun saran medis profesional.",
+  },
+];
+
 const KURIKULUM_REGIONS: KurikulumRegion[] = [
   {
     id: "reg-caput",
@@ -241,6 +287,7 @@ export default function LandingPage() {
   const caputStructures = useMemo(() => getStructuresByRegion("reg-caput"), []);
   const [highlightedStructureId, setHighlightedStructureId] = useState<string>("struct-c-01");
   const [activeRegionIdx, setActiveRegionIdx] = useState(0);
+  const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
   const [activeStructureIdx, setActiveStructureIdx] = useState<number | null>(null);
 
   const selectedKurikulumRegion = KURIKULUM_REGIONS[activeRegionIdx];
@@ -2100,6 +2147,118 @@ export default function LandingPage() {
                   </Link>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION: FAQ (Pertanyaan yang Sering Ditanyakan)
+          ========================================================================= */}
+      <section
+        id="faq"
+        aria-label="Pertanyaan yang sering ditanyakan seputar PRIMA"
+      >
+        {/* Giant Watermark */}
+        <div className="faq-watermark" aria-hidden="true">
+          <span>PERTANYAAN</span>
+        </div>
+
+        <div className="faq-container">
+          {/* Section Header */}
+          <div className="faq-header">
+            <span className="cara-label">
+              <span className="slash">/</span> Pertanyaan Umum
+            </span>
+            <h2 className="faq-headline">
+              Hal yang Sering Ditanyakan <strong>seputar PRIMA</strong>
+            </h2>
+            <p className="faq-subhead">
+              Jawaban seputar kurikulum blok kedokteran, algoritma spaced repetition, spesifikasi teknis 3D, dan tujuan platform.
+            </p>
+          </div>
+
+          {/* 2-Column Grid Layout */}
+          <div className="faq-grid">
+            {/* Kolom Kiri: Ringkasan & Fakta Kunci */}
+            <div className="faq-summary-card">
+              <div>
+                <span className="cara-target-tag">Pusat Informasi</span>
+                <h3 className="faq-summary-title mt-1">
+                  Belajar Terstruktur, Bebas Kram Ujian
+                </h3>
+              </div>
+              <p className="faq-summary-desc">
+                PRIMA mendampingi mahasiswa kedokteran menguasai ratusan struktur anatomi dan terminologi medis secara adaptif melalui visualisasi 3D spasial.
+              </p>
+
+              <div className="faq-facts-list">
+                <div className="faq-fact-item">
+                  <span className="faq-fact-icon">✓</span>
+                  <span>Standar Terminologia Anatomica</span>
+                </div>
+                <div className="faq-fact-item">
+                  <span className="faq-fact-icon">✓</span>
+                  <span>Algoritma FSR / SM-2 Otomatis</span>
+                </div>
+                <div className="faq-fact-item">
+                  <span className="faq-fact-icon">✓</span>
+                  <span>100% WebGL Tanpa Instalasi</span>
+                </div>
+                <div className="faq-fact-item">
+                  <span className="faq-fact-icon">✓</span>
+                  <span>Dukungan Responsif Laptop &amp; HP</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Kolom Kanan: Daftar Accordion */}
+            <div
+              className="faq-accordion-list"
+              role="region"
+              aria-label="Daftar accordion pertanyaan umum"
+            >
+              {FAQ_ITEMS.map((item, idx) => {
+                const isOpen = openFaqIdx === idx;
+                return (
+                  <div
+                    key={item.id}
+                    className={`faq-item ${isOpen ? "is-open" : ""}`}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setUserHasInteracted(true);
+                        setOpenFaqIdx(isOpen ? null : idx);
+                      }}
+                      aria-expanded={isOpen}
+                      className="faq-trigger"
+                    >
+                      <h4 className="faq-question">{item.question}</h4>
+                      <span className="faq-chevron" aria-hidden="true">
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                      </span>
+                    </button>
+
+                    {isOpen && (
+                      <div className="faq-content">
+                        <p className="faq-answer">{item.answer}</p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
