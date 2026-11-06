@@ -136,15 +136,7 @@
     }
 
     .menu {
-      position: absolute;
-      left: calc(var(--fx) + 136px);
-      top: 31px;
-      width: 46px;
-      height: 19px;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      padding: 0;
+      display: none !important;
     }
 
     .menu span {
@@ -173,26 +165,30 @@
     /* Glass pill nav */
     .nav {
       position: absolute;
-      left: calc(50% - 277px);
+      left: 50%;
+      transform: translateX(-50%);
       top: 20px;
-      width: 524px;
-      height: 40px;
-      padding: 3px;
-      display: grid;
-      grid-template-columns: 148px 125px 115px 130px;
-      border: 1px solid rgba(255,255,255,.5);
+      height: 42px;
+      padding: 4px 6px;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      border: 1px solid rgba(255,255,255,.55);
       border-radius: 22px;
-      background: rgba(245,249,255,.23);
+      background: rgba(245,249,255,.28);
       box-shadow: 0 0 12px rgba(255,255,255,.7), inset 0 0 12px rgba(255,255,255,.42);
       backdrop-filter: blur(17px);
       -webkit-backdrop-filter: blur(17px);
+      z-index: 15;
     }
 
     .nav a {
       height: 32px;
-      font-size: 16px;
+      padding: 0 14px;
+      font-size: 14.5px;
+      white-space: nowrap;
       border-radius: 18px;
-      transition: background .2s ease, box-shadow .2s ease;
+      transition: background .2s ease, box-shadow .2s ease, color .2s ease;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -783,9 +779,11 @@
       margin-left: 14px;
     }
 
-    .stage.nav-compact .nav,
+    .stage.nav-compact .nav {
+      display: flex;
+    }
     .stage.nav-compact .join {
-      display: none;
+      display: flex;
     }
 
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•

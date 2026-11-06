@@ -881,18 +881,7 @@ export default function LandingPage() {
               <span className="brand-text">PRIMA</span>
             </Link>
 
-            <button
-              ref={burgerRef}
-              className="menu"
-              type="button"
-              aria-label="Toggle navigation menu"
-              aria-expanded={isMenuOpen}
-              onClick={toggleMenu}
-            >
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
+            
 
             <nav className="nav" aria-label="Main navigation">
               {[
