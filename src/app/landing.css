@@ -103,17 +103,36 @@
     .brand {
       position: absolute;
       left: calc(var(--fx) + 46px);
-      top: 29px;
-      width: 57px;
-      height: 21px;
+      top: 22px;
+      height: 36px;
       display: flex;
       align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      z-index: 10;
     }
 
-    .brand svg {
-      width: 100%;
-      height: 100%;
-      fill: var(--ink);
+    .brand-badge {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 17px;
+      box-shadow: 0 3px 8px rgba(6, 25, 47, 0.16);
+      flex-shrink: 0;
+    }
+
+    .brand-text {
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      line-height: 1;
     }
 
     .menu {
@@ -910,7 +929,7 @@
     }
 
     .is-mobile .header { height: 88px; }
-    .is-mobile .brand { left: 24px; top: 31px; width: 56px; }
+    .is-mobile .brand { left: 24px; top: 24px; height: 36px; }
     .is-mobile .menu { left: 96px; top: 36px; width: 42px; }
     .is-mobile .menu span { width: 41px; }
     .is-mobile .join { right: 16px; top: 23px; width: 120px; }
@@ -1132,9 +1151,7 @@
 
       .is-phone .brand {
         position: static;
-        width: clamp(56px, 16vw, 68px);
-        height: auto;
-        aspect-ratio: 58 / 21;
+        height: 34px;
       }
 
       .is-phone .menu {

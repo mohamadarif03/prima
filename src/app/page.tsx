@@ -864,7 +864,7 @@ export default function LandingPage() {
           ========================================================================= */}
       <main
         className="viewport"
-        aria-label="Pengalaman interaktif atlas anatomi tubuh manusia Anatoma"
+        aria-label="PRIMA — Platform Review Interaktif Medis Adaptif"
       >
         <div
           ref={stageRef}
@@ -875,11 +875,10 @@ export default function LandingPage() {
             <Link
               href="/"
               className="brand"
-              aria-label="Anatoma — Atlas Anatomi Tubuh"
+              aria-label="PRIMA — Platform Review Interaktif Medis Adaptif"
             >
-              <svg viewBox="0 0 58 21" aria-hidden="true">
-                <path d="M0 0h7v21H0zM21 0h7v21h-7zM0 0h12l16 21H16zM30 0h8l12 21h-8zM51 0h7v21h-7z" />
-              </svg>
+              <div className="brand-badge">P</div>
+              <span className="brand-text">PRIMA</span>
             </Link>
 
             <button
@@ -896,26 +895,30 @@ export default function LandingPage() {
             </button>
 
             <nav className="nav" aria-label="Main navigation">
-              {["Atlas 3D", "Sistem Organ", "Fisiologi", "Studi Klinis"].map(
-                (item) => (
-                  <a
-                    key={item}
-                    href={item === "Atlas 3D" ? "#home" : item === "Sistem Organ" ? "#cara-belajar" : "/latihan"}
-                    className={activeNav === item ? "active" : ""}
-                    onClick={(e) => {
-                      setActiveNav(item);
-                      say(item);
-                    }}
-                  >
-                    {item}
-                  </a>
-                )
-              )}
+              {[
+                { label: "Atlas 3D", href: "#home" },
+                { label: "Cara Belajar", href: "#cara-belajar" },
+                { label: "Kurikulum FK", href: "#kurikulum" },
+                { label: "Peta Kelemahan", href: "/kelemahan" },
+                { label: "FAQ", href: "#faq" },
+              ].map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className={activeNav === item.label ? "active" : ""}
+                  onClick={() => {
+                    setActiveNav(item.label);
+                    say(item.label);
+                  }}
+                >
+                  {item.label}
+                </a>
+              ))}
             </nav>
 
-            <button className="join" type="button" onClick={toggleJoin}>
+            <Link href="/beranda" className="join" aria-label="Masuk ke aplikasi PRIMA">
               <span className="join-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="23" height="23">
+                <svg viewBox="0 0 24 24" width="22" height="22">
                   <circle
                     cx="12"
                     cy="7"
@@ -936,10 +939,8 @@ export default function LandingPage() {
                   />
                 </svg>
               </span>
-              <span className="join-label">
-                {isJoined ? "Terdaftar" : "Akses Atlas"}
-              </span>
-            </button>
+              <span className="join-label">Masuk Aplikasi</span>
+            </Link>
 
             {/* Menu panel (for compact / mobile navigation) */}
             <div
@@ -947,22 +948,26 @@ export default function LandingPage() {
               className="menu-panel"
               aria-hidden={!isMenuOpen}
             >
-              {["Atlas 3D", "Sistem Organ", "Fisiologi", "Studi Klinis"].map(
-                (item) => (
-                  <a
-                    key={item}
-                    href={item === "Atlas 3D" ? "#home" : item === "Sistem Organ" ? "#cara-belajar" : "/latihan"}
-                    className={activeNav === item ? "active" : ""}
-                    onClick={() => {
-                      setActiveNav(item);
-                      closeMenu();
-                    }}
-                  >
-                    {item}
-                  </a>
-                )
-              )}
-              <button className="menu-join" type="button" onClick={toggleJoin}>
+              {[
+                { label: "Atlas 3D", href: "#home" },
+                { label: "Cara Belajar", href: "#cara-belajar" },
+                { label: "Kurikulum FK", href: "#kurikulum" },
+                { label: "Peta Kelemahan", href: "/kelemahan" },
+                { label: "FAQ", href: "#faq" },
+              ].map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className={activeNav === item.label ? "active" : ""}
+                  onClick={() => {
+                    setActiveNav(item.label);
+                    closeMenu();
+                  }}
+                >
+                  {item.label}
+                </a>
+              ))}
+              <Link href="/beranda" className="menu-join" onClick={closeMenu}>
                 <span className="join-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" width="26" height="26">
                     <circle
@@ -985,10 +990,8 @@ export default function LandingPage() {
                     />
                   </svg>
                 </span>
-                <span className="join-label">
-                  {isJoined ? "Terdaftar" : "Akses Atlas"}
-                </span>
-              </button>
+                <span className="join-label">Masuk Aplikasi PRIMA</span>
+              </Link>
             </div>
           </header>
 
@@ -1037,8 +1040,8 @@ export default function LandingPage() {
               </svg>
             </div>
             <div className="creator-copy">
-              <div>Dept. Anatomi Medis</div>
-              <div className="series">Modul Anatomi · Edisi 01</div>
+              <div>PRIMA MedTech</div>
+              <div className="series">Modul Anatomi Kedokteran</div>
             </div>
           </div>
 
