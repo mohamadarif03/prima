@@ -34,6 +34,7 @@ export default function LandingPage() {
 
   // Cara Belajar Step States
   const [activeStep, setActiveStep] = useState(0);
+  const [indicatorTop, setIndicatorTop] = useState(0);
   const [userHasInteracted, setUserHasInteracted] = useState(false);
   const [quizAnswer, setQuizAnswer] = useState<"correct" | "wrong" | null>(null);
 
@@ -147,6 +148,23 @@ export default function LandingPage() {
       if (autoRotateTimerRef.current) clearInterval(autoRotateTimerRef.current);
     };
   }, [userHasInteracted]);
+
+  // Update dynamic indicator position based on active step button
+  useEffect(() => {
+    function updateIndicator() {
+      const btn = stepBtnsRef.current[activeStep];
+      if (btn) {
+        setIndicatorTop(btn.offsetTop);
+      }
+    }
+    updateIndicator();
+    const timer = setTimeout(updateIndicator, 120);
+    window.addEventListener("resize", updateIndicator, { passive: true });
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", updateIndicator);
+    };
+  }, [activeStep]);
 
   // Outside click listener for mobile menu
   useEffect(() => {
@@ -951,10 +969,10 @@ export default function LandingPage() {
       >
         {/* Teks Bayangan Raksasa "LATIHAN" di Belakang */}
         <div
-          className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 select-none overflow-hidden text-center"
+          className="cara-watermark"
           aria-hidden="true"
         >
-          <span className="inline-block font-extrabold tracking-[0.18em] text-[#06192f]/[0.045] text-[18vw] leading-none uppercase">
+          <span>
             LATIHAN
           </span>
         </div>
@@ -979,16 +997,14 @@ export default function LandingPage() {
               <div className="relative mt-10 md:mt-12">
                 {/* Garis Vertikal Penanda Progres (Desktop) */}
                 <div
-                  className="absolute left-0 top-1 bottom-1 hidden w-0.5 bg-[#06192f]/15 lg:block"
+                  id="step-indicator-bar"
+                  className="hidden lg:block"
                   aria-hidden="true"
                 >
                   <div
                     id="step-indicator"
-                    className="absolute left-0 top-0 w-0.5 bg-[#06192f] transition-all duration-300 ease-out h-[64px]"
                     style={{
-                      transform: `translateY(${
-                        activeStep === 0 ? 0 : activeStep === 1 ? 96 : 192
-                      }px)`,
+                      transform: `translateY(${indicatorTop}px)`,
                     }}
                   ></div>
                 </div>
@@ -1227,17 +1243,17 @@ export default function LandingPage() {
             <div className="lg:col-span-7">
               <div
                 id="stage-viewport"
-                className="relative w-full rounded-[32px] border border-white/80 bg-[#f7fbff]/75 p-6 sm:p-8 md:p-10 shadow-[0_20px_50px_rgba(35,57,79,0.08)] backdrop-blur-2xl min-h-[480px] lg:h-[520px] flex flex-col justify-between overflow-hidden"
+                className="relative w-full rounded-[32px] border border-white/80 bg-[#f7fbff]/75 p-6 sm:p-8 md:p-10 shadow-[0_20px_50px_rgba(35,57,79,0.08)] backdrop-blur-2xl min-h-[480px] lg:h-[520px] flex flex-col overflow-hidden"
               >
                 {/* PANGGUNG 01: Rencanakan */}
                 <div
                   id="panel-0"
                   role="tabpanel"
                   aria-labelledby="tab-0"
-                  className={`panel-view relative flex h-full w-full flex-col justify-between transition-opacity duration-500 ease-in-out ${
+                  className={`panel-view w-full flex-1 flex flex-col justify-between transition-opacity duration-500 ease-in-out ${
                     activeStep === 0
-                      ? "opacity-100 pointer-events-auto"
-                      : "opacity-0 pointer-events-none absolute inset-0 p-6 sm:p-8 md:p-10"
+                      ? "relative opacity-100 pointer-events-auto"
+                      : "absolute inset-0 p-6 sm:p-8 md:p-10 opacity-0 pointer-events-none"
                   }`}
                 >
                   {/* Header Panggung 01 */}
@@ -1365,10 +1381,10 @@ export default function LandingPage() {
                   id="panel-1"
                   role="tabpanel"
                   aria-labelledby="tab-1"
-                  className={`panel-view relative flex h-full w-full flex-col justify-between transition-opacity duration-500 ease-in-out ${
+                  className={`panel-view w-full flex-1 flex flex-col justify-between transition-opacity duration-500 ease-in-out ${
                     activeStep === 1
-                      ? "opacity-100 pointer-events-auto"
-                      : "opacity-0 pointer-events-none absolute inset-0 p-6 sm:p-8 md:p-10"
+                      ? "relative opacity-100 pointer-events-auto"
+                      : "absolute inset-0 p-6 sm:p-8 md:p-10 opacity-0 pointer-events-none"
                   }`}
                 >
                   {/* Header Panggung 02 */}
@@ -1542,10 +1558,10 @@ export default function LandingPage() {
                   id="panel-2"
                   role="tabpanel"
                   aria-labelledby="tab-2"
-                  className={`panel-view relative flex h-full w-full flex-col justify-between transition-opacity duration-500 ease-in-out ${
+                  className={`panel-view w-full flex-1 flex flex-col justify-between transition-opacity duration-500 ease-in-out ${
                     activeStep === 2
-                      ? "opacity-100 pointer-events-auto"
-                      : "opacity-0 pointer-events-none absolute inset-0 p-6 sm:p-8 md:p-10"
+                      ? "relative opacity-100 pointer-events-auto"
+                      : "absolute inset-0 p-6 sm:p-8 md:p-10 opacity-0 pointer-events-none"
                   }`}
                 >
                   {/* Header Panggung 03 */}
