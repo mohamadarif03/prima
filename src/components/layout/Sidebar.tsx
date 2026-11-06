@@ -26,6 +26,13 @@ const mainNavItems: NavMenuItem[] = [
     icon: "bi bi-speedometer2",
   },
   {
+    name: "Onboarding",
+    href: "/onboarding",
+    icon: "bi bi-magic",
+    badge: "Wizard",
+    badgeColor: "bg-[#198754]",
+  },
+  {
     name: "Latihan Anatomi",
     href: "/latihan",
     icon: "bi bi-box-seam",

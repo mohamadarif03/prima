@@ -619,6 +619,27 @@ export default function PengaturanPage() {
                 {/* 2. TAB PREFERENSI BELAJAR */}
                 {activeTab === "preferensi" && (
                   <div className="space-y-6">
+                    {/* Banner Setup Onboarding */}
+                    <div className="p-4 bg-[#eff6ff] border border-[#bfdbfe] rounded-[8px] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <i className="bi bi-magic text-[#0d6efd] text-base"></i>
+                          <h4 className="text-[13px] font-bold text-[#1e40af]">
+                            Pengaturan Awal & Rencana Belajar (Onboarding)
+                          </h4>
+                        </div>
+                        <p className="text-[11.5px] text-[#1e40af]/80 mt-0.5 leading-relaxed">
+                          Ingin mengatur ulang pemilihan regio anatomi, tanggal ujian, waktu belajar, dan preferensi metode melalui wizard 4 langkah?
+                        </p>
+                      </div>
+                      <Link
+                        href="/onboarding"
+                        className="px-3.5 py-1.5 rounded-[5px] bg-[#0d6efd] text-white text-xs font-semibold hover:bg-[#0b5ed7] transition-colors shrink-0 text-center"
+                      >
+                        Buka Onboarding
+                      </Link>
+                    </div>
+
                     {/* Target Item Per Hari (Slider & Number) */}
                     <div className="p-4 bg-[#f8fafc] border border-[#e2e8f0] rounded-[6px] space-y-3">
                       <div className="flex items-center justify-between">
