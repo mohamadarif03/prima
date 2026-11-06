@@ -11,8 +11,8 @@ interface AppShellWrapperProps {
 export function AppShellWrapper({ children }: AppShellWrapperProps) {
   const pathname = usePathname();
 
-  // If visiting auth/landing page like /masuk, don't wrap with AppShell dashboard
-  if (pathname === "/masuk" || pathname.startsWith("/masuk/")) {
+  // If visiting landing page (/) or auth page (/masuk), don't wrap with AppShell dashboard
+  if (pathname === "/" || pathname === "/masuk" || pathname.startsWith("/masuk/")) {
     return <>{children}</>;
   }
 
