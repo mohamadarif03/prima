@@ -1179,6 +1179,7 @@ export interface Anatomy3DStructure {
   rotation: [number, number, number];
   scale: [number, number, number];
   baseColor: string;
+  relatedStructureIds?: string[];
 }
 
 export type QuizMode = "klik-struktur" | "sebutkan-nama";
@@ -1247,10 +1248,10 @@ export const mockAnatomyRegions: AnatomyPracticeRegion[] = [
     id: "reg-thorax",
     number: 3,
     name: "Regio Thorax",
-    subName: "Otot Dinding Dada & Toraks",
-    latinName: "Musculi Thoracis",
-    structuresCount: 12,
-    modelUrl: "/models/muscles.glb",
+    subName: "Jantung & Toraks",
+    latinName: "Cor & Musculi Thoracis",
+    structuresCount: 23,
+    modelUrl: "/models/heart.glb",
     icon: "bi bi-shield-shaded",
     description: "Visualisasi 3D sistem miologi dinding dada: M. pectoralis major & minor, serratus anterior, kelompok interkostal (externus, internus, intimus), transversus thoracis, serratus posterior, dan diafragma.",
     masteryScore: 82,
@@ -1811,6 +1812,7 @@ export const mockHeart3DStructures: Anatomy3DStructure[] = [
     rotation: [0, 0, 0],
     scale: [1, 1, 1],
     baseColor: "#e11d48",
+    relatedStructureIds: ["struct-h-02", "struct-h-03", "struct-h-05"],
   },
   {
     id: "struct-h-02",
@@ -1827,6 +1829,7 @@ export const mockHeart3DStructures: Anatomy3DStructure[] = [
     rotation: [0, 0, 0],
     scale: [1, 1, 1],
     baseColor: "#f43f5e",
+    relatedStructureIds: ["struct-h-01", "struct-h-05"],
   },
   {
     id: "struct-h-03",
@@ -3027,7 +3030,7 @@ export function getStructuresByRegion(regionId: string): Anatomy3DStructure[] {
     case "reg-thorax":
     case "reg-03":
     case "reg-04":
-      return mockThorax3DStructures;
+      return [...mockHeart3DStructures, ...mockThorax3DStructures];
     case "reg-abdomen":
     case "reg-05":
       return mockAbdomen3DStructures;
@@ -3283,7 +3286,7 @@ export function getQuizQuestionsByRegion(regionId: string): QuizQuestionItem[] {
     case "reg-collum":
       return mockCollumQuizQuestions;
     case "reg-thorax":
-      return mockThoraxQuizQuestions;
+      return [...mockHeartQuizQuestions, ...mockThoraxQuizQuestions];
     case "reg-abdomen":
       return mockAbdomenQuizQuestions;
     case "reg-pelvis":

@@ -33,7 +33,7 @@ const mainNavItems: NavMenuItem[] = [
     badgeColor: "bg-[#198754]",
   },
   {
-    name: "Latihan Anatomi",
+    name: "Anatomi 3D",
     href: "/latihan",
     icon: "bi bi-box-seam",
     badge: "3D",
