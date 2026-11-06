@@ -485,6 +485,28 @@ export default function LandingPage() {
     };
   }, [userHasInteracted]);
 
+  // Scroll Reveal IntersectionObserver for buttery smooth entrance animations
+  useEffect(() => {
+    if (typeof window === "undefined" || !("IntersectionObserver" in window)) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-revealed");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.08, rootMargin: "0px 0px -30px 0px" }
+    );
+
+    const elements = document.querySelectorAll(".reveal-init");
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
   // Update dynamic indicator position based on active step button
   useEffect(() => {
     function updateIndicator() {
@@ -1311,7 +1333,7 @@ export default function LandingPage() {
           {/* Layout Asimetris Dua Kolom: Kiri ~40%, Kanan ~60% di Desktop */}
           <div className="cara-grid">
             {/* KOLOM KIRI (~40%): Label, Headline, Daftar Tiga Langkah Tipografi Besar */}
-            <div className="cara-col-left">
+            <div className="cara-col-left reveal-init">
               {/* Label kecil & Headline */}
               <div>
                 <span className="cara-label">
@@ -1546,7 +1568,7 @@ export default function LandingPage() {
             </div>
 
             {/* KOLOM KANAN (~60%): Satu Panggung Kaca Buram Besar Bersudut Membulat */}
-            <div className="cara-col-right">
+            <div className="cara-col-right reveal-init scale-up reveal-delay-2">
               <div id="stage-viewport">
                 {/* PANGGUNG 01: Rencanakan */}
                 <div
@@ -1973,7 +1995,7 @@ export default function LandingPage() {
 
         <div className="kuri-container">
           {/* Section Header */}
-          <div className="kuri-header">
+          <div className="kuri-header reveal-init">
             <span className="cara-label">
               <span className="slash">/</span> Cakupan kurikulum FK
             </span>
@@ -1990,7 +2012,7 @@ export default function LandingPage() {
           <div className="kuri-stage">
             {/* KOLOM KIRI: Hirarki Anatomis Kranial-ke-Kaudal */}
             <div
-              className="kuri-nav-column"
+              className="kuri-nav-column reveal-init reveal-delay-1"
               role="tablist"
               aria-label="Daftar regio tubuh kranial ke kaudal"
             >
@@ -2031,7 +2053,7 @@ export default function LandingPage() {
               id="kuri-dossier-panel"
               role="tabpanel"
               aria-labelledby={`kuri-tab-${activeRegionIdx}`}
-              className="kuri-dossier"
+              key={activeRegionIdx} className="kuri-dossier kuri-dossier-anim reveal-init scale-up reveal-delay-2"
             >
               {/* Header Berkas */}
               <div className="kuri-dossier-top">
@@ -2166,7 +2188,7 @@ export default function LandingPage() {
 
         <div className="faq-container">
           {/* Section Header */}
-          <div className="faq-header">
+          <div className="faq-header reveal-init">
             <span className="cara-label">
               <span className="slash">/</span> Pertanyaan Umum
             </span>
@@ -2181,7 +2203,7 @@ export default function LandingPage() {
           {/* 2-Column Grid Layout */}
           <div className="faq-grid">
             {/* Kolom Kiri: Ringkasan & Fakta Kunci */}
-            <div className="faq-summary-card">
+            <div className="faq-summary-card reveal-init reveal-delay-1">
               <div>
                 <span className="cara-target-tag">Pusat Informasi</span>
                 <h3 className="faq-summary-title mt-1">
@@ -2214,7 +2236,7 @@ export default function LandingPage() {
 
             {/* Kolom Kanan: Daftar Accordion */}
             <div
-              className="faq-accordion-list"
+              className="faq-accordion-list reveal-init reveal-delay-2"
               role="region"
               aria-label="Daftar accordion pertanyaan umum"
             >
@@ -2268,7 +2290,7 @@ export default function LandingPage() {
           LANDING FOOTER
           ========================================================================= */}
       <footer className="landing-footer">
-        <div className="landing-footer-container">
+        <div className="landing-footer-container reveal-init">
           <div className="landing-footer-grid">
             {/* Brand Column */}
             <div className="landing-footer-brand">
