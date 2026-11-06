@@ -946,12 +946,11 @@ export default function LandingPage() {
         </div>
       </main>
 
-      {/* =========================================================================
+            {/* =========================================================================
           SECTION: CARA BELAJAR (Asymmetrical 2-Column Medical Learning Engine)
           ========================================================================= */}
       <section
         id="cara-belajar"
-        className="relative w-full overflow-hidden py-24 md:py-32 bg-gradient-to-b from-[#d6e6f5] via-[#d9e9f6] to-[#d4e5f4] text-[#06192f] selection:bg-[#1169dc] selection:text-white"
         aria-label="Cara belajar anatomi interaktif"
         onMouseEnter={() => {
           if (autoRotateTimerRef.current) {
@@ -968,41 +967,32 @@ export default function LandingPage() {
         }}
       >
         {/* Teks Bayangan Raksasa "LATIHAN" di Belakang */}
-        <div
-          className="cara-watermark"
-          aria-hidden="true"
-        >
-          <span>
-            LATIHAN
-          </span>
+        <div className="cara-watermark" aria-hidden="true">
+          <span>LATIHAN</span>
         </div>
 
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="cara-container">
           {/* Layout Asimetris Dua Kolom: Kiri ~40%, Kanan ~60% di Desktop */}
-          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-14">
+          <div className="cara-grid">
             {/* KOLOM KIRI (~40%): Label, Headline, Daftar Tiga Langkah Tipografi Besar */}
-            <div className="flex flex-col justify-center lg:col-span-5">
+            <div className="cara-col-left">
               {/* Label kecil & Headline */}
               <div>
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-[#77899c]">
-                  <span className="text-[#1169dc]">/</span> Cara belajar
+                <span className="cara-label">
+                  <span className="slash">/</span> Cara belajar
                 </span>
-                <h2 className="mt-3 text-3xl font-light tracking-tight text-[#06192f] sm:text-4xl lg:text-5xl leading-[1.12]">
+                <h2 className="cara-headline">
                   Latihan yang menyesuaikan{" "}
-                  <span className="font-normal">kelemahanmu</span>
+                  <strong>kelemahanmu</strong>
                 </h2>
               </div>
 
               {/* Daftar Tiga Langkah (Tanpa Kotak, Tipografi Besar, Indeks /01 /02 /03) */}
-              <div className="relative mt-10 md:mt-12">
+              <div className="cara-steps-box">
                 {/* Garis Vertikal Penanda Progres (Desktop) */}
-                <div
-                  id="step-indicator-bar"
-                  className="hidden lg:block"
-                  aria-hidden="true"
-                >
+                <div className="cara-indicator-track" aria-hidden="true">
                   <div
-                    id="step-indicator"
+                    className="cara-indicator-thumb"
                     style={{
                       transform: `translateY(${indicatorTop}px)`,
                     }}
@@ -1013,7 +1003,7 @@ export default function LandingPage() {
                 <div
                   role="tablist"
                   aria-label="Langkah cara belajar"
-                  className="flex gap-6 overflow-x-auto pb-4 lg:flex-col lg:gap-8 lg:overflow-visible lg:pb-0 lg:pl-6 scrollbar-none"
+                  className="cara-tablist scrollbar-none"
                 >
                   {/* LANGKAH /01 */}
                   <button
@@ -1026,7 +1016,7 @@ export default function LandingPage() {
                     aria-selected={activeStep === 0}
                     aria-controls="panel-0"
                     tabIndex={activeStep === 0 ? 0 : -1}
-                    className="step-btn group text-left transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1169dc] focus-visible:rounded-lg"
+                    className="cara-step-btn"
                     onClick={() => switchStep(0, true)}
                     onKeyDown={(e) => {
                       if (e.key === "ArrowDown" || e.key === "ArrowRight") {
@@ -1040,34 +1030,28 @@ export default function LandingPage() {
                       }
                     }}
                   >
-                    <div className="flex items-baseline gap-3">
+                    <div className="cara-step-head">
                       <span
-                        className={`step-num text-xs font-bold tracking-widest transition-colors duration-300 ${
-                          activeStep === 0
-                            ? "text-[#06192f]"
-                            : "text-[#77899c]/60"
+                        className={`cara-step-num ${
+                          activeStep === 0 ? "is-active" : "is-inactive"
                         }`}
                       >
                         /01
                       </span>
                       <span
-                        className={`step-title text-2xl tracking-tight sm:text-3xl transition-colors duration-300 ${
-                          activeStep === 0
-                            ? "font-normal text-[#06192f]"
-                            : "font-light text-[#77899c]/60"
+                        className={`cara-step-title ${
+                          activeStep === 0 ? "is-active" : "is-inactive"
                         }`}
                       >
                         Rencanakan
                       </span>
                     </div>
                     <div
-                      className={`step-desc-wrap overflow-hidden transition-all duration-400 ease-out ${
-                        activeStep === 0
-                          ? "max-h-24 opacity-100 mt-2.5"
-                          : "max-h-0 opacity-0 mt-0"
+                      className={`cara-step-desc ${
+                        activeStep === 0 ? "is-active" : "is-inactive"
                       }`}
                     >
-                      <p className="text-sm leading-relaxed text-[#77899c] pl-9">
+                      <p>
                         Isi tanggal ujianmu, pilih regio target, dan biarkan
                         sistem membagi beban materi jadi sasaran harian.
                       </p>
@@ -1085,7 +1069,7 @@ export default function LandingPage() {
                     aria-selected={activeStep === 1}
                     aria-controls="panel-1"
                     tabIndex={activeStep === 1 ? 0 : -1}
-                    className="step-btn group text-left transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1169dc] focus-visible:rounded-lg"
+                    className="cara-step-btn"
                     onClick={() => switchStep(1, true)}
                     onKeyDown={(e) => {
                       if (e.key === "ArrowDown" || e.key === "ArrowRight") {
@@ -1099,34 +1083,28 @@ export default function LandingPage() {
                       }
                     }}
                   >
-                    <div className="flex items-baseline gap-3">
+                    <div className="cara-step-head">
                       <span
-                        className={`step-num text-xs font-bold tracking-widest transition-colors duration-300 ${
-                          activeStep === 1
-                            ? "text-[#06192f]"
-                            : "text-[#77899c]/60"
+                        className={`cara-step-num ${
+                          activeStep === 1 ? "is-active" : "is-inactive"
                         }`}
                       >
                         /02
                       </span>
                       <span
-                        className={`step-title text-2xl tracking-tight sm:text-3xl transition-colors duration-300 ${
-                          activeStep === 1
-                            ? "font-normal text-[#06192f]"
-                            : "font-light text-[#77899c]/60"
+                        className={`cara-step-title ${
+                          activeStep === 1 ? "is-active" : "is-inactive"
                         }`}
                       >
                         Latihan di 3D
                       </span>
                     </div>
                     <div
-                      className={`step-desc-wrap overflow-hidden transition-all duration-400 ease-out ${
-                        activeStep === 1
-                          ? "max-h-24 opacity-100 mt-2.5"
-                          : "max-h-0 opacity-0 mt-0"
+                      className={`cara-step-desc ${
+                        activeStep === 1 ? "is-active" : "is-inactive"
                       }`}
                     >
-                      <p className="text-sm leading-relaxed text-[#77899c] pl-9">
+                      <p>
                         Klik struktur yang disorot langsung pada model atau
                         sebutkan namanya, kamu langsung dapat umpan balik.
                       </p>
@@ -1144,7 +1122,7 @@ export default function LandingPage() {
                     aria-selected={activeStep === 2}
                     aria-controls="panel-2"
                     tabIndex={activeStep === 2 ? 0 : -1}
-                    className="step-btn group text-left transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1169dc] focus-visible:rounded-lg"
+                    className="cara-step-btn"
                     onClick={() => switchStep(2, true)}
                     onKeyDown={(e) => {
                       if (e.key === "ArrowDown" || e.key === "ArrowRight") {
@@ -1158,36 +1136,30 @@ export default function LandingPage() {
                       }
                     }}
                   >
-                    <div className="flex items-baseline gap-3">
+                    <div className="cara-step-head">
                       <span
-                        className={`step-num text-xs font-bold tracking-widest transition-colors duration-300 ${
-                          activeStep === 2
-                            ? "text-[#06192f]"
-                            : "text-[#77899c]/60"
+                        className={`cara-step-num ${
+                          activeStep === 2 ? "is-active" : "is-inactive"
                         }`}
                       >
                         /03
                       </span>
                       <span
-                        className={`step-title text-2xl tracking-tight sm:text-3xl transition-colors duration-300 ${
-                          activeStep === 2
-                            ? "font-normal text-[#06192f]"
-                            : "font-light text-[#77899c]/60"
+                        className={`cara-step-title ${
+                          activeStep === 2 ? "is-active" : "is-inactive"
                         }`}
                       >
                         Diulang otomatis
                       </span>
                     </div>
                     <div
-                      className={`step-desc-wrap overflow-hidden transition-all duration-400 ease-out ${
-                        activeStep === 2
-                          ? "max-h-24 opacity-100 mt-2.5"
-                          : "max-h-0 opacity-0 mt-0"
+                      className={`cara-step-desc ${
+                        activeStep === 2 ? "is-active" : "is-inactive"
                       }`}
                     >
-                      <p className="text-sm leading-relaxed text-[#77899c] pl-9">
-                        Yang salah muncul lebih cepat, sedangkan bagian yang
-                        sudah kamu kuasai makin jarang diulang.
+                      <p>
+                        Struktur yang sering salah otomatis dijadwalkan ulang
+                        lebih sering dengan spaced repetition.
                       </p>
                     </div>
                   </button>
@@ -1195,14 +1167,13 @@ export default function LandingPage() {
               </div>
 
               {/* Tombol Pill Navy & Tautan Teks di Bawah Daftar */}
-              <div className="mt-10 flex flex-wrap items-center gap-5 sm:mt-12">
+              <div className="cara-actions">
                 <Link
                   href="/latihan"
-                  className="inline-flex items-center justify-center rounded-full bg-[#06192f] px-7 py-3.5 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:bg-[#0c2849] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1169dc] focus-visible:ring-offset-2"
+                  className="cara-btn-navy"
                 >
                   Coba latihan 3D
                   <svg
-                    className="ml-2 h-4 w-4"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -1218,11 +1189,10 @@ export default function LandingPage() {
                 </Link>
                 <Link
                   href="/beranda"
-                  className="group inline-flex items-center text-sm font-medium text-[#06192f] transition-colors hover:text-[#1169dc] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1169dc] focus-visible:rounded"
+                  className="cara-link-dashboard"
                 >
                   <span>Lihat contoh dashboard</span>
                   <svg
-                    className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -1240,137 +1210,90 @@ export default function LandingPage() {
             </div>
 
             {/* KOLOM KANAN (~60%): Satu Panggung Kaca Buram Besar Bersudut Membulat */}
-            <div className="lg:col-span-7">
-              <div
-                id="stage-viewport"
-                className="relative w-full rounded-[32px] border border-white/80 bg-[#f7fbff]/75 p-6 sm:p-8 md:p-10 shadow-[0_20px_50px_rgba(35,57,79,0.08)] backdrop-blur-2xl min-h-[480px] lg:h-[520px] flex flex-col overflow-hidden"
-              >
+            <div className="cara-col-right">
+              <div id="stage-viewport">
                 {/* PANGGUNG 01: Rencanakan */}
                 <div
                   id="panel-0"
                   role="tabpanel"
                   aria-labelledby="tab-0"
-                  className={`panel-view w-full flex-1 flex flex-col justify-between transition-opacity duration-500 ease-in-out ${
-                    activeStep === 0
-                      ? "relative opacity-100 pointer-events-auto"
-                      : "absolute inset-0 p-6 sm:p-8 md:p-10 opacity-0 pointer-events-none"
+                  className={`cara-panel ${
+                    activeStep === 0 ? "is-active" : "is-inactive"
                   }`}
                 >
                   {/* Header Panggung 01 */}
-                  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#06192f]/5 pb-4">
+                  <div className="cara-p1-header">
                     <div>
-                      <span className="text-[11px] font-semibold uppercase tracking-wider text-[#77899c]">
+                      <span className="cara-target-tag">
                         Target Modul
                       </span>
-                      <p className="text-sm font-semibold text-[#06192f]">
+                      <p className="cara-target-title">
                         Regio: anggota gerak atas
                       </p>
                     </div>
-                    <div className="rounded-full border border-[#06192f]/10 bg-white/70 px-3.5 py-1 text-xs font-medium text-[#06192f] shadow-sm">
+                    <div className="cara-badge-exam">
                       Ujian Blok: 14 Des (H-28)
                     </div>
                   </div>
 
                   {/* Baris Hari Horizontal (Sen-Min) dengan Target Harian */}
-                  <div className="my-auto py-6">
-                    <div className="text-xs font-semibold uppercase tracking-wider text-[#77899c] mb-3">
+                  <div className="cara-calendar-box">
+                    <div className="cara-cal-label">
                       Jadwal Belajar Pekan Ini
                     </div>
-                    <div className="grid grid-cols-7 gap-1.5 sm:gap-2.5 text-center">
-                      <div className="flex flex-col justify-between rounded-2xl border border-white/90 bg-white/50 p-2 sm:p-3 transition">
-                        <span className="text-[11px] font-medium text-[#77899c]">
-                          Sen
-                        </span>
-                        <span className="my-1.5 text-sm sm:text-base font-semibold text-[#06192f]">
-                          18
-                        </span>
-                        <span className="rounded-md bg-[#06192f]/5 py-0.5 text-[10px] font-medium text-[#77899c]">
-                          16 str
-                        </span>
+                    <div className="cara-cal-grid">
+                      <div className="cara-day-card">
+                        <span className="cara-day-name">Sen</span>
+                        <span className="cara-day-num">18</span>
+                        <span className="cara-day-pill">16 str</span>
                       </div>
 
-                      <div className="flex flex-col justify-between rounded-2xl border border-white/90 bg-white/50 p-2 sm:p-3 transition">
-                        <span className="text-[11px] font-medium text-[#77899c]">
-                          Sel
-                        </span>
-                        <span className="my-1.5 text-sm sm:text-base font-semibold text-[#06192f]">
-                          19
-                        </span>
-                        <span className="rounded-md bg-[#06192f]/5 py-0.5 text-[10px] font-medium text-[#77899c]">
-                          18 str
-                        </span>
+                      <div className="cara-day-card">
+                        <span className="cara-day-name">Sel</span>
+                        <span className="cara-day-num">19</span>
+                        <span className="cara-day-pill">18 str</span>
                       </div>
 
-                      <div className="flex flex-col justify-between rounded-2xl border border-white/90 bg-white/50 p-2 sm:p-3 transition">
-                        <span className="text-[11px] font-medium text-[#77899c]">
-                          Rab
-                        </span>
-                        <span className="my-1.5 text-sm sm:text-base font-semibold text-[#06192f]">
-                          20
-                        </span>
-                        <span className="rounded-md bg-[#06192f]/5 py-0.5 text-[10px] font-medium text-[#77899c]">
-                          18 str
-                        </span>
+                      <div className="cara-day-card">
+                        <span className="cara-day-name">Rab</span>
+                        <span className="cara-day-num">20</span>
+                        <span className="cara-day-pill">18 str</span>
                       </div>
 
                       {/* Hari Ini */}
-                      <div className="relative flex flex-col justify-between rounded-2xl border border-[#06192f] bg-[#06192f] p-2 sm:p-3 text-white shadow-md ring-2 ring-[#06192f]/10">
-                        <span className="text-[10px] font-semibold uppercase tracking-wider text-white/80">
-                          Hari ini
-                        </span>
-                        <span className="my-1 text-base sm:text-lg font-bold text-white">
-                          Kam 21
-                        </span>
-                        <span className="rounded-md bg-white/20 py-0.5 text-[10px] font-semibold text-white">
-                          20 str
-                        </span>
+                      <div className="cara-day-today">
+                        <span className="cara-day-name">Hari ini</span>
+                        <span className="cara-day-num">Kam 21</span>
+                        <span className="cara-day-pill">20 str</span>
                       </div>
 
-                      <div className="flex flex-col justify-between rounded-2xl border border-white/90 bg-white/50 p-2 sm:p-3 transition">
-                        <span className="text-[11px] font-medium text-[#77899c]">
-                          Jum
-                        </span>
-                        <span className="my-1.5 text-sm sm:text-base font-semibold text-[#06192f]">
-                          22
-                        </span>
-                        <span className="rounded-md bg-[#06192f]/5 py-0.5 text-[10px] font-medium text-[#77899c]">
-                          16 str
-                        </span>
+                      <div className="cara-day-card">
+                        <span className="cara-day-name">Jum</span>
+                        <span className="cara-day-num">22</span>
+                        <span className="cara-day-pill">16 str</span>
                       </div>
 
-                      <div className="flex flex-col justify-between rounded-2xl border border-white/90 bg-white/50 p-2 sm:p-3 transition">
-                        <span className="text-[11px] font-medium text-[#77899c]">
-                          Sab
-                        </span>
-                        <span className="my-1.5 text-sm sm:text-base font-semibold text-[#06192f]">
-                          23
-                        </span>
-                        <span className="rounded-md bg-[#06192f]/5 py-0.5 text-[10px] font-medium text-[#77899c]">
-                          Kuis
-                        </span>
+                      <div className="cara-day-card">
+                        <span className="cara-day-name">Sab</span>
+                        <span className="cara-day-num">23</span>
+                        <span className="cara-day-pill">Kuis</span>
                       </div>
 
-                      <div className="flex flex-col justify-between rounded-2xl border border-white/90 bg-white/50 p-2 sm:p-3 transition">
-                        <span className="text-[11px] font-medium text-[#77899c]">
-                          Min
-                        </span>
-                        <span className="my-1.5 text-sm sm:text-base font-semibold text-[#06192f]">
-                          24
-                        </span>
-                        <span className="rounded-md bg-[#06192f]/5 py-0.5 text-[10px] font-medium text-[#77899c]">
-                          Ulang
-                        </span>
+                      <div className="cara-day-card">
+                        <span className="cara-day-name">Min</span>
+                        <span className="cara-day-num">24</span>
+                        <span className="cara-day-pill">Ulang</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Footer Panggung 01 */}
-                  <div className="rounded-2xl border border-white/90 bg-white/60 p-3.5 text-xs text-[#77899c] flex items-center justify-between">
+                  <div className="cara-p1-footer">
                     <span>
                       Topik aktif hari ini:{" "}
                       <strong>Osteologi humerus &amp; articulatio cubiti</strong>
                     </span>
-                    <span className="font-medium text-[#06192f]">
+                    <span className="target-count">
                       Target: 20 struktur
                     </span>
                   </div>
@@ -1381,24 +1304,22 @@ export default function LandingPage() {
                   id="panel-1"
                   role="tabpanel"
                   aria-labelledby="tab-1"
-                  className={`panel-view w-full flex-1 flex flex-col justify-between transition-opacity duration-500 ease-in-out ${
-                    activeStep === 1
-                      ? "relative opacity-100 pointer-events-auto"
-                      : "absolute inset-0 p-6 sm:p-8 md:p-10 opacity-0 pointer-events-none"
+                  className={`cara-panel ${
+                    activeStep === 1 ? "is-active" : "is-inactive"
                   }`}
                 >
                   {/* Header Panggung 02 */}
-                  <div className="flex items-center justify-between border-b border-[#06192f]/5 pb-3">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-[#77899c]">
+                  <div className="cara-p2-header">
+                    <span className="cara-target-tag">
                       Identifikasi Anatomi 3D
                     </span>
-                    <span className="rounded-full bg-[#1169dc]/10 px-3 py-1 text-xs font-medium text-[#1169dc]">
+                    <span className="cara-specimen-badge">
                       Spesimen Tulang Lengan
                     </span>
                   </div>
 
                   {/* Ilustrasi Tulang Lengan Besar dengan Hotspot Berdenyut */}
-                  <div className="relative my-auto flex h-48 sm:h-52 w-full items-center justify-center rounded-2xl bg-[#06192f]/[0.025] px-4">
+                  <div className="cara-bone-box">
                     <svg
                       viewBox="0 0 340 120"
                       className="h-full w-auto text-[#77899c]"
@@ -1464,45 +1385,39 @@ export default function LandingPage() {
                     </svg>
 
                     {/* Titik Berdenyut di Korpus Humeri */}
-                    <div className="absolute left-[36%] top-[50%] -translate-x-1/2 -translate-y-1/2">
-                      <span className="absolute -inset-2.5 animate-ping rounded-full bg-[#1169dc] opacity-75"></span>
-                      <span className="relative flex h-5 w-5 items-center justify-center rounded-full bg-[#1169dc] shadow-lg ring-4 ring-white">
-                        <span className="h-2 w-2 rounded-full bg-white"></span>
+                    <div className="cara-pulse-dot">
+                      <span className="cara-pulse-ping"></span>
+                      <span className="cara-pulse-center">
+                        <span className="cara-pulse-inner"></span>
                       </span>
                     </div>
 
-                    <span className="absolute bottom-2 right-3 text-[11px] font-medium text-[#77899c]">
+                    <span className="cara-view-label">
                       Pandangan anterior
                     </span>
                   </div>
 
                   {/* Pertanyaan & Tiga Pilihan Pill */}
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-semibold text-[#06192f]">
+                  <div className="cara-quiz-box">
+                    <div className="cara-quiz-row">
+                      <p className="cara-quiz-title">
                         Struktur yang disorot?
                       </p>
-                      <span
-                        id="quiz-status"
-                        className="text-xs font-medium text-[#77899c]"
-                      >
+                      <span className="cara-quiz-status">
                         {quizAnswer ? "Hasil kuis:" : "Pilih salah satu jawaban:"}
                       </span>
                     </div>
 
                     <div
-                      id="quiz-pills"
-                      className="grid grid-cols-3 gap-2.5"
+                      className="cara-quiz-grid"
                       role="group"
                       aria-label="Pilihan struktur anatomi"
                     >
                       <button
                         type="button"
                         onClick={() => setQuizAnswer("correct")}
-                        className={`quiz-choice rounded-full px-4 py-2 text-xs font-semibold shadow-sm transition focus-visible:outline-none focus-visible:ring-2 ${
-                          quizAnswer === "correct"
-                            ? "border border-emerald-500 bg-emerald-500/15 font-bold text-emerald-800 ring-emerald-500"
-                            : "border border-[#06192f]/15 bg-white/80 text-[#06192f] hover:border-[#1169dc] hover:bg-white ring-[#1169dc]"
+                        className={`cara-quiz-pill ${
+                          quizAnswer === "correct" ? "is-correct" : ""
                         }`}
                       >
                         Humerus
@@ -1510,10 +1425,8 @@ export default function LandingPage() {
                       <button
                         type="button"
                         onClick={() => setQuizAnswer("wrong")}
-                        className={`quiz-choice rounded-full px-4 py-2 text-xs font-semibold shadow-sm transition focus-visible:outline-none focus-visible:ring-2 ${
-                          quizAnswer === "wrong"
-                            ? "border border-rose-400 bg-rose-500/15 font-bold text-rose-800 ring-rose-400"
-                            : "border border-[#06192f]/15 bg-white/80 text-[#06192f] hover:border-[#1169dc] hover:bg-white ring-[#1169dc]"
+                        className={`cara-quiz-pill ${
+                          quizAnswer === "wrong" ? "is-wrong" : ""
                         }`}
                       >
                         Radius
@@ -1521,10 +1434,8 @@ export default function LandingPage() {
                       <button
                         type="button"
                         onClick={() => setQuizAnswer("wrong")}
-                        className={`quiz-choice rounded-full px-4 py-2 text-xs font-semibold shadow-sm transition focus-visible:outline-none focus-visible:ring-2 ${
-                          quizAnswer === "wrong"
-                            ? "border border-rose-400 bg-rose-500/15 font-bold text-rose-800 ring-rose-400"
-                            : "border border-[#06192f]/15 bg-white/80 text-[#06192f] hover:border-[#1169dc] hover:bg-white ring-[#1169dc]"
+                        className={`cara-quiz-pill ${
+                          quizAnswer === "wrong" ? "is-wrong" : ""
                         }`}
                       >
                         Ulna
@@ -1533,12 +1444,12 @@ export default function LandingPage() {
 
                     {/* Umpan Balik Singkat */}
                     <div
-                      className={`min-h-[28px] rounded-xl px-3 py-1.5 text-xs font-medium transition-all duration-200 ${
+                      className={`cara-feedback-box ${
                         quizAnswer === "correct"
-                          ? "opacity-100 bg-emerald-500/10 text-emerald-800 border border-emerald-300"
+                          ? "is-correct"
                           : quizAnswer === "wrong"
-                          ? "opacity-100 bg-rose-500/10 text-rose-800 border border-rose-300"
-                          : "opacity-0"
+                          ? "is-wrong"
+                          : "is-hidden"
                       }`}
                       aria-live="polite"
                     >
@@ -1558,66 +1469,64 @@ export default function LandingPage() {
                   id="panel-2"
                   role="tabpanel"
                   aria-labelledby="tab-2"
-                  className={`panel-view w-full flex-1 flex flex-col justify-between transition-opacity duration-500 ease-in-out ${
-                    activeStep === 2
-                      ? "relative opacity-100 pointer-events-auto"
-                      : "absolute inset-0 p-6 sm:p-8 md:p-10 opacity-0 pointer-events-none"
+                  className={`cara-panel ${
+                    activeStep === 2 ? "is-active" : "is-inactive"
                   }`}
                 >
                   {/* Header Panggung 03 */}
-                  <div className="flex items-center justify-between border-b border-[#06192f]/5 pb-3">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-[#77899c]">
+                  <div className="cara-p2-header">
+                    <span className="cara-target-tag">
                       Jadwal Retensi Memori
                     </span>
-                    <span className="rounded-full bg-[#06192f]/5 px-3 py-1 text-xs font-medium text-[#06192f]">
+                    <span className="cara-interval-badge">
                       Interval Spaced Repetition
                     </span>
                   </div>
 
                   {/* Garis Waktu Jeda Ulang: 1 hari -> 3 hari -> 7 hari */}
-                  <div className="my-auto py-4 space-y-6">
+                  <div className="cara-timeline-box">
                     <div>
-                      <div className="text-xs font-semibold uppercase tracking-wider text-[#77899c] mb-3">
+                      <div className="cara-cal-label">
                         Siklus Pengulangan Terjadwal
                       </div>
-                      <div className="relative flex items-center justify-between rounded-2xl border border-white/90 bg-white/60 p-4 shadow-sm">
+                      <div className="cara-timeline-card">
                         <div
-                          className="absolute left-10 right-10 top-1/2 -translate-y-1/2 border-t-2 border-dashed border-[#06192f]/15 -z-0"
+                          className="cara-timeline-dashed"
                           aria-hidden="true"
                         ></div>
 
-                        <div className="relative z-10 flex flex-col items-center text-center">
-                          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#06192f] text-xs font-bold text-white shadow-sm">
+                        <div className="cara-timeline-step">
+                          <span className="cara-tl-bubble navy">
                             1
                           </span>
-                          <span className="mt-2 text-xs font-semibold text-[#06192f]">
+                          <span className="cara-tl-days">
                             1 hari
                           </span>
-                          <span className="text-[10px] text-[#77899c]">
+                          <span className="cara-tl-sub">
                             Review awal
                           </span>
                         </div>
 
-                        <div className="relative z-10 flex flex-col items-center text-center">
-                          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#1169dc] text-xs font-bold text-white shadow-sm">
+                        <div className="cara-timeline-step">
+                          <span className="cara-tl-bubble blue">
                             3
                           </span>
-                          <span className="mt-2 text-xs font-semibold text-[#06192f]">
+                          <span className="cara-tl-days">
                             3 hari
                           </span>
-                          <span className="text-[10px] text-[#77899c]">
+                          <span className="cara-tl-sub">
                             Konsolidasi
                           </span>
                         </div>
 
-                        <div className="relative z-10 flex flex-col items-center text-center">
-                          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-600 text-xs font-bold text-white shadow-sm">
+                        <div className="cara-timeline-step">
+                          <span className="cara-tl-bubble green">
                             7
                           </span>
-                          <span className="mt-2 text-xs font-semibold text-[#06192f]">
+                          <span className="cara-tl-days">
                             7 hari
                           </span>
-                          <span className="text-[10px] text-[#77899c]">
+                          <span className="cara-tl-sub">
                             Retensi permanen
                           </span>
                         </div>
@@ -1626,64 +1535,57 @@ export default function LandingPage() {
 
                     {/* Peta Kelemahan: Tiga Bar Horizontal (Tulang, Otot, Saraf) */}
                     <div>
-                      <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-[#77899c] mb-3">
-                        <span>Peta Kelemahan Sistem Tubuh</span>
-                        <span className="text-[11px] font-medium lowercase text-[#77899c]">
+                      <div className="cara-bar-head" style={{ marginBottom: "0.75rem" }}>
+                        <span className="cara-cal-label" style={{ marginBottom: 0 }}>
+                          Peta Kelemahan Sistem Tubuh
+                        </span>
+                        <span style={{ fontSize: "11px", color: "#77899c" }}>
                           berdasarkan tingkat retensi
                         </span>
                       </div>
 
-                      <div className="space-y-3 rounded-2xl border border-white/90 bg-white/60 p-4 shadow-sm">
+                      <div className="cara-weakness-card">
                         {/* Bar 1: Tulang */}
-                        <div>
-                          <div className="flex justify-between text-xs font-medium text-[#06192f]">
+                        <div className="cara-bar-item">
+                          <div className="cara-bar-head">
                             <span>Tulang (Skeletal)</span>
-                            <span className="font-bold text-[#1169dc]">
+                            <span style={{ fontWeight: 700, color: "#1169dc" }}>
                               88%
                             </span>
                           </div>
-                          <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-[#06192f]/10">
-                            <div
-                              className="h-full rounded-full bg-[#1169dc]"
-                              style={{ width: "88%" }}
-                            ></div>
+                          <div className="cara-bar-track">
+                            <div className="cara-bar-fill blue"></div>
                           </div>
                         </div>
 
                         {/* Bar 2: Otot */}
-                        <div>
-                          <div className="flex justify-between text-xs font-medium text-[#06192f]">
+                        <div className="cara-bar-item">
+                          <div className="cara-bar-head">
                             <span>Otot (Muscular)</span>
-                            <span className="font-bold text-[#06192f]">
+                            <span style={{ fontWeight: 700, color: "#06192f" }}>
                               64%
                             </span>
                           </div>
-                          <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-[#06192f]/10">
-                            <div
-                              className="h-full rounded-full bg-[#06192f]/70"
-                              style={{ width: "64%" }}
-                            ></div>
+                          <div className="cara-bar-track">
+                            <div className="cara-bar-fill navy"></div>
                           </div>
                         </div>
 
                         {/* Bar 3: Saraf */}
-                        <div>
-                          <div className="flex justify-between text-xs font-medium text-[#06192f]">
-                            <span className="flex items-center gap-1.5">
+                        <div className="cara-bar-item">
+                          <div className="cara-bar-head">
+                            <span style={{ display: "inline-flex", alignItems: "center" }}>
                               <span>Saraf (Nervous)</span>
-                              <span className="rounded bg-rose-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-rose-700">
+                              <span className="cara-bar-badge">
                                 Perlu diulang
                               </span>
                             </span>
-                            <span className="font-bold text-rose-600">
+                            <span style={{ fontWeight: 700, color: "#e11d48" }}>
                               26%
                             </span>
                           </div>
-                          <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-[#06192f]/10">
-                            <div
-                              className="h-full rounded-full bg-rose-500"
-                              style={{ width: "26%" }}
-                            ></div>
+                          <div className="cara-bar-track">
+                            <div className="cara-bar-fill rose"></div>
                           </div>
                         </div>
                       </div>
@@ -1691,7 +1593,7 @@ export default function LandingPage() {
                   </div>
 
                   {/* Footer Panggung 03 */}
-                  <div className="text-[11px] text-[#77899c]">
+                  <div className="cara-p3-footer">
                     Sistem otomatis memprioritaskan soal plexus brachialis dan
                     nervus perifer pada sesi berikutnya.
                   </div>

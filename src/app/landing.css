@@ -1439,87 +1439,922 @@
     }
   
 
-    /* =========================================================================
-       CARA BELAJAR SECTION STYLES
-       ========================================================================= */
-    #cara-belajar {
-      position: relative;
-      width: 100%;
-      overflow: hidden;
-      background: linear-gradient(180deg, #d6e6f5 0%, #d9e9f6 50%, #d4e5f4 100%);
-      color: #06192f;
-      z-index: 10;
-    }
+    
+/* =========================================================================
+   CARA BELAJAR COMPLETE STYLES (Exact match with test/index.html)
+   ========================================================================= */
+#cara-belajar {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  background: linear-gradient(180deg, #d6e6f5 0%, #d9e9f6 50%, #d4e5f4 100%);
+  color: #06192f;
+  z-index: 20;
+  clear: both;
+}
 
-    .cara-watermark {
-      pointer-events: none;
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      user-select: none;
-      overflow: hidden;
-      text-align: center;
-      z-index: 0;
-    }
+@media (min-width: 768px) {
+  #cara-belajar {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+  }
+}
 
-    .cara-watermark span {
-      display: inline-block;
-      font-weight: 800;
-      letter-spacing: 0.18em;
-      color: rgba(6, 25, 47, 0.025);
-      font-size: 18vw;
-      line-height: 1;
-      text-transform: uppercase;
-    }
+/* Giant background watermark */
+.cara-watermark {
+  pointer-events: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  user-select: none;
+  overflow: hidden;
+  text-align: center;
+  z-index: 0;
+}
 
-    #step-indicator-bar {
-      position: absolute;
-      left: 0;
-      top: 4px;
-      bottom: 4px;
-      width: 2px;
-      background: rgba(6, 25, 47, 0.12);
-    }
+.cara-watermark span {
+  display: inline-block;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: rgba(6, 25, 47, 0.045);
+  font-size: 18vw;
+  line-height: 1;
+  text-transform: uppercase;
+}
 
-    #step-indicator {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 2.5px;
-      border-radius: 9999px;
-      background: #1169dc;
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-      height: 48px;
-    }
+/* Inner 7xl Container */
+.cara-container {
+  position: relative;
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  z-index: 1;
+}
 
-    #stage-viewport {
-      position: relative;
-      width: 100%;
-      border-radius: 32px;
-      border: 1px solid rgba(255, 255, 255, 0.85);
-      background: rgba(247, 251, 255, 0.82);
-      box-shadow: 0 20px 50px rgba(35, 57, 79, 0.08);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      min-height: 480px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      z-index: 2;
-    }
+@media (min-width: 640px) {
+  .cara-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
 
-    @media (min-width: 1024px) {
-      #stage-viewport {
-        height: 520px;
-      }
-    }
+@media (min-width: 1024px) {
+  .cara-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
 
-    .scrollbar-none::-webkit-scrollbar {
-      display: none;
-    }
-    .scrollbar-none {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
+/* 2-Column Grid (40% / 60%) */
+.cara-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  gap: 3rem;
+}
+
+@media (min-width: 1024px) {
+  .cara-grid {
+    grid-template-columns: repeat(12, 1fr);
+    gap: 3.5rem;
+  }
+}
+
+.cara-col-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (min-width: 1024px) {
+  .cara-col-left {
+    grid-column: span 5 / span 5;
+  }
+}
+
+.cara-col-right {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .cara-col-right {
+    grid-column: span 7 / span 7;
+  }
+}
+
+/* Left Column Typography */
+.cara-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #77899c;
+}
+
+.cara-label .slash {
+  color: #1169dc;
+}
+
+.cara-headline {
+  margin-top: 0.75rem;
+  font-size: 1.875rem;
+  font-weight: 300;
+  letter-spacing: -0.025em;
+  color: #06192f;
+  line-height: 1.12;
+}
+
+@media (min-width: 640px) {
+  .cara-headline {
+    font-size: 2.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cara-headline {
+    font-size: 3rem;
+  }
+}
+
+.cara-headline strong {
+  font-weight: 400;
+}
+
+/* Steps List Container */
+.cara-steps-box {
+  position: relative;
+  margin-top: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .cara-steps-box {
+    margin-top: 3rem;
+  }
+}
+
+.cara-indicator-track {
+  position: absolute;
+  left: 0;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  width: 2px;
+  background: rgba(6, 25, 47, 0.15);
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .cara-indicator-track {
+    display: block;
+  }
+}
+
+.cara-indicator-thumb {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2px;
+  background: #06192f;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  height: 64px;
+}
+
+.cara-tablist {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+}
+
+@media (min-width: 1024px) {
+  .cara-tablist {
+    flex-direction: column;
+    gap: 2rem;
+    overflow: visible;
+    padding-bottom: 0;
+    padding-left: 1.5rem;
+  }
+}
+
+.cara-step-btn {
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.cara-step-btn:focus-visible {
+  outline: 2px solid #1169dc;
+  border-radius: 0.5rem;
+}
+
+.cara-step-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.cara-step-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  transition: color 0.3s ease;
+}
+
+.cara-step-num.is-active {
+  color: #06192f;
+}
+
+.cara-step-num.is-inactive {
+  color: rgba(119, 137, 156, 0.6);
+}
+
+.cara-step-title {
+  font-size: 1.5rem;
+  letter-spacing: -0.025em;
+  transition: color 0.3s ease;
+}
+
+@media (min-width: 640px) {
+  .cara-step-title {
+    font-size: 1.875rem;
+  }
+}
+
+.cara-step-title.is-active {
+  font-weight: 400;
+  color: #06192f;
+}
+
+.cara-step-title.is-inactive {
+  font-weight: 300;
+  color: rgba(119, 137, 156, 0.6);
+}
+
+.cara-step-desc {
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cara-step-desc.is-active {
+  max-height: 6rem;
+  opacity: 1;
+  margin-top: 0.625rem;
+}
+
+.cara-step-desc.is-inactive {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+}
+
+.cara-step-desc p {
+  font-size: 0.875rem;
+  line-height: 1.625;
+  color: #77899c;
+  padding-left: 2.25rem;
+  margin: 0;
+}
+
+/* Actions below step list */
+.cara-actions {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .cara-actions {
+    margin-top: 3rem;
+  }
+}
+
+.cara-btn-navy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: #06192f;
+  padding: 0.875rem 1.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #ffffff !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.cara-btn-navy:hover {
+  background: #0c2849;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.cara-btn-navy svg {
+  margin-left: 0.5rem;
+  width: 1rem;
+  height: 1rem;
+}
+
+.cara-link-dashboard {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #06192f;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.cara-link-dashboard:hover {
+  color: #1169dc;
+}
+
+.cara-link-dashboard svg {
+  margin-left: 0.25rem;
+  width: 1rem;
+  height: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.cara-link-dashboard:hover svg {
+  transform: translateX(4px);
+}
+
+/* Right Column: Frosted Glass Stage Card */
+#stage-viewport {
+  position: relative;
+  width: 100%;
+  border-radius: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: rgba(247, 251, 255, 0.75);
+  padding: 1.5rem;
+  box-shadow: 0 20px 50px rgba(35, 57, 79, 0.08);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  #stage-viewport {
+    padding: 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  #stage-viewport {
+    padding: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  #stage-viewport {
+    height: 520px;
+  }
+}
+
+/* Panel Views (Crossfading) */
+.cara-panel {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.cara-panel.is-active {
+  position: relative;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cara-panel.is-inactive {
+  position: absolute;
+  inset: 0;
+  padding: 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (min-width: 640px) {
+  .cara-panel.is-inactive {
+    padding: 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .cara-panel.is-inactive {
+    padding: 2.5rem;
+  }
+}
+
+/* Panel 1 (Rencanakan) Inner */
+.cara-p1-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 1px solid rgba(6, 25, 47, 0.05);
+  padding-bottom: 1rem;
+}
+
+.cara-target-tag {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #77899c;
+}
+
+.cara-target-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #06192f;
+  margin: 0;
+}
+
+.cara-badge-exam {
+  border-radius: 9999px;
+  border: 1px solid rgba(6, 25, 47, 0.1);
+  background: rgba(255, 255, 255, 0.7);
+  padding: 0.25rem 0.875rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #06192f;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.cara-calendar-box {
+  margin-top: auto;
+  margin-bottom: auto;
+  padding: 1.5rem 0;
+}
+
+.cara-cal-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #77899c;
+  margin-bottom: 0.75rem;
+}
+
+.cara-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.375rem;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .cara-cal-grid {
+    gap: 0.625rem;
+  }
+}
+
+.cara-day-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.5);
+  padding: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+@media (min-width: 640px) {
+  .cara-day-card {
+    padding: 0.75rem;
+  }
+}
+
+.cara-day-name {
+  font-size: 11px;
+  font-weight: 500;
+  color: #77899c;
+}
+
+.cara-day-num {
+  margin: 0.375rem 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #06192f;
+}
+
+@media (min-width: 640px) {
+  .cara-day-num {
+    font-size: 1rem;
+  }
+}
+
+.cara-day-pill {
+  border-radius: 0.375rem;
+  background: rgba(6, 25, 47, 0.05);
+  padding: 0.125rem 0;
+  font-size: 10px;
+  font-weight: 500;
+  color: #77899c;
+}
+
+/* Hari Ini highlight card */
+.cara-day-today {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 1rem;
+  border: 1px solid #06192f;
+  background: #06192f;
+  padding: 0.5rem;
+  color: #ffffff;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  outline: 2px solid rgba(6, 25, 47, 0.1);
+}
+
+@media (min-width: 640px) {
+  .cara-day-today {
+    padding: 0.75rem;
+  }
+}
+
+.cara-day-today .cara-day-name {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.cara-day-today .cara-day-num {
+  margin: 0.25rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+@media (min-width: 640px) {
+  .cara-day-today .cara-day-num {
+    font-size: 1.125rem;
+  }
+}
+
+.cara-day-today .cara-day-pill {
+  border-radius: 0.375rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.125rem 0;
+  font-size: 10px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.cara-p1-footer {
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.6);
+  padding: 0.875rem;
+  font-size: 0.75rem;
+  color: #77899c;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cara-p1-footer strong {
+  color: #06192f;
+  font-weight: 600;
+}
+
+.cara-p1-footer .target-count {
+  font-weight: 500;
+  color: #06192f;
+}
+
+/* Panel 2 (3D Identification) Inner */
+.cara-p2-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(6, 25, 47, 0.05);
+  padding-bottom: 0.75rem;
+}
+
+.cara-specimen-badge {
+  border-radius: 9999px;
+  background: rgba(17, 105, 220, 0.1);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #1169dc;
+}
+
+.cara-bone-box {
+  position: relative;
+  margin-top: auto;
+  margin-bottom: auto;
+  display: flex;
+  height: 12rem;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  background: rgba(6, 25, 47, 0.025);
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .cara-bone-box {
+    height: 13rem;
+  }
+}
+
+.cara-pulse-dot {
+  position: absolute;
+  left: 36%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.cara-pulse-ping {
+  position: absolute;
+  inset: -0.625rem;
+  border-radius: 9999px;
+  background: #1169dc;
+  opacity: 0.75;
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.cara-pulse-center {
+  position: relative;
+  display: flex;
+  height: 1.25rem;
+  width: 1.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: #1169dc;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  outline: 4px solid #ffffff;
+}
+
+.cara-pulse-inner {
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 9999px;
+  background: #ffffff;
+}
+
+.cara-view-label {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.75rem;
+  font-size: 11px;
+  font-weight: 500;
+  color: #77899c;
+}
+
+.cara-quiz-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cara-quiz-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cara-quiz-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #06192f;
+  margin: 0;
+}
+
+.cara-quiz-status {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #77899c;
+}
+
+.cara-quiz-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.625rem;
+}
+
+.cara-quiz-pill {
+  border-radius: 9999px;
+  border: 1px solid rgba(6, 25, 47, 0.15);
+  background: rgba(255, 255, 255, 0.8);
+  padding: 0.5rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #06192f;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.cara-quiz-pill:hover {
+  border-color: #1169dc;
+  background: #ffffff;
+}
+
+.cara-quiz-pill.is-correct {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.15);
+  font-weight: 700;
+  color: #065f46;
+}
+
+.cara-quiz-pill.is-wrong {
+  border-color: #f87171;
+  background: rgba(244, 63, 94, 0.15);
+  font-weight: 700;
+  color: #9f1239;
+}
+
+.cara-feedback-box {
+  min-height: 28px;
+  border-radius: 0.75rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.cara-feedback-box.is-correct {
+  opacity: 1;
+  background: rgba(16, 185, 129, 0.1);
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.cara-feedback-box.is-wrong {
+  opacity: 1;
+  background: rgba(244, 63, 94, 0.1);
+  color: #9f1239;
+  border: 1px solid #fca5a5;
+}
+
+.cara-feedback-box.is-hidden {
+  opacity: 0;
+}
+
+/* Panel 3 (Spaced Repetition Timeline) Inner */
+.cara-interval-badge {
+  border-radius: 9999px;
+  background: rgba(6, 25, 47, 0.05);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #06192f;
+}
+
+.cara-timeline-box {
+  margin-top: auto;
+  margin-bottom: auto;
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cara-timeline-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.6);
+  padding: 1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.cara-timeline-dashed {
+  position: absolute;
+  left: 2.5rem;
+  right: 2.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 2px dashed rgba(6, 25, 47, 0.15);
+  z-index: 0;
+}
+
+.cara-timeline-step {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.cara-tl-bubble {
+  display: flex;
+  height: 2.25rem;
+  width: 2.25rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.cara-tl-bubble.navy { background: #06192f; }
+.cara-tl-bubble.blue { background: #1169dc; }
+.cara-tl-bubble.green { background: #059669; }
+
+.cara-tl-days {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #06192f;
+}
+
+.cara-tl-sub {
+  font-size: 10px;
+  color: #77899c;
+}
+
+/* Weakness Progress Bars */
+.cara-weakness-card {
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.6);
+  padding: 1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cara-bar-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.cara-bar-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #06192f;
+}
+
+.cara-bar-badge {
+  background: rgba(244, 63, 94, 0.1);
+  color: #be123c;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 0.25rem;
+  padding: 0.125rem 0.375rem;
+  margin-left: 0.375rem;
+}
+
+.cara-bar-track {
+  margin-top: 0.375rem;
+  height: 0.5rem;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: rgba(6, 25, 47, 0.1);
+}
+
+.cara-bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+}
+
+.cara-bar-fill.blue { background: #1169dc; width: 88%; }
+.cara-bar-fill.navy { background: rgba(6, 25, 47, 0.7); width: 64%; }
+.cara-bar-fill.rose { background: #f43f5e; width: 26%; }
+
+.cara-p3-footer {
+  font-size: 11px;
+  color: #77899c;
+}
