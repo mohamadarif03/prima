@@ -272,7 +272,6 @@ const KURIKULUM_REGIONS: KurikulumRegion[] = [
 
 export default function LandingPage() {
   // Navigation & Interactive States
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeNav, setActiveNav] = useState("Atlas 3D");
   const [isJoined, setIsJoined] = useState(false);
   const [isAwake, setIsAwake] = useState(false);
@@ -376,8 +375,6 @@ export default function LandingPage() {
 
   // Refs for stage layout and canvas spotlight
   const stageRef = useRef<HTMLDivElement | null>(null);
-  const menuPanelRef = useRef<HTMLDivElement | null>(null);
-  const burgerRef = useRef<HTMLButtonElement | null>(null);
   const stackRef = useRef<HTMLDivElement | null>(null);
   const backRef = useRef<HTMLImageElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -393,26 +390,6 @@ export default function LandingPage() {
       setToastMsg(null);
     }, 1700);
   }, []);
-
-  // Menu Handlers
-  const openMenu = useCallback(() => {
-    setIsMenuOpen(true);
-    say("Menu navigasi dibuka");
-  }, [say]);
-
-  const closeMenu = useCallback(() => {
-    setIsMenuOpen(false);
-    say("Menu navigasi ditutup");
-  }, [say]);
-
-  const toggleMenu = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsMenuOpen((prev) => {
-      const next = !prev;
-      say(next ? "Menu navigasi dibuka" : "Menu navigasi ditutup");
-      return next;
-    });
-  }, [say]);
 
   // Gallery Avatar selection
   const chooseSystem = useCallback(
@@ -524,35 +501,6 @@ export default function LandingPage() {
     };
   }, [activeStep]);
 
-  // Outside click listener for mobile menu
-  useEffect(() => {
-    function handlePointerDown(e: PointerEvent) {
-      if (!isMenuOpen) return;
-      if (
-        menuPanelRef.current &&
-        !menuPanelRef.current.contains(e.target as Node) &&
-        burgerRef.current &&
-        !burgerRef.current.contains(e.target as Node)
-      ) {
-        closeMenu();
-      }
-    }
-
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape" && isMenuOpen) {
-        closeMenu();
-        if (burgerRef.current) burgerRef.current.focus();
-      }
-    }
-
-    window.addEventListener("pointerdown", handlePointerDown, true);
-    window.addEventListener("keydown", handleKeyDown);
-    return () => {
-      window.removeEventListener("pointerdown", handlePointerDown, true);
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isMenuOpen, closeMenu]);
-
   // Core Stage Layout Model
   useEffect(() => {
     const stage = stageRef.current;
@@ -597,9 +545,7 @@ export default function LandingPage() {
       const compact = mobile || s < 0.52;
       stage.classList.toggle("nav-compact", compact);
 
-      if (!compact && stage.classList.contains("menu-open")) {
-        setIsMenuOpen(false);
-      }
+
 
       stage.style.width = bw + "px";
       stage.style.height = bh + "px";
@@ -766,7 +712,6 @@ export default function LandingPage() {
 
     // 1. Header elements
     run(document.querySelector(".brand"), fade("translateY(-10px)"), 0.5, 0.04, 0, SOFT);
-    run(document.querySelector(".menu"), fade("translateY(-10px)"), 0.5, 0.09, 0, SOFT);
     run(document.querySelector(".nav"), fade("translateY(-10px)"), 0.55, 0.13, 0, SOFT);
     run(document.querySelector(".join"), fade("translateY(-10px)"), 0.55, 0.18, 0, SOFT);
 
@@ -868,7 +813,7 @@ export default function LandingPage() {
       >
         <div
           ref={stageRef}
-          className={`stage ${isMenuOpen ? "menu-open" : ""}`}
+          className="stage"
         >
           {/* Header */}
           <header className="header">
@@ -880,19 +825,6 @@ export default function LandingPage() {
               <div className="brand-badge">P</div>
               <span className="brand-text">PRIMA</span>
             </Link>
-
-            <button
-              ref={burgerRef}
-              className="menu"
-              type="button"
-              aria-label="Toggle navigation menu"
-              aria-expanded={isMenuOpen}
-              onClick={toggleMenu}
-            >
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
 
             <nav className="nav" aria-label="Main navigation">
               {[
@@ -942,57 +874,7 @@ export default function LandingPage() {
               <span className="join-label">Masuk Aplikasi</span>
             </Link>
 
-            {/* Menu panel (for compact / mobile navigation) */}
-            <div
-              ref={menuPanelRef}
-              className="menu-panel"
-              aria-hidden={!isMenuOpen}
-            >
-              {[
-                { label: "Atlas 3D", href: "#home" },
-                { label: "Cara Belajar", href: "#cara-belajar" },
-                { label: "Kurikulum FK", href: "#kurikulum" },
-                { label: "Peta Kelemahan", href: "/kelemahan" },
-                { label: "FAQ", href: "#faq" },
-              ].map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className={activeNav === item.label ? "active" : ""}
-                  onClick={() => {
-                    setActiveNav(item.label);
-                    closeMenu();
-                  }}
-                >
-                  {item.label}
-                </a>
-              ))}
-              <Link href="/beranda" className="menu-join" onClick={closeMenu}>
-                <span className="join-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" width="26" height="26">
-                    <circle
-                      cx="12"
-                      cy="7"
-                      r="4"
-                      fill="none"
-                      stroke="var(--ink)"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    <path
-                      d="M4.5 21c.4-5 3.1-7.3 7.5-7.3s7.1 2.3 7.5 7.3"
-                      fill="none"
-                      stroke="var(--ink)"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-                <span className="join-label">Masuk Aplikasi PRIMA</span>
-              </Link>
-            </div>
+            
           </header>
 
           {/* Headline */}
