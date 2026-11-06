@@ -1521,7 +1521,7 @@ export default function LandingPage() {
                       </p>
                     </div>
                     <div className="cara-badge-exam">
-                      Ujian Blok: 24 Nov 2026 · <strong style={{ color: "#dc2626" }}>H-18</strong>
+                      Ujian Blok: 24 Nov 2026 · <strong>H-18</strong>
                     </div>
                   </div>
 
@@ -1531,7 +1531,7 @@ export default function LandingPage() {
                       <span className="cara-cal-label" style={{ margin: 0 }}>
                         Jadwal Belajar Pekan Ini
                       </span>
-                      <span className="text-[11px] font-semibold text-[#1169dc]">
+                      <span className="text-[11px] font-semibold text-[#77899c]">
                         Target Harian: 20 Struktur
                       </span>
                     </div>
@@ -1587,7 +1587,7 @@ export default function LandingPage() {
                       <span className="text-[11.5px] font-semibold text-[#06192f]">
                         Sasaran Belajar Hari Ini (Kamis, 20 Nov)
                       </span>
-                      <span className="text-[11px] font-bold text-[#1169dc]">
+                      <span className="text-[11px] font-bold text-[#06192f]">
                         {p1CompletedCount} / {p1TotalCount} Selesai ({p1Percent}%)
                       </span>
                     </div>
@@ -1639,7 +1639,7 @@ export default function LandingPage() {
                     <div className="mt-2.5">
                       <div className="w-full h-1.5 bg-[#e2e8f0] rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-[#1169dc] transition-all duration-300 rounded-full"
+                          className="h-full bg-[#06192f] transition-all duration-300 rounded-full"
                           style={{ width: `${p1Percent}%` }}
                         ></div>
                       </div>
@@ -1999,7 +1999,7 @@ export default function LandingPage() {
                   </div>
                   <h3 className="text-xl sm:text-2xl font-bold text-[#06192f] mt-1 mb-0">
                     {selectedKurikulumRegion.name}{" "}
-                    <span className="text-[#1169dc] font-medium text-lg sm:text-xl">
+                    <span className="font-normal text-[#77899c] text-lg sm:text-xl">
                       — {selectedKurikulumRegion.subName}
                     </span>
                   </h3>
