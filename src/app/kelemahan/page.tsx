@@ -5,7 +5,6 @@ import Link from "next/link";
 import ChartJS from "chart.js/auto";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { Skeleton } from "@/components/ui/Skeleton";
 import {
   mockDetailedAnatomyTopics,
   DetailedAnatomyTopic,
@@ -23,9 +22,6 @@ export default function KelemahanPage() {
   const [selectedRegio, setSelectedRegio] = useState("Semua");
   const [selectedLevel, setSelectedLevel] = useState<"Semua" | MasteryLevel>("Semua");
   const [sortBy, setSortBy] = useState<"skor-terendah" | "terakhir-dilatih" | "sering-salah">("skor-terendah");
-
-  // Demo loading state
-  const [isLoading, setIsLoading] = useState(false);
 
   const trendChartRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -240,18 +236,6 @@ export default function KelemahanPage() {
 
         {/* Action Buttons */}
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => setIsLoading(!isLoading)}
-            className={`h-[34px] px-3 border text-[12.5px] font-medium rounded-[6px] transition hidden md:flex items-center gap-1.5 ${
-              isLoading
-                ? "bg-[#0d6efd] text-white border-[#0d6efd]"
-                : "bg-white text-[#475569] border-[#cbd5e1] hover:bg-[#f8fafc]"
-            }`}
-          >
-            <i className="bi bi-hourglass-split"></i>
-            <span>{isLoading ? "Mode Normal" : "Simulasi Loading"}</span>
-          </button>
-
           <Link
             href={`/latihan?topic=${lowestScoreTopic.id}`}
             className="h-[34px] px-3.5 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white text-[13px] font-medium rounded-[6px] flex items-center gap-1.5 shadow-sm transition"
@@ -263,18 +247,7 @@ export default function KelemahanPage() {
       </div>
 
       {/* ROW 1: 4 STATCARDS RINGKASAN */}
-      {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-5">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="metis-card p-[18px]">
-              <Skeleton className="h-3 w-28 mb-3" />
-              <Skeleton className="h-7 w-20 mb-2" />
-              <Skeleton className="h-3 w-36" />
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-5">
           {/* Card 1: Topik Lemah */}
           <div className="metis-card p-[18px] flex items-center gap-4">
             <div className="w-[44px] h-[44px] rounded-[8px] bg-[#fff5f5] border border-[#fed7d7] flex items-center justify-center text-[#dc2626] flex-shrink-0 text-[18px]">
@@ -347,7 +320,6 @@ export default function KelemahanPage() {
             </div>
           </div>
         </div>
-      )}
 
       {/* ROW 2: DUA KOLOM (HEATMAP GRID & PANEL DETAIL) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 mb-5">

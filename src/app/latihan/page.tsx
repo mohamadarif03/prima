@@ -4,7 +4,6 @@ import React, { useState, Suspense, useMemo, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Skeleton } from "@/components/ui/Skeleton";
 import {
   mockAnatomyRegions,
   getStructuresByRegion,
@@ -60,7 +59,6 @@ function LatihanContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("Semua");
   const [isFullWidth, setIsFullWidth] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -228,18 +226,6 @@ function LatihanContent() {
             ></i>
             <span>{isFullWidth ? "Buka Panel Detail" : "Layar Lebar"}</span>
           </button>
-
-          <button
-            onClick={() => setIsLoading(!isLoading)}
-            className={`h-[34px] px-3 border text-[12.5px] font-medium rounded-[6px] transition hidden md:flex items-center gap-1.5 ${
-              isLoading
-                ? "bg-[#0d6efd] text-white border-[#0d6efd]"
-                : "bg-white text-[#475569] border-[#cbd5e1] hover:bg-[#f8fafc]"
-            }`}
-          >
-            <i className="bi bi-hourglass-split"></i>
-            <span>{isLoading ? "Mode Normal" : "Simulasi Loading"}</span>
-          </button>
         </div>
       </div>
 
@@ -379,23 +365,8 @@ function LatihanContent() {
       </div>
 
       {/* MAIN 3D EXPLORER & ANATOMY INSPECTOR */}
-      {isLoading ? (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-          <div className="lg:col-span-8 metis-card p-6 flex flex-col justify-center items-center min-h-[460px]">
-            <Skeleton className="w-12 h-12 rounded-full mb-3" />
-            <Skeleton className="h-5 w-48 mb-2" />
-            <Skeleton className="h-4 w-72" />
-          </div>
-          <div className="lg:col-span-4 metis-card p-6 space-y-4">
-            <Skeleton className="h-6 w-1/2" />
-            <Skeleton className="h-24 w-full" />
-            <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-10 w-full" />
-          </div>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-          {/* 3D ANATOMY VIEWER (8 Kolom atau 12 Kolom saat Layar Lebar) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
+        {/* 3D ANATOMY VIEWER (8 Kolom atau 12 Kolom saat Layar Lebar) */}
           <div
             className={`metis-card flex flex-col overflow-hidden transition-all duration-300 ${
               isFullWidth ? "lg:col-span-12" : "lg:col-span-8"
@@ -693,7 +664,6 @@ function LatihanContent() {
             </div>
           )}
         </div>
-      )}
 
       {/* Toast Notification */}
       {toastMessage && (

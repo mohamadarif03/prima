@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from "react";
 import ChartJS from "chart.js/auto";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { Skeleton } from "@/components/ui/Skeleton";
 import {
   mockStudyPlans,
   mock14DaySchedule,
@@ -40,9 +39,6 @@ export default function PerencanaPage() {
   ]);
   const [formNotes, setFormNotes] = useState("");
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
-
-  // Demo testing states
-  const [isLoading, setIsLoading] = useState(false);
 
   const chartRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -352,20 +348,8 @@ export default function PerencanaPage() {
           </p>
         </div>
 
-        {/* Action Button & Demo Toggle */}
+        {/* Action Button */}
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => setIsLoading(!isLoading)}
-            className={`h-[34px] px-3 border text-[12.5px] font-medium rounded-[6px] transition hidden md:flex items-center gap-1.5 ${
-              isLoading
-                ? "bg-[#0d6efd] text-white border-[#0d6efd]"
-                : "bg-white text-[#475569] border-[#cbd5e1] hover:bg-[#f8fafc]"
-            }`}
-          >
-            <i className="bi bi-hourglass-split"></i>
-            <span>{isLoading ? "Mode Normal" : "Simulasi Loading"}</span>
-          </button>
-
           <button
             onClick={handleOpenAddModal}
             className="h-[34px] px-3.5 bg-[#0d6efd] hover:bg-[#0b5ed7] text-white text-[13px] font-medium rounded-[6px] flex items-center gap-1.5 shadow-sm transition"
@@ -377,18 +361,7 @@ export default function PerencanaPage() {
       </div>
 
       {/* ROW 1: 4 RINGKASAN STATCARD */}
-      {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-5">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="metis-card p-[18px]">
-              <Skeleton className="h-3 w-28 mb-3" />
-              <Skeleton className="h-7 w-20 mb-2" />
-              <Skeleton className="h-3 w-36" />
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-5">
           {/* Card 1: Rencana Aktif */}
           <div className="metis-card p-[18px] flex items-center gap-4">
             <div className="w-[44px] h-[44px] rounded-[8px] bg-[#f8f9fa] border border-[#e9ecef] flex items-center justify-center text-[#0d6efd] flex-shrink-0 text-[18px]">
@@ -465,7 +438,6 @@ export default function PerencanaPage() {
             </div>
           </div>
         </div>
-      )}
 
       {/* ROW 2: DUA KOLOM UTAMA (JADWAL 14 HARI & RENCANA AKTIF) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 mb-5">

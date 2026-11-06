@@ -12,7 +12,6 @@ import {
   UserNotificationSettings,
   UserAppearanceSettings,
 } from "@/lib/mock-data";
-import { Skeleton } from "@/components/ui/Skeleton";
 
 type SettingsTabId =
   | "profil"
@@ -77,7 +76,6 @@ const SETTINGS_TABS: SettingsTabItem[] = [
 
 export default function PengaturanPage() {
   const [activeTab, setActiveTab] = useState<SettingsTabId>("profil");
-  const [isLoading, setIsLoading] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Form State: Profil
@@ -349,19 +347,6 @@ export default function PengaturanPage() {
             privasi data
           </p>
         </div>
-
-        {/* Demo Loading Toggle */}
-        <button
-          onClick={() => setIsLoading(!isLoading)}
-          className={`h-[34px] px-3 border text-[12.5px] font-medium rounded-[6px] transition flex items-center gap-1.5 self-start sm:self-auto ${
-            isLoading
-              ? "bg-[#0d6efd] text-white border-[#0d6efd]"
-              : "bg-white text-[#475569] border-[#cbd5e1] hover:bg-[#f8fafc]"
-          }`}
-        >
-          <i className="bi bi-hourglass-split"></i>
-          <span>{isLoading ? "Mode Normal" : "Simulasi Loading"}</span>
-        </button>
       </div>
 
       {/* MOBILE NAVIGATION TABS (Horizontal Scrollable Strip) */}
@@ -445,20 +430,7 @@ export default function PengaturanPage() {
 
         {/* SETTINGS CONTENT SECTION (8 Kolom di Laptop) */}
         <div className="lg:col-span-8">
-          {isLoading ? (
-            <div className="metis-card p-6 space-y-5">
-              <div className="space-y-2">
-                <Skeleton className="h-6 w-1/3" />
-                <Skeleton className="h-4 w-1/2" />
-              </div>
-              <div className="space-y-4 pt-4 border-t border-[#f1f5f9]">
-                <Skeleton className="h-10 w-full" />
-                <Skeleton className="h-10 w-full" />
-                <Skeleton className="h-24 w-full" />
-              </div>
-            </div>
-          ) : (
-            <div className="metis-card overflow-hidden">
+          <div className="metis-card overflow-hidden">
               {/* Card Header with active tab title */}
               <div className="metis-card-header">
                 <div>
@@ -1374,7 +1346,6 @@ export default function PengaturanPage() {
                 )}
               </div>
             </div>
-          )}
         </div>
       </div>
 
