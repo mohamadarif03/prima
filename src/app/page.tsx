@@ -1,8 +1,32 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
+import { getStructuresByRegion } from "@/lib/mock-data";
 import "./landing.css";
+
+// Dynamic Client Component Loader for Three.js (No SSR)
+const AnatomyViewer = dynamic(
+  () =>
+    import("@/components/anatomy/AnatomyViewer").then(
+      (mod) => mod.AnatomyViewer
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-full min-h-[240px] flex flex-col items-center justify-center bg-[#f8fafc] rounded-2xl border border-white/80 p-6 text-center">
+        <div className="w-8 h-8 border-3 border-[#1169dc] border-t-transparent rounded-full animate-spin mb-2.5"></div>
+        <p className="text-xs font-semibold text-[#06192f]">
+          Memuat Model 3D Anatomi...
+        </p>
+        <p className="text-[11px] text-[#77899c]">
+          Menyiapkan grafis WebGL interaktif
+        </p>
+      </div>
+    ),
+  }
+);
 
 const HERO_FRONT = "/assets/images/hero_front.png";
 const HERO_BACK = "/assets/images/hero_back.png";
@@ -37,6 +61,24 @@ export default function LandingPage() {
   const [indicatorTop, setIndicatorTop] = useState(0);
   const [userHasInteracted, setUserHasInteracted] = useState(false);
   const [quizAnswer, setQuizAnswer] = useState<"correct" | "wrong" | null>(null);
+  const membrumStructures = useMemo(() => getStructuresByRegion("reg-membrum"), []);
+  const [highlightedStructureId, setHighlightedStructureId] = useState<string>("struct-m-04");
+
+  const handleMeshClick = useCallback((structureId: string) => {
+    setUserHasInteracted(true);
+    setHighlightedStructureId(structureId);
+    if (structureId === "struct-m-04") {
+      setQuizAnswer("correct");
+    } else {
+      setQuizAnswer("wrong");
+    }
+  }, []);
+
+  const handleQuizChoice = useCallback((id: string, isCorrect: boolean) => {
+    setUserHasInteracted(true);
+    setHighlightedStructureId(id);
+    setQuizAnswer(isCorrect ? "correct" : "wrong");
+  }, []);
 
   // Refs for stage layout and canvas spotlight
   const stageRef = useRef<HTMLDivElement | null>(null);
@@ -1314,87 +1356,23 @@ export default function LandingPage() {
                       Identifikasi Anatomi 3D
                     </span>
                     <span className="cara-specimen-badge">
-                      Spesimen Tulang Lengan
+                      Model 3D Otot Ekstremitas
                     </span>
                   </div>
 
-                  {/* Ilustrasi Tulang Lengan Besar dengan Hotspot Berdenyut */}
-                  <div className="cara-bone-box">
-                    <svg
-                      viewBox="0 0 340 120"
-                      className="h-full w-auto text-[#77899c]"
-                      aria-hidden="true"
-                    >
-                      <circle
-                        cx="46"
-                        cy="60"
-                        r="14"
-                        fill="currentColor"
-                        fillOpacity="0.25"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                      />
-                      <ellipse
-                        cx="60"
-                        cy="60"
-                        rx="6"
-                        ry="12"
-                        fill="currentColor"
-                        fillOpacity="0.2"
-                      />
-                      <path
-                        d="M 64 52 C 100 48, 140 50, 180 54 L 180 66 C 140 70, 100 72, 64 68 Z"
-                        fill="currentColor"
-                        fillOpacity="0.32"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                      />
-                      <path
-                        d="M 180 54 C 188 48, 198 52, 198 60 C 198 68, 188 72, 180 66 Z"
-                        fill="currentColor"
-                        fillOpacity="0.4"
-                        stroke="currentColor"
-                        strokeWidth="1.8"
-                      />
-                      <line
-                        x1="202"
-                        y1="46"
-                        x2="202"
-                        y2="74"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeDasharray="3 3"
-                        opacity="0.4"
-                      />
-                      <path
-                        d="M 206 52 C 240 46, 280 48, 310 50"
-                        stroke="currentColor"
-                        strokeWidth="3.2"
-                        strokeLinecap="round"
-                        fill="none"
-                        opacity="0.45"
-                      />
-                      <path
-                        d="M 206 68 C 240 74, 280 72, 310 70"
-                        stroke="currentColor"
-                        strokeWidth="3.2"
-                        strokeLinecap="round"
-                        fill="none"
-                        opacity="0.45"
-                      />
-                    </svg>
-
-                    {/* Titik Berdenyut di Korpus Humeri */}
-                    <div className="cara-pulse-dot">
-                      <span className="cara-pulse-ping"></span>
-                      <span className="cara-pulse-center">
-                        <span className="cara-pulse-inner"></span>
-                      </span>
-                    </div>
-
-                    <span className="cara-view-label">
-                      Pandangan anterior
-                    </span>
+                  {/* Real 3D Interactive WebGL Anatomy Canvas */}
+                  <div className="cara-3d-box">
+                    <AnatomyViewer
+                      structures={membrumStructures}
+                      selectedStructureId={highlightedStructureId}
+                      highlightedStructureId={highlightedStructureId}
+                      correctStructureId={quizAnswer === "correct" ? "struct-m-04" : null}
+                      incorrectStructureId={quizAnswer === "wrong" ? highlightedStructureId : null}
+                      hintStructureId={null}
+                      modelUrl="/models/muscles.glb"
+                      onMeshClick={handleMeshClick}
+                      className="w-full h-full"
+                    />
                   </div>
 
                   {/* Pertanyaan & Tiga Pilihan Pill */}
@@ -1404,7 +1382,7 @@ export default function LandingPage() {
                         Struktur yang disorot?
                       </p>
                       <span className="cara-quiz-status">
-                        {quizAnswer ? "Hasil kuis:" : "Pilih salah satu jawaban:"}
+                        {quizAnswer ? "Hasil kuis:" : "Klik model 3D atau pilih jawaban:"}
                       </span>
                     </div>
 
@@ -1415,30 +1393,36 @@ export default function LandingPage() {
                     >
                       <button
                         type="button"
-                        onClick={() => setQuizAnswer("correct")}
+                        onClick={() => handleQuizChoice("struct-m-04", true)}
                         className={`cara-quiz-pill ${
-                          quizAnswer === "correct" ? "is-correct" : ""
+                          highlightedStructureId === "struct-m-04" && quizAnswer === "correct"
+                            ? "is-correct"
+                            : ""
                         }`}
                       >
-                        Humerus
+                        M. Biceps Brachii
                       </button>
                       <button
                         type="button"
-                        onClick={() => setQuizAnswer("wrong")}
+                        onClick={() => handleQuizChoice("struct-m-01", false)}
                         className={`cara-quiz-pill ${
-                          quizAnswer === "wrong" ? "is-wrong" : ""
+                          highlightedStructureId === "struct-m-01" && quizAnswer === "wrong"
+                            ? "is-wrong"
+                            : ""
                         }`}
                       >
-                        Radius
+                        M. Deltoideus
                       </button>
                       <button
                         type="button"
-                        onClick={() => setQuizAnswer("wrong")}
+                        onClick={() => handleQuizChoice("struct-m-06", false)}
                         className={`cara-quiz-pill ${
-                          quizAnswer === "wrong" ? "is-wrong" : ""
+                          highlightedStructureId === "struct-m-06" && quizAnswer === "wrong"
+                            ? "is-wrong"
+                            : ""
                         }`}
                       >
-                        Ulna
+                        M. Triceps Brachii
                       </button>
                     </div>
 
@@ -1455,9 +1439,9 @@ export default function LandingPage() {
                     >
                       <span>
                         {quizAnswer === "correct"
-                          ? "Benar! Korpus humeri merupakan tulang panjang utama pada lengan atas."
+                          ? "Benar! Musculus Biceps Brachii adalah fleksor kuat sendi siku dan supinator lengan bawah."
                           : quizAnswer === "wrong"
-                          ? "Kurang tepat. Struktur ini adalah Humerus, terletak proksimal dari sendi siku."
+                          ? "Kurang tepat. Struktur yang ditanyakan adalah M. Biceps Brachii (fleksor lengan atas)."
                           : ""}
                       </span>
                     </div>
