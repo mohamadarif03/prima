@@ -47,6 +47,183 @@ const SYSTEM_NAMES = [
   "Sistem Pencernaan & Viseral",
 ];
 
+
+interface KurikulumStructure {
+  name: string;
+  latin: string;
+  role: string;
+}
+
+interface KurikulumRegion {
+  id: string;
+  num: string;
+  name: string;
+  subName: string;
+  latin: string;
+  structuresCount: number;
+  examBlock: string;
+  masteryScore: number;
+  level: string;
+  dueCount: number;
+  description: string;
+  structures: KurikulumStructure[];
+  clinicalCorrelation: string;
+  topicParam: string;
+}
+
+const KURIKULUM_REGIONS: KurikulumRegion[] = [
+  {
+    id: "reg-caput",
+    num: "/01",
+    name: "Regio Caput",
+    subName: "Kepala & Wajah",
+    latin: "Musculi Capitis & Faciei",
+    structuresCount: 15,
+    examBlock: "Blok Neuropsikiatri & Kepala Leher",
+    masteryScore: 78,
+    level: "Kuat",
+    dueCount: 4,
+    description:
+      "Sistem miologi kraniofasial mencakup 15 struktur otot ekspresi wajah dan mastikasi. Menekankan distingsi inervasi motorik Nervus Facialis (CN VII) untuk mimik wajah dan Nervus Trigeminus cabang mandibularis (CN V3) untuk otot pengunyah.",
+    structures: [
+      { name: "M. Frontalis", latin: "Venter Frontalis", role: "Mengangkat alis & kerutan dahi horizontal (N. VII)" },
+      { name: "M. Temporalis", latin: "M. Temporalis", role: "Elevasi & retraksi mandibula (N. V3)" },
+      { name: "M. Masseter", latin: "M. Masseter", role: "Otot kunyah utama berkekuatan oklusi gigitan tinggi" },
+      { name: "M. Orbicularis Oculi", latin: "M. Orbicularis Oculi", role: "Sfingter penutup rima palpebrarum mata" },
+      { name: "M. Orbicularis Oris", latin: "M. Orbicularis Oris", role: "Sfingter bibir & artikulasi fonasi bicara" },
+      { name: "Galea Aponeurotica", latin: "Aponeurosis Epicranialis", role: "Lembaran tendon penghubung skalp dahi-oksipital" },
+    ],
+    clinicalCorrelation:
+      "Ujian OSCE & MCQ: Paresis N. VII perifer (Bell's Palsy) melumpuhkan seluruh hemifasial termasuk dahi ipsilateral. Sebaliknya, stroke kortikal (lesi UMN) mempertahankan fungsi dahi karena inervasi bilateral nukleus fasialis bagian atas.",
+    topicParam: "reg-caput",
+  },
+  {
+    id: "reg-collum",
+    num: "/02",
+    name: "Regio Collum",
+    subName: "Leher & Servikal",
+    latin: "Musculi Colli & Cervicis",
+    structuresCount: 15,
+    examBlock: "Blok Bedah Leher & Aerodigestif",
+    masteryScore: 68,
+    level: "Sedang",
+    dueCount: 4,
+    description:
+      "Topografi servikal terbagi atas trigonum colli anterior dan posterior oleh M. Sternocleidomastoideus. Berisi pembuluh darah vital (A. Carotis, V. Jugularis) dan otot-otot laringeal pengatur fonasi serta mekanisme menelan.",
+    structures: [
+      { name: "M. Sternocleidomastoideus", latin: "M. SCM", role: "Rotasi kepala kontralateral & fleksi servikal (N. XI)" },
+      { name: "M. Platysma", latin: "M. Platysma", role: "Otot mimik leher superfisial penegang kulit servikal" },
+      { name: "M. Digastricus", latin: "Venter Ant. & Post.", role: "Depresi mandibula & elevasi os hyoid saat menelan" },
+      { name: "M. Omohyoideus", latin: "M. Omohyoideus", role: "Strap muscle penurun os hyoid dan kartilago laring" },
+      { name: "M. Scalenus Anterior", latin: "M. Scalenus Anterior", role: "Batas apertura thoracis superior & elevator costa I" },
+      { name: "M. Trapezius", latin: "Pars Descendens", role: "Elevasi scapula & ekstensi leher (N. Accessorius)" },
+    ],
+    clinicalCorrelation:
+      "Ujian Bedah & Anatomi Terapan: Celah di antara M. Scalenus Anterior dan Medius (Hiatus Scalenus) dilewati Pleksus Brakialis dan A. Subclavia; kompresi di area ini menimbulkan sindrom Thoracic Outlet Syndrome (TOS).",
+    topicParam: "reg-collum",
+  },
+  {
+    id: "reg-thorax",
+    num: "/03",
+    name: "Regio Thorax",
+    subName: "Dada & Dinding Toraks",
+    latin: "Musculi Thoracis & Diaphragma",
+    structuresCount: 12,
+    examBlock: "Blok Kardiorespirasi & Toraks",
+    masteryScore: 82,
+    level: "Kuat",
+    dueCount: 3,
+    description:
+      "Dinding sangkar toraks melindungi organ vital mediastinum dan paru. Meliputi otot pektoral penggerak gelang bahu, interkostalis pengatur dinamika rongga dada, serta diafragma sebagai pompa pernapasan utama tubuh.",
+    structures: [
+      { name: "M. Pectoralis Major", latin: "M. Pectoralis Major", role: "Adduksi & rotasi medial humerus pada sendi bahu" },
+      { name: "M. Pectoralis Minor", latin: "M. Pectoralis Minor", role: "Depresi angulus anterior scapula & stabilisator" },
+      { name: "M. Serratus Anterior", latin: "M. Serratus Anterior", role: "Protraktor scapula menempel dada (N. Thoracicus Longus)" },
+      { name: "Mm. Intercostales Externi", latin: "Intercostales Externi", role: "Elevasi kosta memperbesar diameter toraks (inspirasi)" },
+      { name: "Mm. Intercostales Interni", latin: "Intercostales Interni", role: "Depresi kosta memperkecil rongga toraks (ekspirasi)" },
+      { name: "Diaphragma", latin: "Centrum Tendineum", role: "Otot pernapasan utama tubuh (inervasi N. Phrenicus C3-C5)" },
+    ],
+    clinicalCorrelation:
+      "Prosedur Klinis: Pungsi pleura (torakosentesis) dan pemasangan chest tube (WSD) wajib dilakukan menempel pada tepi atas costa (kosta bawah) untuk menghindari bundle neurovaskular interkostal (V-A-N) di sulcus costae.",
+    topicParam: "reg-thorax",
+  },
+  {
+    id: "reg-abdomen",
+    num: "/04",
+    name: "Regio Abdomen",
+    subName: "Dinding Perut & Viseral",
+    latin: "Musculi Abdominis Anterolateralis",
+    structuresCount: 10,
+    examBlock: "Blok Digestif & Dinding Abdomen",
+    masteryScore: 66,
+    level: "Sedang",
+    dueCount: 5,
+    description:
+      "Arsitektur multilapis dinding anterolateral melindungi rongga peritoneum dan menjaga tekanan intraabdominal. Pembentukan sarung rektus (vagina musculi recti) dan kanalis inguinalis menjadi fokus krusial ujian bedah umum.",
+    structures: [
+      { name: "M. Rectus Abdominis", latin: "M. Rectus Abdominis", role: "Fleksi kolumna vertebralis & kompresi visera abdomen" },
+      { name: "M. Obliquus Externus", latin: "Obliquus Externus", role: "Rotasi trunkus kontralateral & kompresi abdominal" },
+      { name: "M. Obliquus Internus", latin: "Obliquus Internus", role: "Rotasi trunkus ipsilateral bersama oblikus eksterna" },
+      { name: "M. Transversus Abdominis", latin: "Transversus Abdominis", role: "Stabilisator korset inti (core stability) terdalam" },
+      { name: "Linea Alba", latin: "Linea Alba", role: "Fusi serat aponeurosis linea mediana bebas vaskular" },
+      { name: "M. Psoas Major", latin: "M. Psoas Major", role: "Fleksor kuat sendi panggul & postural lumbar lordosis" },
+    ],
+    clinicalCorrelation:
+      "Korelasi Bedah: Trigonum Hesselbach dibatasi oleh Plica Epigastrica Inferior, Tepi Lateral M. Rectus, dan Ligamentum Inguinale; kelemahan fasia transversalis di sini menimbulkan Hernia Inguinalis Medialis (Directa).",
+    topicParam: "reg-abdomen",
+  },
+  {
+    id: "reg-pelvis",
+    num: "/05",
+    name: "Regio Pelvis",
+    subName: "Panggul & Perineum",
+    latin: "Musculi Pelvis, Glutei & Perinei",
+    structuresCount: 15,
+    examBlock: "Blok Urogenital & Dasar Panggul",
+    masteryScore: 62,
+    level: "Sedang",
+    dueCount: 4,
+    description:
+      "Regio kompleks mencakup kelompok gluteal ekstensor panggul, rotator lateral femoris profunda, serta diafragma pelvis (dasar panggul) yang menopang visera pelvis dan mengontrol kontinensia volunter.",
+    structures: [
+      { name: "M. Gluteus Maximus", latin: "M. Gluteus Maximus", role: "Ekstensor terkuat sendi panggul (inervasi N. Gluteus Inf.)" },
+      { name: "M. Gluteus Medius", latin: "M. Gluteus Medius", role: "Abduktor utama & penstabil pelvis saat fase menumpu jalan" },
+      { name: "M. Piriformis", latin: "M. Piriformis", role: "Rotasi lateral panggul & landmark foramen ischiadicum majus" },
+      { name: "M. Obturator Internus", latin: "M. Obturator Internus", role: "Rotator lateral panggul profunda bersama mm. gemelli" },
+      { name: "M. Levator Ani", latin: "Diaphragma Pelvis", role: "Penyangga dasar visera panggul & pengatur sudut anorektal" },
+      { name: "M. Sphincter Ani Ext.", latin: "Sphincter Ani Externus", role: "Kontinensia fekal volunter (inervasi N. Pudendus S2-S4)" },
+    ],
+    clinicalCorrelation:
+      "Tanda Klinis Trendelenburg: Kelemahan M. Gluteus Medius (lesi N. Gluteus Superior) menyebabkan panggul sisi kontralateral jatuh saat menumpu satu kaki, memicu gaya berjalan Trendelenburg Gait khas.",
+    topicParam: "reg-pelvis",
+  },
+  {
+    id: "reg-membrum",
+    num: "/06",
+    name: "Regio Membrum",
+    subName: "Anggota Gerak (Ekstremitas)",
+    latin: "Musculi Membri Superioris & Inferioris",
+    structuresCount: 18,
+    examBlock: "Blok Muskuloskeletal & Lokomosi",
+    masteryScore: 74,
+    level: "Kuat",
+    dueCount: 4,
+    description:
+      "Regio dengan jumlah struktur 3D terbanyak (18 otot). Meliputi gelang bahu, lengan atas fleksor/ekstensor, lengan bawah, serta kelompok paha anterior (kuadriseps), paha posterior (hamstring), dan tungkai bawah (kruris).",
+    structures: [
+      { name: "M. Deltoideus", latin: "M. Deltoideus", role: "Abduktor utama lengan 15°-90° (inervasi N. Axillaris C5-C6)" },
+      { name: "M. Supraspinatus", latin: "Rotator Cuff Superior", role: "Inisiasi abduksi 0°-15° sendi bahu & stabilisator kaput" },
+      { name: "M. Biceps Brachii", latin: "M. Biceps Brachii", role: "Fleksi siku & supinator kuat lengan bawah (N. Musculocutaneus)" },
+      { name: "M. Triceps Brachii", latin: "M. Triceps Brachii", role: "Ekstensor tunggal sendi siku (inervasi N. Radialis)" },
+      { name: "M. Quadriceps Femoris", latin: "M. Rectus Femoris", role: "Ekstensor sendi lutut utama (inervasi N. Femoralis L2-L4)" },
+      { name: "Tendo Calcaneus", latin: "Tendo Achillis", role: "Insersio tendo terkuat tubuh untuk plantar fleksi (N. Tibialis)" },
+    ],
+    clinicalCorrelation:
+      "Ujian Ortopedi OSCE: Tes Drop-Arm positif mengindikasikan robekan (tear) pada tendo M. Supraspinatus; sedangkan hilangnya refleks tendon Achilles (S1-S2) khas pada kompresi radiks saraf skiatika.",
+    topicParam: "reg-membrum",
+  },
+];
+
 export default function LandingPage() {
   // Navigation & Interactive States
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -63,6 +240,10 @@ export default function LandingPage() {
   const [quizAnswer, setQuizAnswer] = useState<"correct" | "wrong" | null>(null);
   const caputStructures = useMemo(() => getStructuresByRegion("reg-caput"), []);
   const [highlightedStructureId, setHighlightedStructureId] = useState<string>("struct-c-01");
+  const [activeRegionIdx, setActiveRegionIdx] = useState(0);
+  const [activeStructureIdx, setActiveStructureIdx] = useState<number | null>(null);
+
+  const selectedKurikulumRegion = KURIKULUM_REGIONS[activeRegionIdx];
 
   // Planner Day State & Interactive Checklist (Panggung 01)
   const [plannerDayIdx, setPlannerDayIdx] = useState(3); // Kamis (Hari Ini)
@@ -1730,6 +1911,273 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* =========================================================================
+          SECTION: KURIKULUM 6 REGIO (Interactive Master-Detail Anatomical Explorer)
+          ========================================================================= */}
+      <section
+        id="kurikulum"
+        aria-label="Cakupan kurikulum 6 regio tubuh standar kedokteran"
+      >
+        {/* Giant Watermark */}
+        <div className="kuri-watermark" aria-hidden="true">
+          <span>KURIKULUM</span>
+        </div>
+
+        <div className="kuri-container">
+          {/* Section Header */}
+          <div className="kuri-header">
+            <span className="cara-label">
+              <span className="slash">/</span> Cakupan kurikulum FK
+            </span>
+            <h2 className="kuri-headline">
+              6 Regio Anatomi Standar, <strong>Terpetakan Lengkap</strong>
+            </h2>
+            <p className="kuri-subhead">
+              Bukan sekadar ringkasan sepotong — jelajahi seluruh 87 struktur miologi,
+              inervasi saraf kranialis, dan korelasi klinis yang diujikan pada ujian blok kedokteran preklinik.
+            </p>
+          </div>
+
+          {/* Master-Detail Split Stage (Interactive Inspector) */}
+          <div className="kuri-stage">
+            {/* KOLOM KIRI: Hirarki Anatomis Kranial-ke-Kaudal */}
+            <div
+              className="kuri-nav-column"
+              role="tablist"
+              aria-label="Daftar regio tubuh kranial ke kaudal"
+            >
+              {KURIKULUM_REGIONS.map((region, idx) => {
+                const isActive = activeRegionIdx === idx;
+                return (
+                  <button
+                    key={region.id}
+                    type="button"
+                    role="tab"
+                    id={`kuri-tab-${idx}`}
+                    aria-selected={isActive}
+                    aria-controls="kuri-dossier-panel"
+                    onClick={() => {
+                      setUserHasInteracted(true);
+                      setActiveRegionIdx(idx);
+                      setActiveStructureIdx(null);
+                    }}
+                    className={`kuri-nav-btn ${isActive ? "is-active" : ""}`}
+                  >
+                    <div className="kuri-nav-meta">
+                      <span className="kuri-nav-num">{region.num}</span>
+                      <div>
+                        <p className="kuri-nav-title">{region.name}</p>
+                        <p className="kuri-nav-latin">{region.latin}</p>
+                      </div>
+                    </div>
+                    <span className="kuri-nav-badge">
+                      {region.structuresCount} str
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* KOLOM KANAN: Berkas Kurikulum Medis (Live Clinical Dossier) */}
+            <div
+              id="kuri-dossier-panel"
+              role="tabpanel"
+              aria-labelledby={`kuri-tab-${activeRegionIdx}`}
+              className="kuri-dossier"
+            >
+              {/* Header Berkas */}
+              <div className="kuri-dossier-top">
+                <div className="kuri-dossier-title-box">
+                  <div className="flex items-center gap-2">
+                    <span className="kuri-block-badge">
+                      {selectedKurikulumRegion.examBlock}
+                    </span>
+                    <span className="kuri-score-pill">
+                      ✓ Retensi Rata-rata {selectedKurikulumRegion.masteryScore}% ({selectedKurikulumRegion.level})
+                    </span>
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-bold text-[#06192f] mt-1 mb-0">
+                    {selectedKurikulumRegion.name}{" "}
+                    <span className="text-[#1169dc] font-medium text-lg sm:text-xl">
+                      — {selectedKurikulumRegion.subName}
+                    </span>
+                  </h3>
+                  <span className="text-xs italic text-[#64748b]">
+                    Terminologia Anatomica: {selectedKurikulumRegion.latin}
+                  </span>
+                </div>
+              </div>
+
+              {/* Deskripsi Fokus Kurikulum */}
+              <p className="kuri-dossier-desc">
+                {selectedKurikulumRegion.description}
+              </p>
+
+              {/* Kluster Struktur Interaktif */}
+              <div className="kuri-chips-container">
+                <div className="flex items-center justify-between">
+                  <span className="kuri-chips-label">
+                    Struktur Utama Terpetakan ({selectedKurikulumRegion.structuresCount} Struktur 3D):
+                  </span>
+                  <span className="text-[11px] text-[#77899c]">
+                    Klik struktur untuk melihat fungsi &amp; inervasi
+                  </span>
+                </div>
+
+                <div className="kuri-chips-grid">
+                  {selectedKurikulumRegion.structures.map((struct, sIdx) => {
+                    const isSelected = activeStructureIdx === sIdx;
+                    return (
+                      <div
+                        key={struct.name}
+                        onClick={() => {
+                          setUserHasInteracted(true);
+                          setActiveStructureIdx(isSelected ? null : sIdx);
+                        }}
+                        className={`kuri-chip ${isSelected ? "is-active" : ""}`}
+                        title="Klik untuk melihat catatan inervasi klinis"
+                      >
+                        <p className="kuri-chip-title">{struct.name}</p>
+                        <span className="kuri-chip-latin">{struct.latin}</span>
+                        {isSelected && (
+                          <div className="kuri-chip-preview">
+                            {struct.role}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Kotak Korelasi Klinis Ujian Blok (High-Yield Clinical Pearls) */}
+              <div className="kuri-clinical-box">
+                <span className="kuri-clinical-icon" aria-hidden="true">
+                  🩺
+                </span>
+                <div>
+                  <h4 className="kuri-clinical-title">
+                    Korelasi Klinis Ujian Blok &amp; OSCE:
+                  </h4>
+                  <p className="kuri-clinical-text">
+                    {selectedKurikulumRegion.clinicalCorrelation}
+                  </p>
+                </div>
+              </div>
+
+              {/* Footer Tindakan Berkas */}
+              <div className="kuri-dossier-footer">
+                <div className="flex items-center gap-3">
+                  <span className="kuri-metric-tag">
+                    Total: <strong>{selectedKurikulumRegion.structuresCount} Model 3D</strong>
+                  </span>
+                  <span className="text-[#cbd5e1]">·</span>
+                  <span className="kuri-metric-tag">
+                    Jadwal Ulang: <strong>{selectedKurikulumRegion.dueCount} Butuh Review</strong>
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <Link
+                    href={`/latihan?topic=${selectedKurikulumRegion.topicParam}`}
+                    className="kuri-btn-launch"
+                  >
+                    <span>Latihan 3D {selectedKurikulumRegion.name}</span>
+                    <svg
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                      />
+                    </svg>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          LANDING FOOTER
+          ========================================================================= */}
+      <footer className="landing-footer">
+        <div className="landing-footer-container">
+          <div className="landing-footer-grid">
+            {/* Brand Column */}
+            <div className="landing-footer-brand">
+              <h3>PRIMA</h3>
+              <p>
+                Platform Review Interaktif Medis Adaptif. Pendamping belajar terstruktur untuk mahasiswa kedokteran preklinik dengan visualisasi anatomi 3D spasial dan spaced repetition otomatis.
+              </p>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs text-white/90">
+                <span>🏆 Karya Software Development</span>
+              </div>
+            </div>
+
+            {/* Quick Links Column 1 */}
+            <div className="landing-footer-nav">
+              <h4>Modul Belajar</h4>
+              <ul>
+                <li>
+                  <Link href="/beranda">Dashboard Beranda</Link>
+                </li>
+                <li>
+                  <Link href="/latihan">Latihan Anatomi 3D</Link>
+                </li>
+                <li>
+                  <Link href="/perencana">Perencana Belajar Blok</Link>
+                </li>
+                <li>
+                  <Link href="/kelemahan">Peta Kelemahan Topik</Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Quick Links Column 2 */}
+            <div className="landing-footer-nav">
+              <h4>Kurikulum 6 Regio</h4>
+              <ul>
+                <li>
+                  <Link href="/latihan?topic=reg-caput">Regio Caput (Kepala &amp; Wajah)</Link>
+                </li>
+                <li>
+                  <Link href="/latihan?topic=reg-collum">Regio Collum (Leher)</Link>
+                </li>
+                <li>
+                  <Link href="/latihan?topic=reg-thorax">Regio Thorax (Toraks &amp; Dada)</Link>
+                </li>
+                <li>
+                  <Link href="/latihan?topic=reg-abdomen">Regio Abdomen (Perut)</Link>
+                </li>
+                <li>
+                  <Link href="/latihan?topic=reg-pelvis">Regio Pelvis (Panggul)</Link>
+                </li>
+                <li>
+                  <Link href="/latihan?topic=reg-membrum">Regio Membrum (Ekstremitas)</Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom Row & Medical Disclaimer */}
+          <div className="landing-footer-bottom">
+            <p className="m-0">
+              PRIMA adalah alat bantu belajar (edukasi), bukan merupakan alat diagnosis atau saran medis klinis.
+            </p>
+            <p className="m-0 text-[#94a3b8]">
+              © 2026 PRIMA MedTech · Seluruh hak cipta dilindungi.
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

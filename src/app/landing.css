@@ -2645,3 +2645,514 @@
 .cara-seg-red { background: #ef4444; width: 15%; }
 .cara-seg-amber { background: #f59e0b; width: 25%; }
 .cara-seg-green { background: #10b981; width: 60%; }
+
+/* =========================================================================
+   SECTION: KURIKULUM 6 REGIO (Interactive Master-Detail Anatomical Explorer)
+   ========================================================================= */
+#kurikulum {
+  position: relative;
+  background: #d6e6f5;
+  overflow: hidden;
+  padding: 6rem 0 7rem;
+}
+
+.kuri-watermark {
+  position: absolute;
+  top: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(80px, 16vw, 240px);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  color: rgba(255, 255, 255, 0.42);
+  user-select: none;
+  pointer-events: none;
+  z-index: 0;
+  line-height: 0.8;
+  white-space: nowrap;
+}
+
+.kuri-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .kuri-container {
+    padding: 0 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .kuri-container {
+    padding: 0 3rem;
+  }
+}
+
+.kuri-header {
+  max-width: 760px;
+  margin-bottom: 2.75rem;
+}
+
+.kuri-headline {
+  margin: 0.75rem 0 0;
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: #06192f;
+}
+
+.kuri-headline strong {
+  font-weight: 800;
+  color: #1169dc;
+}
+
+.kuri-subhead {
+  margin-top: 0.75rem;
+  font-size: clamp(0.9rem, 1.25vw, 1.05rem);
+  color: #475569;
+  line-height: 1.5;
+}
+
+/* Master-Detail Grid */
+.kuri-stage {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .kuri-stage {
+    grid-template-columns: 380px 1fr;
+    gap: 2rem;
+  }
+}
+
+/* Left Column: Vertical Anatomical Index (Cranial-to-Caudal Hierarchy) */
+.kuri-nav-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.kuri-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+.kuri-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: #1169dc;
+  transform: translateX(4px);
+}
+
+.kuri-nav-btn.is-active {
+  background: #06192f;
+  border-color: #06192f;
+  color: #ffffff;
+  box-shadow: 0 12px 30px rgba(6, 25, 47, 0.16);
+  transform: translateX(6px);
+}
+
+.kuri-nav-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  min-width: 0;
+}
+
+.kuri-nav-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #77899c;
+  transition: color 0.2s;
+}
+
+.kuri-nav-btn.is-active .kuri-nav-num {
+  color: #60a5fa;
+}
+
+.kuri-nav-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #06192f;
+  line-height: 1.2;
+  margin: 0;
+  transition: color 0.2s;
+}
+
+.kuri-nav-btn.is-active .kuri-nav-title {
+  color: #ffffff;
+}
+
+.kuri-nav-latin {
+  font-size: 0.72rem;
+  font-style: italic;
+  color: #64748b;
+  margin-top: 0.125rem;
+  transition: color 0.2s;
+}
+
+.kuri-nav-btn.is-active .kuri-nav-latin {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.kuri-nav-badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  background: rgba(17, 105, 220, 0.1);
+  color: #1169dc;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.kuri-nav-btn.is-active .kuri-nav-badge {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+/* Right Column: Live Clinical Dossier */
+.kuri-dossier {
+  border-radius: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  background: rgba(247, 251, 255, 0.82);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  padding: 1.75rem;
+  box-shadow: 0 20px 50px rgba(35, 57, 79, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+  min-height: 520px;
+}
+
+@media (min-width: 640px) {
+  .kuri-dossier {
+    padding: 2.25rem;
+  }
+}
+
+.kuri-dossier-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-bottom: 1.15rem;
+  border-bottom: 1px solid rgba(6, 25, 47, 0.08);
+}
+
+.kuri-dossier-title-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.kuri-block-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+
+.kuri-score-pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.kuri-dossier-desc {
+  font-size: 0.875rem;
+  color: #334155;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Interactive Structure Chips */
+.kuri-chips-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.kuri-chips-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
+}
+
+.kuri-chips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.5rem;
+}
+
+.kuri-chip {
+  display: flex;
+  flex-direction: column;
+  padding: 0.6rem 0.85rem;
+  border-radius: 0.875rem;
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.kuri-chip:hover {
+  background: #ffffff;
+  border-color: #1169dc;
+  box-shadow: 0 4px 12px rgba(17, 105, 220, 0.1);
+  transform: translateY(-1px);
+}
+
+.kuri-chip.is-active {
+  background: #ffffff;
+  border-color: #1169dc;
+  outline: 2px solid rgba(17, 105, 220, 0.2);
+}
+
+.kuri-chip-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #06192f;
+  margin: 0;
+}
+
+.kuri-chip-latin {
+  font-size: 0.6875rem;
+  font-style: italic;
+  color: #64748b;
+  margin-top: 0.125rem;
+}
+
+.kuri-chip-preview {
+  margin-top: 0.35rem;
+  padding-top: 0.35rem;
+  border-top: 1px dashed rgba(6, 25, 47, 0.1);
+  font-size: 0.6875rem;
+  color: #0369a1;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* High-Yield Clinical Correlation Callout */
+.kuri-clinical-box {
+  border-radius: 1rem;
+  border: 1px solid #fed7aa;
+  background: #fff7ed;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+}
+
+.kuri-clinical-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.kuri-clinical-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #c2410c;
+  margin: 0 0 0.25rem;
+}
+
+.kuri-clinical-text {
+  font-size: 0.8125rem;
+  color: #9a3412;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Dossier Footer Actions */
+.kuri-dossier-footer {
+  margin-top: auto;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(6, 25, 47, 0.08);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.kuri-metric-tag {
+  font-size: 0.75rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.kuri-metric-tag strong {
+  color: #06192f;
+  font-weight: 700;
+}
+
+.kuri-btn-launch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  background: #06192f;
+  color: #ffffff;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(6, 25, 47, 0.15);
+}
+
+.kuri-btn-launch:hover {
+  background: #1169dc;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(17, 105, 220, 0.25);
+}
+
+.kuri-btn-launch svg {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s;
+}
+
+.kuri-btn-launch:hover svg {
+  transform: translateX(3px);
+}
+
+/* =========================================================================
+   LANDING FOOTER
+   ========================================================================= */
+.landing-footer {
+  background: #06192f;
+  color: #94a3b8;
+  padding: 4rem 1.5rem 3rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.landing-footer-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .landing-footer-container {
+    padding: 0 1.5rem;
+  }
+}
+
+.landing-footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .landing-footer-grid {
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 3rem;
+  }
+}
+
+.landing-footer-brand h3 {
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem;
+}
+
+.landing-footer-brand p {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #94a3b8;
+  max-width: 360px;
+  margin: 0 0 1rem;
+}
+
+.landing-footer-nav h4 {
+  color: #ffffff;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 1rem;
+}
+
+.landing-footer-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.landing-footer-nav a {
+  color: #94a3b8;
+  font-size: 0.8125rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.landing-footer-nav a:hover {
+  color: #ffffff;
+}
+
+.landing-footer-bottom {
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+@media (min-width: 768px) {
+  .landing-footer-bottom {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
