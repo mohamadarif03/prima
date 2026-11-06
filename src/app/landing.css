@@ -89,7 +89,7 @@
 
     /* All desktop direct children absolute positioned */
     .header, .headline, .features, .creator, .glass-card, .ghost, .robo-o-avatar,
-    .material, .gallery, .socials, .toast, .menu-panel { display: none !important;
+    .material, .gallery, .socials, .toast, .menu-panel {
       position: absolute;
     }
 
@@ -135,7 +135,7 @@
       line-height: 1;
     }
 
-    .menu { display: none !important;
+    .menu {
       position: absolute;
       left: calc(var(--fx) + 136px);
       top: 31px;
@@ -783,11 +783,9 @@
       margin-left: 14px;
     }
 
-    .stage.nav-compact .nav {
-      display: flex;
-    }
+    .stage.nav-compact .nav,
     .stage.nav-compact .join {
-      display: flex;
+      display: none;
     }
 
     /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
@@ -3546,15 +3544,3 @@
     transform: none !important;
   }
 }
-
-      .is-phone .header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 16px;
-        height: 60px;
-      }
-      .is-phone .menu,
-      .is-phone .menu-panel {
-        display: none !important;
-      }
