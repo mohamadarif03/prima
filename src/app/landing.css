@@ -9,13 +9,13 @@
       --blue: #1169dc;
     }
 
-    *, *::before, *::after {
+    .landing-scope *, .landing-scope *::before, .landing-scope *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
-    html, body {
+    .landing-scope {
       width: 100%;
       min-height: 100%;
       margin: 0;
@@ -29,7 +29,7 @@
     }
 
     /* Accessibility focus */
-    a:focus-visible, button:focus-visible {
+    .landing-scope a:focus-visible, .landing-scope button:focus-visible {
       outline: 2px solid var(--blue);
       outline-offset: 2px;
     }
@@ -1092,7 +1092,7 @@
        8. RESPONSIVE â€” TIER C (@media max-width:520px and portrait)
        â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
     @media (max-width: 520px) and (orientation: portrait) {
-      html, body {
+      .landing-scope {
         height: auto;
         min-height: 100%;
         overflow-x: hidden;

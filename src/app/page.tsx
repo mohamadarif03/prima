@@ -859,7 +859,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="w-full min-h-screen bg-[#d6e6f5] text-[#06192f] overflow-x-hidden">
+    <div className="landing-scope w-full min-h-screen bg-[#d6e6f5] text-[#06192f] overflow-x-hidden">
       {/* =========================================================================
           VIEWPORT & RESPONSIVE SCALED STAGE (Hero Arena)
           ========================================================================= */}
@@ -913,7 +913,7 @@ export default function LandingPage() {
               ))}
             </nav>
 
-            <Link href="/beranda" className="join" aria-label="Masuk ke aplikasi PRIMA">
+            <a href="/beranda" className="join" aria-label="Masuk ke aplikasi PRIMA">
               <span className="join-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" width="22" height="22">
                   <circle
@@ -937,7 +937,7 @@ export default function LandingPage() {
                 </svg>
               </span>
               <span className="join-label">Masuk Aplikasi</span>
-            </Link>
+            </a>
 
             {/* Menu panel (for compact / mobile navigation) */}
             <div
@@ -964,7 +964,7 @@ export default function LandingPage() {
                   {item.label}
                 </a>
               ))}
-              <Link href="/beranda" className="menu-join" onClick={closeMenu}>
+              <a href="/beranda" className="menu-join" onClick={closeMenu}>
                 <span className="join-icon" aria-hidden="true">
                   <svg viewBox="0 0 24 24" width="26" height="26">
                     <circle
@@ -988,7 +988,7 @@ export default function LandingPage() {
                   </svg>
                 </span>
                 <span className="join-label">Masuk Aplikasi PRIMA</span>
-              </Link>
+              </a>
             </div>
           </header>
 
@@ -2317,7 +2317,7 @@ export default function LandingPage() {
               <h4>Modul Belajar</h4>
               <ul>
                 <li>
-                  <Link href="/beranda">Dashboard Beranda</Link>
+                  <a href="/beranda">Dashboard Beranda</a>
                 </li>
                 <li>
                   <Link href="/latihan">Latihan Anatomi 3D</Link>
