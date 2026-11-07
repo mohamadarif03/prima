@@ -236,37 +236,8 @@ function OnboardingContent() {
         <div className="absolute top-[60%] -right-[10%] w-[500px] h-[500px] rounded-full bg-emerald-50/60 blur-[130px]" />
       </div>
 
-      {/* Standalone Topbar Header (Tanpa Sidebar Dashboard) */}
-      <header className="relative z-10 h-[64px] bg-white/95 backdrop-blur-md border-b border-[#e2e8f0] px-4 sm:px-8 flex items-center justify-between sticky top-0 shadow-2xs">
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2.5 no-underline group">
-            <div className="w-[32px] h-[32px] rounded-[7px] bg-[#2563eb] flex items-center justify-center text-white font-bold text-[19px] tracking-tight shadow-xs group-hover:bg-[#1d4ed8] transition">
-              P
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold text-[17px] text-[#1e293b] leading-tight">PRIMA</span>
-              <span className="text-[10px] text-[#64748b] leading-tight hidden sm:inline">Platform Review Interaktif Medis Adaptif</span>
-            </div>
-          </Link>
-          <span className="hidden sm:inline-block h-4 w-[1px] bg-slate-200 mx-1"></span>
-          <span className="text-[11px] font-semibold text-[#0d6efd] bg-blue-50 border border-blue-200/60 px-2.5 py-0.5 rounded-full">
-            Pengaturan Awal Belajar
-          </span>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <Link
-            href="/beranda"
-            className="text-xs font-semibold text-[#64748b] hover:text-[#0d6efd] flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition"
-          >
-            <span>Lewati ke Beranda</span>
-            <i className="bi bi-arrow-right"></i>
-          </Link>
-        </div>
-      </header>
-
-      {/* Main Wizard Content */}
-      <main className="relative z-10 flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8">
+      {/* Main Wizard Content (Tanpa Topbar) */}
+      <main className="relative z-10 flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-10">
         {/* Banner Sambutan Pengguna Baru Setelah Register */}
         {isFromRegister && (
           <div className="mb-6 p-4 sm:p-5 rounded-xl bg-gradient-to-r from-blue-50 via-indigo-50 to-emerald-50 border border-blue-200/80 shadow-xs flex items-start gap-3.5 animate-fadeIn">
@@ -289,17 +260,34 @@ function OnboardingContent() {
           </div>
         )}
 
-        {/* HEADER HALAMAN & PENJELASAN */}
+        {/* HEADER HALAMAN DENGAN LOGO & PENJELASAN */}
         <div className="mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-            <div>
-              <h1 className="text-xl sm:text-2xl font-bold text-[#1e293b] tracking-tight">
-                Pengaturan Awal Belajar (Onboarding)
-              </h1>
-              <p className="text-[13px] text-[#64748b] mt-0.5">
-                Sesuaikan target dan jadwal Anda agar PRIMA dapat menyusun rencana belajar yang terarah.
-              </p>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-2">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0d6efd] to-[#2563eb] flex items-center justify-center text-white font-extrabold text-xl shadow-md shadow-blue-500/20 shrink-0">
+                P
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-xl sm:text-2xl font-bold text-[#1e293b] tracking-tight">
+                    Pengaturan Awal Belajar
+                  </h1>
+                  <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-[#0d6efd] border border-blue-200/60">
+                    Onboarding
+                  </span>
+                </div>
+                <p className="text-[13px] text-[#64748b] mt-0.5">
+                  Sesuaikan target dan jadwal Anda agar PRIMA dapat menyusun rencana belajar yang terarah.
+                </p>
+              </div>
             </div>
+            <Link
+              href="/beranda"
+              className="self-start sm:self-auto text-xs font-semibold text-[#3b76e1] hover:underline flex items-center gap-1.5 shrink-0"
+            >
+              <span>Lewati ke Beranda</span>
+              <i className="bi bi-arrow-right"></i>
+            </Link>
           </div>
         </div>
 
