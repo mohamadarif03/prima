@@ -1,0 +1,6 @@
+# Vercel Ignore
+video/
+docs/
+*.mp4
+*.MP3
+.git
