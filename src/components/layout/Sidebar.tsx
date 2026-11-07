@@ -26,13 +26,6 @@ const mainNavItems: NavMenuItem[] = [
     icon: "bi bi-speedometer2",
   },
   {
-    name: "Onboarding",
-    href: "/onboarding",
-    icon: "bi bi-magic",
-    badge: "Wizard",
-    badgeColor: "bg-[#198754]",
-  },
-  {
     name: "Anatomi 3D",
     href: "/latihan",
     icon: "bi bi-box-seam",
@@ -79,6 +72,13 @@ const accountNavItems: NavMenuItem[] = [
     name: "Pengaturan",
     href: "/pengaturan",
     icon: "bi bi-gear",
+  },
+  {
+    name: "Ulangi Onboarding",
+    href: "/onboarding",
+    icon: "bi bi-magic",
+    badge: "Wizard",
+    badgeColor: "bg-[#198754]",
   },
   {
     name: "Masuk / Keluar",

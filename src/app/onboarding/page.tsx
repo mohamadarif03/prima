@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { mockAnatomyRegions } from "@/lib/mock-data";
 
@@ -70,6 +70,9 @@ export default function OnboardingPage() {
 
 function OnboardingContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isFromRegister = searchParams.get("registered") === "true";
+  const userName = searchParams.get("name") || "";
 
   // Langkah wizard saat ini (1 sampai 4)
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -226,29 +229,79 @@ function OnboardingContent() {
   ];
 
   return (
-    <div className="max-w-4xl mx-auto py-2 sm:py-4">
-      {/* =====================================================================
-          HEADER HALAMAN & PENJELASAN
-          ===================================================================== */}
-      <div className="mb-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-[#1e293b] tracking-tight">
-              Pengaturan Awal Belajar (Onboarding)
-            </h1>
-            <p className="text-[13px] text-[#64748b] mt-0.5">
-              Sesuaikan target dan jadwal Anda agar PRIMA dapat menyusun rencana belajar yang terarah.
-            </p>
-          </div>
+    <div className="min-h-screen bg-[#f8fafc] text-[#1e293b] flex flex-col justify-between">
+      {/* Background Decorative Gradient Blobs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="absolute -top-[10%] -left-[10%] w-[500px] h-[500px] rounded-full bg-blue-100/50 blur-[120px]" />
+        <div className="absolute top-[60%] -right-[10%] w-[500px] h-[500px] rounded-full bg-emerald-50/60 blur-[130px]" />
+      </div>
+
+      {/* Standalone Topbar Header (Tanpa Sidebar Dashboard) */}
+      <header className="relative z-10 h-[64px] bg-white/95 backdrop-blur-md border-b border-[#e2e8f0] px-4 sm:px-8 flex items-center justify-between sticky top-0 shadow-2xs">
+        <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-2.5 no-underline group">
+            <div className="w-[32px] h-[32px] rounded-[7px] bg-[#2563eb] flex items-center justify-center text-white font-bold text-[19px] tracking-tight shadow-xs group-hover:bg-[#1d4ed8] transition">
+              P
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold text-[17px] text-[#1e293b] leading-tight">PRIMA</span>
+              <span className="text-[10px] text-[#64748b] leading-tight hidden sm:inline">Platform Review Interaktif Medis Adaptif</span>
+            </div>
+          </Link>
+          <span className="hidden sm:inline-block h-4 w-[1px] bg-slate-200 mx-1"></span>
+          <span className="text-[11px] font-semibold text-[#0d6efd] bg-blue-50 border border-blue-200/60 px-2.5 py-0.5 rounded-full">
+            Pengaturan Awal Belajar
+          </span>
+        </div>
+
+        <div className="flex items-center gap-3">
           <Link
             href="/beranda"
-            className="self-start sm:self-auto text-xs font-semibold text-[#3b76e1] hover:underline flex items-center gap-1.5"
+            className="text-xs font-semibold text-[#64748b] hover:text-[#0d6efd] flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition"
           >
             <span>Lewati ke Beranda</span>
             <i className="bi bi-arrow-right"></i>
           </Link>
         </div>
-      </div>
+      </header>
+
+      {/* Main Wizard Content */}
+      <main className="relative z-10 flex-1 max-w-4xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8">
+        {/* Banner Sambutan Pengguna Baru Setelah Register */}
+        {isFromRegister && (
+          <div className="mb-6 p-4 sm:p-5 rounded-xl bg-gradient-to-r from-blue-50 via-indigo-50 to-emerald-50 border border-blue-200/80 shadow-xs flex items-start gap-3.5 animate-fadeIn">
+            <div className="w-10 h-10 rounded-xl bg-[#0d6efd] text-white flex items-center justify-center shrink-0 text-xl shadow-md shadow-blue-500/20">
+              <i className="bi bi-person-check-fill"></i>
+            </div>
+            <div className="flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="text-sm sm:text-base font-bold text-[#0f172a]">
+                  Pendaftaran Berhasil! Selamat Datang{userName ? `, ${userName}` : ""} 🎉
+                </h2>
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                  Akun Aktif
+                </span>
+              </div>
+              <p className="text-xs text-[#475569] mt-1 leading-relaxed">
+                Akun belajarmu telah siap digunakan. Silakan lengkapi 4 langkah pengaturan awal di bawah ini agar AI PRIMA dapat memetakan materi dan menyusun rencana belajar yang optimal untukmu.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* HEADER HALAMAN & PENJELASAN */}
+        <div className="mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+            <div>
+              <h1 className="text-xl sm:text-2xl font-bold text-[#1e293b] tracking-tight">
+                Pengaturan Awal Belajar (Onboarding)
+              </h1>
+              <p className="text-[13px] text-[#64748b] mt-0.5">
+                Sesuaikan target dan jadwal Anda agar PRIMA dapat menyusun rencana belajar yang terarah.
+              </p>
+            </div>
+          </div>
+        </div>
 
       {/* =====================================================================
           PROGRESS INDICATOR WIZARD
@@ -947,6 +1000,18 @@ function OnboardingContent() {
           )}
         </div>
       </div>
+      </main>
+
+      {/* Footer Standalone Onboarding */}
+      <footer className="relative z-10 py-4 px-6 border-t border-slate-200/60 bg-white/70 backdrop-blur-xs text-center text-xs text-[#64748b]">
+        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+          <span>&copy; {new Date().getFullYear()} PRIMA &mdash; Platform Review Interaktif Medis Adaptif.</span>
+          <div className="flex items-center gap-2 text-[11px] text-[#64748b]">
+            <i className="bi bi-robot text-blue-600"></i>
+            <span>Rencana disusun oleh AI sebagai alat bantu belajar</span>
+          </div>
+        </div>
+      </footer>
 
       {/* =====================================================================
           MODAL SIMULASI PROSES AI (~3 DETIK)

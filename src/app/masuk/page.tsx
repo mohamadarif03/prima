@@ -202,7 +202,10 @@ function MasukContent() {
     setLoadingMessage("Mempersiapkan profil belajarmu...");
     setTimeout(() => {
       setIsLoading(false);
-      router.push("/onboarding");
+      const targetUrl = fullName.trim()
+        ? `/onboarding?registered=true&name=${encodeURIComponent(fullName.trim())}`
+        : "/onboarding?registered=true";
+      router.push(targetUrl);
     }, 1500);
   };
 
