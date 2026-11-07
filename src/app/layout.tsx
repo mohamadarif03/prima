@@ -17,6 +17,15 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "PRIMA - Platform Review Interaktif Medis Adaptif",
   description: "Aplikasi pendamping belajar mandiri untuk mahasiswa kedokteran preklinik",
+  icons: {
+    icon: [
+      { url: "/icon.png", type: "image/png", sizes: "340x340" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", sizes: "340x340", type: "image/png" },
+    ],
+  },
 };
 
 export default function RootLayout({

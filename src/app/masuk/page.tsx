@@ -257,9 +257,9 @@ function MasukContent() {
                   <Image
                     src="/logo-horizontal.png"
                     alt="PRIMA"
-                    width={155}
-                    height={44}
-                    className="h-10 w-auto object-contain group-hover:opacity-90 transition-opacity"
+                    width={165}
+                    height={52}
+                    className="h-[44px] sm:h-[48px] w-auto object-contain group-hover:opacity-90 transition-opacity"
                     priority
                   />
                   <span className="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-[#0d6efd] border border-blue-200/60">

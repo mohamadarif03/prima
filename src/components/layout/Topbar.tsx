@@ -18,13 +18,13 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
       {/* Left: Brand & Hamburger */}
       <div className="flex items-center">
         <div className="w-[214px] flex items-center justify-between pr-3">
-          <Link href="/beranda" className="flex items-center no-underline group">
+          <Link href="/beranda" className="flex items-center no-underline group py-1">
             <Image
               src="/logo-horizontal.png"
               alt="PRIMA"
-              width={124}
-              height={34}
-              className="h-[32px] w-auto object-contain group-hover:opacity-90 transition-opacity"
+              width={140}
+              height={44}
+              className="h-[36px] sm:h-[38px] w-auto object-contain group-hover:opacity-90 transition-opacity"
               priority
             />
           </Link>

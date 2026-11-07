@@ -881,9 +881,9 @@ export default function LandingPage() {
               <Image
                 src="/logo-horizontal.png"
                 alt="PRIMA"
-                width={128}
-                height={36}
-                className="h-9 w-auto object-contain"
+                width={145}
+                height={46}
+                className="h-[38px] sm:h-[42px] w-auto object-contain"
                 priority
               />
 

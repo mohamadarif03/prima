@@ -218,9 +218,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <Image
                   src="/logo-horizontal.png"
                   alt="PRIMA"
-                  width={112}
-                  height={32}
-                  className="h-[28px] w-auto object-contain"
+                  width={130}
+                  height={40}
+                  className="h-[34px] w-auto object-contain"
                 />
               </Link>
               <button

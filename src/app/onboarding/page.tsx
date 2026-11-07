@@ -268,9 +268,9 @@ function OnboardingContent() {
               <Image
                 src="/logo-square.png"
                 alt="Logo PRIMA"
-                width={42}
-                height={42}
-                className="w-10 h-10 object-contain drop-shadow-sm shrink-0"
+                width={44}
+                height={44}
+                className="w-11 h-11 object-contain drop-shadow-sm shrink-0"
                 priority
               />
               <div>
