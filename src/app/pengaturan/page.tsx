@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   mockUserProfile,
   mockStudyPreferences,
@@ -1259,9 +1260,13 @@ export default function PengaturanPage() {
                   <div className="space-y-6">
                     {/* App Header & Bio */}
                     <div className="flex items-start gap-4 pb-5 border-b border-[#f1f5f9]">
-                      <div className="w-[52px] h-[52px] rounded-[10px] bg-[#2563eb] text-white flex items-center justify-center font-bold text-[28px] shadow-sm flex-shrink-0">
-                        P
-                      </div>
+                      <Image
+                        src="/logo-square.png"
+                        alt="Logo PRIMA"
+                        width={52}
+                        height={52}
+                        className="w-[52px] h-[52px] object-contain rounded-[10px] drop-shadow-sm flex-shrink-0"
+                      />
                       <div>
                         <div className="flex items-center gap-2">
                           <h3 className="text-[16px] font-bold text-[#1e293b]">

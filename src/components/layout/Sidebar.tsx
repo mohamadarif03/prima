@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { mockUserProfile } from "@/lib/mock-data";
 
@@ -213,9 +214,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
         >
           <aside className="w-full h-full bg-white border-r border-[#e5e7eb] select-none pt-4 pb-8 flex flex-col justify-between overflow-y-auto shadow-2xl">
             <div className="px-6 pb-3 border-b border-[#f1f5f9] flex items-center justify-between">
-              <span className="font-bold text-[16px] text-[#1e293b] tracking-tight">
-                Menu Navigasi
-              </span>
+              <Link href="/beranda" onClick={onCloseMobile} className="flex items-center no-underline">
+                <Image
+                  src="/logo-horizontal.png"
+                  alt="PRIMA"
+                  width={112}
+                  height={32}
+                  className="h-[28px] w-auto object-contain"
+                />
+              </Link>
               <button
                 onClick={onCloseMobile}
                 className="text-[#64748b] hover:text-[#0f172a] p-1 rounded"

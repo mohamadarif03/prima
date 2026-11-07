@@ -3,6 +3,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { mockAnatomyRegions } from "@/lib/mock-data";
 
 // Tipe data pilihan onboarding
@@ -264,9 +265,14 @@ function OnboardingContent() {
         <div className="mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-2">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#0d6efd] to-[#2563eb] flex items-center justify-center text-white font-extrabold text-xl shadow-md shadow-blue-500/20 shrink-0">
-                P
-              </div>
+              <Image
+                src="/logo-square.png"
+                alt="Logo PRIMA"
+                width={42}
+                height={42}
+                className="w-10 h-10 object-contain drop-shadow-sm shrink-0"
+                priority
+              />
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="text-xl sm:text-2xl font-bold text-[#1e293b] tracking-tight">

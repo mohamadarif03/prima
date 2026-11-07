@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { mockUserProfile } from "@/lib/mock-data";
 
 interface TopbarProps {
@@ -17,12 +18,15 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleSidebar }) => {
       {/* Left: Brand & Hamburger */}
       <div className="flex items-center">
         <div className="w-[214px] flex items-center justify-between pr-3">
-          <Link href="/beranda" className="flex items-center gap-2.5 no-underline">
-            {/* Blue 'P' Logo Box */}
-            <div className="w-[32px] h-[32px] rounded-[7px] bg-[#2563eb] flex items-center justify-center text-white font-bold text-[19px] tracking-tight shadow-sm">
-              P
-            </div>
-            <span className="font-bold text-[18px] text-[#1e293b] tracking-tight">PRIMA</span>
+          <Link href="/beranda" className="flex items-center no-underline group">
+            <Image
+              src="/logo-horizontal.png"
+              alt="PRIMA"
+              width={124}
+              height={34}
+              className="h-[32px] w-auto object-contain group-hover:opacity-90 transition-opacity"
+              priority
+            />
           </Link>
           <button
             onClick={onToggleSidebar}

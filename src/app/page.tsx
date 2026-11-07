@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import Image from "next/image";
 import { getStructuresByRegion } from "@/lib/mock-data";
 import "./landing.css";
 
@@ -877,8 +878,15 @@ export default function LandingPage() {
               className="brand"
               aria-label="PRIMA — Platform Review Interaktif Medis Adaptif"
             >
-              <div className="brand-badge">P</div>
-              <span className="brand-text">PRIMA</span>
+              <Image
+                src="/logo-horizontal.png"
+                alt="PRIMA"
+                width={128}
+                height={36}
+                className="h-9 w-auto object-contain"
+                priority
+              />
+
             </Link>
 
             
@@ -2286,7 +2294,16 @@ export default function LandingPage() {
           <div className="landing-footer-grid">
             {/* Brand Column */}
             <div className="landing-footer-brand">
-              <h3>PRIMA</h3>
+              <div className="flex items-center gap-2.5 mb-2">
+                <Image
+                  src="/logo-square.png"
+                  alt="Logo PRIMA"
+                  width={34}
+                  height={34}
+                  className="w-[34px] h-[34px] object-contain drop-shadow-sm"
+                />
+                <h3 className="text-xl font-extrabold text-white tracking-tight m-0">PRIMA</h3>
+              </div>
               <p>
                 Platform Review Interaktif Medis Adaptif. Pendamping belajar terstruktur untuk mahasiswa kedokteran preklinik dengan visualisasi anatomi 3D spasial dan spaced repetition otomatis.
               </p>

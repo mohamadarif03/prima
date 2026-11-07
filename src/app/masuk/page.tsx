@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect, Suspense } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 
 // Komponen utama dengan useSearchParams dibungkus Suspense untuk standar Next.js App Router
@@ -251,19 +252,21 @@ function MasukContent() {
             
             {/* Header Merek */}
             <div>
-              <Link href="/" className="inline-flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-[#0d6efd] rounded-lg">
-                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#0d6efd] to-[#2563eb] flex items-center justify-center text-white font-extrabold text-2xl shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform duration-200">
-                  P
+              <Link href="/" className="inline-flex flex-col items-start gap-1 group focus:outline-none focus:ring-2 focus:ring-[#0d6efd] rounded-lg">
+                <div className="flex items-center gap-2.5">
+                  <Image
+                    src="/logo-horizontal.png"
+                    alt="PRIMA"
+                    width={155}
+                    height={44}
+                    className="h-10 w-auto object-contain group-hover:opacity-90 transition-opacity"
+                    priority
+                  />
+                  <span className="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-[#0d6efd] border border-blue-200/60">
+                    Preklinik
+                  </span>
                 </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-extrabold text-2xl tracking-tight text-[#0f172a]">PRIMA</span>
-                    <span className="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-[#0d6efd] border border-blue-200/60">
-                      Preklinik
-                    </span>
-                  </div>
-                  <p className="text-xs text-[#64748b] font-medium">Platform Review Interaktif Medis Adaptif</p>
-                </div>
+                <p className="text-xs text-[#64748b] font-medium">Platform Review Interaktif Medis Adaptif</p>
               </Link>
 
               <h1 className="mt-6 text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0f172a] leading-tight tracking-tight">
